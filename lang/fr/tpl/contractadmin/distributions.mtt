@@ -1,0 +1,61 @@
+::use 'contractadmin/design.mtt'::
+
+	
+		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
+		
+			<a href="/contractAdmin/distributionp/::c.id::" class="btn btn-default">
+				<i class="icon-user"></i> Participations aux distributions
+			</a>
+			<br/>
+			
+			<b>Distributions</b>
+			
+			
+			
+			<table class="table">
+				::foreach d c.getDistribs(false)::
+					
+				
+				
+					::if d.date!=null && d.date.getTime() < Date.now().getTime()::
+						::set style = "opacity:0.5;"::
+					::else::
+						::set style = ""::
+					::end::
+					<tr  style="::style::" >
+			
+					<td>
+						::if d.distributionCycleId!=null::
+						<img src="/img/icons/arrow_refresh.png" style="opacity:0.5;" />
+						::end::
+						
+						::set da = getDate(d.date)::
+						
+						::if d.end!=null::
+						
+							::set e = getDate(d.end)::
+						::end::
+						
+						::da.dow:: ::da.d:: ::da.m::   de ::da.h+":"+da.i:: 
+						
+						::if d.end!=null::
+							à ::e.h+":"+e.i::
+						::end::
+					</td>
+					<td>
+						$$edit(modifier,/distribution/edit/::d.id::) 
+						$$delete(supprimer,/distribution/delete/::d.id::)
+					</td>
+				</tr>
+				
+				::end::
+			</table>				
+			$$insert(Nouvelle distribution,/distribution/insert/::c.id::) 
+			$$insert(Distributions récurrentes,/distribution/insertCycle/::c.id::) 
+	
+
+	
+	
+
+
+::end::

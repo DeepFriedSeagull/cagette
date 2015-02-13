@@ -1,0 +1,8 @@
+::use 'design.mtt'::
+
+<h2 class="muted">Admin</h2>
+
+	::raw __content__::
+
+
+::end::

@@ -1,0 +1,112 @@
+::use 'contractadmin/design.mtt'::
+
+		::if u==null::
+		<h3>Saisir une commande</h3>
+		::else::
+		<h3>Saisir une commande pour ::u.getName()::</h3>
+		::end::
+		
+		
+		
+		<form name="order" id="order" method="POST" action="">
+			<input type="hidden" name="chk" value="::token::"/>
+			
+			::if users!=null:: 
+			Adhérent : 
+			<select name="user">
+				::foreach uu users::
+				<option value="::uu.key::">::uu.value::</option>
+				::end::			
+			</select>
+			::end::
+			
+			<table class="table table-bordered">
+				<tr>
+					<td></td>
+					<th>Produit</th>
+					<th>Prix</th>
+					<th>Quantité</th>
+				</tr>
+				::set total = 0::
+				::foreach uo userOrders::
+				<tr>
+					<td>
+						<img src="/img/::uo.product.getImage()::" style="width:32px;height:32px;" />
+					</td>
+					<td>
+						::uo.product.name::	
+					</td>
+					<td>
+						::uo.product.price:: &euro;
+					</td>
+					<td>
+						::if uo.order==null::
+							::set q = 0::
+						::else::
+							::set q = uo.order.quantity::
+						::end::
+						
+						::set total = total+(q*uo.product.price)::
+						<input type="text" class="" name="product::uo.product.id::" id="product::uo.product.id::" value="::q::" />
+					</td>
+					<td>
+						Payé : 
+						::if uo.order!=null::			
+						<input type="checkbox" name="paid::uo.product.id::" value="1" ::attr checked (uo.order.paid==true ):: />
+						::else::
+						<input type="checkbox" name="paid::uo.product.id::" value="1" />
+						::end::
+						
+					</td>
+				</tr>
+					
+				::end::
+				
+				::set extra = 0::
+				
+				::if c.hasPercentageOnOrders()::
+					<tr>
+						<th></th>
+						<th>Total commande</th>
+						<th>::total::€</th>
+						<th></th>
+						<th></th>
+					</tr>
+					<tr>
+						<th></th>
+						<td>::c.percentageName:: (::c.percentageValue::%)</td>
+						::set extra = total*(c.percentageValue/100)::
+						<td>::extra::€</td>
+						<th></th>
+						<th></th>
+					</tr>
+					
+					::end::
+					
+					
+					<tr>
+						<th></th>
+						<th>Total</th>
+						<th>::total+extra::€</th>
+						<th></th>
+						<th>
+							<a href="#"  id="checkButton">Tout cocher</a>
+							<script language="javascript">
+							var globalCheck = true;
+							var checkEverything = function(e){
+								var boxes = $(":checkbox");
+								boxes.attr("checked",globalCheck);
+								globalCheck=!globalCheck;
+								e.preventDefault();
+							};
+							$("#checkButton").click(checkEverything);
+							</script>
+							
+						</th>
+					</tr>
+			</table>
+		
+			<input type="submit" class="btn btn-primary" value="Valider la commande" name="submit" id="submit" />
+		
+		</form>
+::end::

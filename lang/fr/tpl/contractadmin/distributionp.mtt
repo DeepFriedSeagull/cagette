@@ -1,0 +1,52 @@
+::use 'contractadmin/design.mtt'::
+
+	
+		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
+			
+			<b>Participations aux distributions</b>
+			
+			<div>
+				Cette page permet de voir si les adhérents ont suffisamment participé aux distributions.
+			</div>
+			
+			<div style="margin:16px 0 16px 0;text-align:center;">
+				
+				<strong>::distribs:: distributions à ::distributorNum:: distributeur(s),<br/>
+				::users:: souscripteurs à ce contrat<br/>
+				= ::num:: distributions à faire par foyer.</strong>	
+				
+				
+			</div>
+			
+			<table class="table table-bordered">
+				<tr>
+					<th>Adhérent</th>
+					<th>
+						Nbre de distributions<br />
+						faites ou prévues
+					</th>
+				</tr>
+				::foreach p participations::
+					
+				<tr>
+					<td>
+						::p.user.getCoupleName()::
+					</td>
+					<td>
+						::p.count::
+					</td>
+					<td>
+						::if p.count>=numRounded::
+						<img src="/img/icons/accept.png" /> OK
+						::else::
+						<img src="/img/icons/stop.png" /> Insuffisant
+						::end::
+					</td>
+				</tr>
+				
+				::end::
+			</table>				
+			
+
+
+::end::

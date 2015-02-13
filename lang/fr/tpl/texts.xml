@@ -1,0 +1,17 @@
+﻿<texts>
+
+	<t id="locale1">fr_FR.UTF-8</t>
+	<t id="locale2">FR</t>
+	<t id="date_fmt">%A %d %B à %H:%M</t>
+
+	<t id="short_dates">Aujourd'hui|Hier|Demain|%A|Le %d %B|Le %d %B %Y</t>
+	<t id="short_times">Maintenant|Il y a %M min|Il y a %H h %M min|Aujourd'hui à %H:%M|Hier à %H:%M|%A à %H:%M|Le %d à %H:%M|Le %d %B|Le %d %B %Y</t>
+	<t id="short_futur_times">Maintenant|Dans %M min|Dans %H h %M min|Aujourd'hui à %H:%M|Demain à %H:%M|%A à %H:%M|Le %d à %H:%M|Le %d %B|Le %d %B %Y</t>
+
+	<!--- USER ACCOUNT -->
+
+	<t id="err_invalid_pass">Votre mot de passe n'est pas correct.</t>
+	
+
+
+</texts>

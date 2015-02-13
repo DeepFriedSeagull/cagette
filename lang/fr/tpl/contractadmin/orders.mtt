@@ -1,0 +1,88 @@
+::use 'contractadmin/design.mtt'::
+	
+		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
+		
+		<b>Commandes</b>
+		
+		<div style="margin:8px 0;">
+			<a href="/contractAdmin/edit/::c.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
+		</div>
+		
+		<table class="table table-bordered table-hover"  style="width:100%;">
+				::set name = ""::
+
+				::foreach m orders::
+				
+				::if m.firstName+" "+m.uname != name::
+					<tr style="background:#F4E3B2;">
+						<th colspan="4">
+							::m.uname:: ::m.firstName:: 
+							
+							$$edit(modifier,/contractAdmin/edit/::c.id::/::m.uid::) 
+							::set name =  m.firstName+" "+m.uname ::		
+						</th>
+					
+					</tr>		
+				::end::
+				
+				<tr>
+				
+					<td>
+						
+						
+					</td>
+					<td>
+						::m.quantity:: x ::m.pname::
+					</td>
+					<td>
+						::formatNum(m.quantity*m.price)::€
+					</td>
+					<td>
+						::if m.paid==true::
+						<span style="color:#00AA00;">Payé</span>
+						::else::
+						<span style="color:#DD0000;">Non payé</span>
+						::end::
+					</td>
+					
+				</tr>
+				::end::
+				
+				::set extra = 0::
+				::if c.hasPercentageOnOrders()::
+				<tr style="background:#DDD;">
+					
+					<th colspan="2">Total commande</th>
+					<th>::formatNum(totalPrice)::€</th>
+					
+					<th></th>
+				</tr>
+				<tr style="background:#DDD;">
+					
+					<td colspan="2">::c.percentageName:: (::c.percentageValue::%)</td>
+					::set extra = totalPrice*(c.percentageValue/100)::
+					<td>::formatNum(extra)::€</td>
+					
+					<th></th>
+				</tr>
+				 
+				::end::
+				
+				
+				<tr style="background:#DDD;">
+					
+					<th colspan="2">Total</th>
+					<th>::formatNum(totalPrice+extra)::€</th>
+					
+					<th></th>
+				</tr>
+				
+
+				</table>
+
+				<div>
+					<a href="/contractAdmin/edit/::c.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
+					$$export()
+				</div>		
+		
+::end::

@@ -1,0 +1,22 @@
+::use 'design.mtt'::
+<div class="span3">
+	
+		<ul class="nav nav-tabs nav-stacked" >
+			<li><a style="background-color:#FFF;" href="/contractAdmin/view/::c.id::">Récapitulatif</a></li>
+			<li><a style="background-color:#FFF;" href="/contract/edit/::c.id::">Modifier contrat</a></li>
+			<li><a style="background-color:#FFF;" href="/contractAdmin/products/::c.id::">Produits</a></li>
+			<li><a style="background-color:#FFF;" href="/contractAdmin/distributions/::c.id::">Distributions</a></li>
+			<li><a style="background-color:#FFF;" href="/contractAdmin/orders/::c.id::">Commandes</a></li>
+			<li><a style="background-color:#FFF;" href="/contractAdmin/stats/::c.id::">Statistiques</a></li>
+		</ul>
+	
+</div>
+
+
+<div class="span9">
+	<div class="article">
+		::raw __content__::
+	</div>
+</div>
+
+::end::

@@ -1,0 +1,16 @@
+-lib dbadmin
+-lib templo
+-lib weblog
+-lib sugoi
+-cp src
+-cp lang/fr/tpl
+-neko www/index.n
+-D spod_macro
+-D twinBase
+-main App
+-D debugip=localhost:18080
+-D weblogid=cagette
+--next
+-cp src/js
+-main App
+-js www/js/app.js

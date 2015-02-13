@@ -1,0 +1,118 @@
+::use 'design.mtt'::
+<div class="col-md-9">
+<div class="article">
+	::if select!=null::
+		<h2>Sélection : 
+		::if select=="nocontract"::
+			Amapiens sans contrat
+		::elseif select=="nomembership"::
+			Adhésions à renouveller
+		::end::
+		</h2>
+		
+		<a href="/member/">Revenir à la page principale</a>
+	::elseif search!=null::
+		<h2>Recherche : ::search::</h2>
+		<a href="/member/">Revenir à la page principale</a>
+	::else::	
+		<h2>Adhérents</h2>
+	::end::
+	
+
+	<table class="table table-bordered table-hover"  style="width:100%;">
+		
+	::foreach m members.current()::	
+	<tr>
+		
+		<td>
+			<a href="/member/view/::m.id::">
+			::m.lastName:: ::m.firstName:: 
+			::if m.lastName2!=null::
+			&amp; ::m.lastName2:: ::m.firstName2:: 
+			::end::
+			</a>		
+		</td>
+		<td>
+			::if m.address1!=null::
+				::m.address1:: 
+			::end::
+			::if m.address2!=null::
+				::m.address2:: 
+			::end::
+			::if m.zipCode!=null::
+				::m.zipCode:: 
+			::end::
+			::if m.city!=null::
+				::m.city:: 
+			::end::
+		</td>
+	</tr>
+	::end::
+
+	<tr ::cond select==null && search==null::>
+		<th colspan="2">
+			<a href="?page=::members.page-1::"> &lt;&lt; </a>
+			&nbsp;
+			page ::members.page::/::members.pages::
+			&nbsp;
+			<a href="?page=::members.page+1::"> &gt;&gt; </a>
+		</th>
+	</tr>
+
+	</table>
+
+	<div>
+		<a href="/member/insert" class="btn"><i class="icon-plus-sign"></i> Nouvel adhérent</a>	
+	</div>
+	
+	<hr/>
+	
+	<form class="form-search" action="/member/" method="get">
+	  <div class="input-append">
+		::if search==null::
+			::set ssearch=""::
+		::else::
+			::set ssearch=search::
+		::end::
+		  
+		<input type="text" class="span2 search-query" name="search" value="::ssearch::" />
+		<button type="submit" class="btn"><i class="icon-search"></i> Rechercher</button>
+	  </div>
+	 </form>
+	
+	
+	<!--$$export(::Web.getURI()::?::Web.getParamsString():: )-->
+	
+</div>
+</div>
+
+<div class="col-md-3">
+	<!--<div class="article">
+		<b>Importation</b>
+		<p>
+		Pour éviter de rentrer à la main tous vos adhérents, vous pouvez importer une grande quantité d'adhérents à partir d'un tableur comme Excel ou Libre Office.
+		<br/>
+		<a href="/member/import" class="btn btn-small">Importer</a>
+		</p>
+	</div>-->
+	
+	<div class="block">
+		<p>
+		Vous avez accès à la gestion des adhérents 
+		car vous êtes responsable d'un contrat ou responsable de l'AMAP en général.
+		</p>
+		
+	</div>
+	
+	<div class="block">
+		<b>Sélections</b>
+		<ul>
+			<li><a href="/member/">Tous les amapiens</a></li>
+			<li><a href="/member/?select=nocontract">Sans contrats</a></li>
+			<li ::cond user._amap.hasMembership()::><a href="/member/?select=nomembership">Adhésion à renouveller</a></li>
+		</ul>
+	</div>
+	
+</div>
+
+::end::

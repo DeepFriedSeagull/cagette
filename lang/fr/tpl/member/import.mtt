@@ -1,0 +1,149 @@
+::use 'design.mtt'::
+
+<div class="span12">
+<div class="article">
+	<h2>Import</h2>
+	
+	
+	::if step==1::
+		
+	
+		<form action="/member/import/" method="POST" enctype="multipart/form-data">
+			<input name="file" type="file"/>
+			<input type="submit" value="OK"/>
+		</form>
+	
+	
+	::elseif step==2::
+		<h4>Personnes à importer</h4>
+		<div style="margin-bottom:24px;">
+			::if data!=null && data.length>0::
+			
+			<table class="table" style="font-size:11px;background-color:#FFF;">
+				<tr>
+					<th>Prénom</th>
+					<th>Nom</th>
+					<th>Email</th>
+					<th>Téléphone</th>
+					<th>Prénom conjoint</th>
+					<th>Nom conjoint</th>
+					<th>Email conjoint</th>
+					<th>Téléphone</th>
+					<th>Adresse 1</th>
+					<th>Adresse 2</th>
+					<th>Code postal</th>
+					<th>Ville</th>
+				</tr>
+				::foreach d data::
+				<tr>
+					::foreach r d::
+					<td>
+						::if r!=null:: ::r:: ::end::
+					</td>
+					::end::
+				</tr>
+				::end::
+			</table>
+			<div class="alert alert-error">
+					<b>Attention</b>
+					<p>
+						Avant de valider l'importation, vérifiez bien que le tableau ci dessus est correctement rempli.<br/>
+						Si des données sont décalées ou ne correspondent pas à la bonne colonne, c'est que votre fichier CSV n'est pas correct.
+					</p>
+					<a href="/member/import">Recommencer</a>
+				</div>
+			<a href="/member/import?confirm=1" class="btn btn-danger">Importer ces personnes dans la base de données</a>
+			::else::
+				
+				<div class="alert alert-error">
+					<b>Oups !</b>
+					<p>On dirait qu'il n'y a aucune donnée à importer. Vérifiez que les données de votre fichier sont valides ou que les personnes ne sont pas déjà enregistrées dans la base de données de Cagette.net</p>
+					<a href="/member/import">Recommencer</a>
+				</div>
+			
+			::end::
+		</div>
+		
+		<div ::cond data2.length > 0:: >
+			
+			<h4>Personnes déjà présentes dans la base de données</h4>
+			<table class="table" style="font-size:11px;color:#666666;background-color:#FFF;">
+				<tr>
+			<th>Prénom</th>
+			<th>Nom</th>
+			<th>Email</th>
+			<th>Téléphone</th>
+			<th>Prénom conjoint</th>
+			<th>Nom conjoint</th>
+			<th>Email conjoint</th>
+			<th>Téléphone</th>
+			<th>Adresse 1</th>
+			<th>Adresse 2</th>
+			<th>Code postal</th>
+			<th>Ville</th>
+		</tr>
+			::foreach d data2::
+			<tr>
+				::foreach r d::
+				<td>
+					::if r!=null:: ::r:: ::end::
+				</td>
+				::end::
+			</tr>
+			::end::
+			</table>
+		</div>
+	::elseif step==3::
+		::if numImported>0::
+		
+		<div class="alert alert-success">
+			<b>Bravo ! Vous avez importé ::numImported:: personnes dans votre base de données</b>
+		</div>
+		
+		<!--<p>
+			Un email a été envoyé à chacune des nouvelles personnes pour les prévenir de leur inscription et leur demander de définir un mot de passe.<br/>
+			Cependant, il est fréquent que ces emails arrivent dans le dossier "courrier indésirable", 
+			<br/>nous vous recommandons donc de prévenir ces gens afin qu'ils ne loupent pas cet email !
+		</p>-->
+		<p>
+			N'oubliez pas de les prévenir qu'elles peuvent maintenant se connecter à cagette.net !<br/>
+			Tous les nouveaux comptes sont créés sans mot de passe, il suffit donc simplement de se connecter en entrant son email et en laissant le champs "mot de passe" vide.<br/>
+			Il est ensuite vivement conseillé de protéger son compte avec un mot de passe !
+		</p>
+		::else::
+		<p>Vous n'avez rien importé dans votre base de données car votre fichier était vide ou contenait des personnes déjà enregistrées dans votre base de données.</p>
+		::end::
+		<a href="/member/">Revenir à la gestion des adhérents</a>
+		
+		
+	::end::
+	
+	
+	
+	
+</div>
+
+<div class="block">
+	<h3>Aide</h3>
+	Cette page va vous permettre d'importer un grand nombre de personnes dans votre base de données à partir d'un fichier Excel
+	ou Libre Office.<br/>
+	<ul>
+		<li>Pour commencer, <a href="/adherents.xls">téléchargez ce fichier de démonstration.</a></li>
+		<li>Remplissez correctement ce fichier, ou modifiez votre fichier existant pour respecter scrupuleusement l'ordre des colonnes.</li>
+		<li>Une fois votre fichier rempli, cliquez sur "enregistrer sous" dans votre tableur, et choisissez le format "CSV"</li>
+		<li>Choisissez les options suivantes : caractère de séparation : <b>point virgule</b>, encodage : <b>Unicode UTF-8</b></li>
+		<li>Enregitrez votre fichier</li>
+		<li>Ensuite, cliquez sur le bouton "choisissez un fichier" ci dessus et envoyez votre fichier</li>
+	</ul>
+	
+	
+	
+	
+
+</div>
+
+
+</div>
+
+
+::end::

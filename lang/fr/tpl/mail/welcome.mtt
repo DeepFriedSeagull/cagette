@@ -1,0 +1,22 @@
+:: use 'mail/design.mtt'::
+
+<p>
+	Bonjour ::recipientName::,
+</p>
+<p>
+	<b>::senderName::</b>, responsable de <b>::amap::</b> vient de vous inscrire sur <a href="http://www.cagette.net">Cagette.net</a>, le logiciel de gestion d'AMAP.<br/>
+	
+	Ce site vous permettra par exemple de consulter <b>le planning des distributions</b> ou encore de connaître les coordonnées des <b>producteurs</b> ou <b>des responsables de contrat</b> de l'AMAP.<br/>
+	
+	Attention, actuellement votre compte n'est pas protégé par un mot de passe.<br/>
+	Il est vivement conseillé d'en créer un tout de suite afin que personne ne vole votre compte.<br/>
+	<a href="http://www.cagette.net/user/login">Cliquez ici pour vous connecter sur Cagette.net et valider votre compte.</a>
+	
+</p>
+<p>
+	Conformément à la loi n° 78-17 du 6 janvier 1978, relative à l'Informatique, aux Fichiers et aux Libertés, vous disposez d'un droit d'accès et de rectification des données à caractère personnel vous concernant.
+</p>
+
+::end::
+
+

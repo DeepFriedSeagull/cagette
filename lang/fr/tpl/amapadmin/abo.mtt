@@ -1,0 +1,59 @@
+::use 'design.mtt'::
+
+<div class="span9">
+	<div class="article">
+		<h3>Abonnement et options Cagette.net</h3>		
+		
+		<h4>Tarifs</h4>
+		
+		
+		$$cagettePrices()
+	
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		
+		
+	</div>
+</div>
+
+
+<div class="span9">
+	<div class="article">
+			<h4>Paiement par chèque</h4>
+			
+			<p>
+				Choisissez dans le tableau ci-dessus les options qui vous correspondent.<br/>
+				Ensuite, téléchargez, imprimez et remplissez le bon de commande téléchargeable ci-dessous :<br/>
+			</p>
+			<p>
+				Joignez un chèque correspondant aux options commandées et envoyez le tout à l'adresse indiquée
+				sur le bon de commande.  A réception du courrier, votre compte sera mis à jour.
+			</p>
+			<p>
+				<a href="/pdf/bon_de_commande_2014-11.pdf" class="btn btn-primary" target="_blank">Télécharger le bon de commande</a>
+			</p>
+			
+	</div>
+</div>
+
+	
+<div class="span3">
+	<div class="block">
+		<h4>Paiement en ligne</h4>
+		<div>
+			<em>Pour les Amap disposant d'une carte bleue, le paiement en ligne sera bientôt disponible !</em>
+		</div>
+	</div>
+</div>
+
+
+::end::

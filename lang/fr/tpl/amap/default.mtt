@@ -1,0 +1,37 @@
+::use 'design.mtt'::
+
+	
+	<div class="span3">
+		<div class="block2">
+			::raw nl2br(user.getAmap().txtIntro)::
+			<br/>
+			::if user.isAmapManager()::
+			$$edit(Modifier,amap/edit)
+			::end::
+		</div>
+		
+
+	</div>
+	
+	<div class="span9">
+		<div class="article">
+									
+			<div style="display:inline-block;vertical-align:top;margin-bottom:18px;width:300px;">
+				<span class="title">Coordinateur général</span>
+				$$contact(::user.getAmap()._contact::)
+			</div>
+			
+			::foreach c contracts::
+				<div style="display:inline-block;vertical-align:top;margin-bottom:18px;width:300px;" >
+					<span class="title">::c.name::</span>
+					::if c._contact!=null::
+						$$contact(::c._contact::)
+					::end::
+				</div>
+			::end::
+			
+			
+		</div>
+	</div>
+
+::end::

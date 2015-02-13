@@ -1,0 +1,21 @@
+::use 'admin/design.mtt'::
+
+	
+	<ul>
+		
+		<li>
+			<a href="/admin/quiz">Administrate Quizes</a>
+		</li>
+		
+	</ul>
+
+
+<div class="row">
+	<div class="span12">
+		<div class="article">
+			sdfsdf
+		</div>
+	</div>
+</div>	
+	
+::end::

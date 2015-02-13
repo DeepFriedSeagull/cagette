@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Liste d'émargement</title>
+	<style>
+	
+	body{
+		font-family:'Arial';
+		font-size:12px;
+	}
+	
+	table{
+		/*border:solid 1px black;*/
+	}
+	
+	table tr td{
+		margin:0;
+		padding:4px;
+		border-bottom:solid 1px #DDD;
+		border-left:solid 1px #DDD;
+	}
+	
+	table tr th{
+		background-color:#DDD;
+	}
+	
+	h1, h2{
+		margin:auto;
+		text-align:center;
+	}
+	
+	</style>
+</head>
+<body>
+	
+	::set date = getDate(distrib.date)::
+	<h2>Distribution du ::date.dow:: ::date.d:: ::date.m::</h2>
+	
+	
+	
+	<h2>::distrib._contract.name:: - ::distrib._contract._vendor.name::</h2>	
+	
+	<p>
+		::set c = contract._contact::
+		::set v = contract._vendor::
+		<b>Responsable contrat : </b>  ::c.firstName:: ::c.lastName::, ::c.email::, ::c.phone::
+	</p>
+	<p>
+		<b>Producteur : </b>::v.name:: , 
+		::if v.email!=null :: ::v.email:: ::end::, 
+		::if v.phone!=null :: ::v.phone:: ::end::
+	</p>
+	<p>	
+		<b>Distributeurs : </b>
+		::if distrib._distributor1!=null:: ::distrib._distributor1.getName()::,::end::
+		::if distrib._distributor2!=null:: ::distrib._distributor2.getName()::,::end::
+		::if distrib._distributor3!=null:: ::distrib._distributor3.getName()::,::end::
+		::if distrib._distributor4!=null:: ::distrib._distributor4.getName():: ::end::
+		
+	</p>
+	
+		<table class="table table-bordered table-hover"  style="width:100%;">
+				::set name = ""::
+				<tr>
+					<th>Nom</th>
+					<th>Coordonnées</th>
+					<th>Produit</th>
+					<th>Signature</th>
+					
+				</tr>
+				::foreach m contracts::	
+				<tr>
+				
+					<td>
+						::if m.firstName+" "+m.uname != name::
+						
+							
+							<b>
+								::m.firstName:: ::m.uname:: 
+								
+								::if m.firstName2!=null::
+								& ::m.firstName2:: ::m.lastName2::
+								::end::
+							</b>
+							
+							
+							
+							
+						::end::
+						
+					</td>
+					<td>
+						::if m.firstName+" "+m.uname != name::
+						::m.email::, ::m.phone::
+						::end::
+						
+					</td>
+					::set name =  m.firstName+" "+m.uname ::
+					<td>
+						::m.quantity:: x ::m.pname::
+					</td>
+					<td style="width:20%;">
+						
+						
+					</td>
+					
+				</tr>
+				::end::
+
+				</table>
+				
+				<p>::raw nl2br(user.getAmap().txtDistrib)::</p>
+		
+				<p><i>Appuyez sur "Control + P" pour imprimer cette page.</i></p>
+</body>
+</html>

@@ -1,0 +1,60 @@
+::use 'admin/design.mtt'::
+
+<div class="span12">
+	<div class="article">
+		::amaps.length:: Amaps	<br/>
+		::users.length:: Responsables $$export()<br/>
+		
+		<h1>Amaps</h1>
+		
+		<table class="table table-bordered">
+			<tr>
+				<th>Id</th>
+				<th>Nom</th>
+				<th>Abo</th>
+				<th>AboEnd</th>
+				<th>Abo à jour</th>
+			</tr>
+			::foreach a amaps::
+			<tr>
+				<td>::a.id::</td>
+				<td>::a.name::</td>
+				<td>::a.aboType::</td>
+				<td>
+				::if a.aboEnd!=null::
+					::hDate(a.aboEnd)::
+				::end::
+				</td>
+				<td>$$bool(::a.isAboOk(false)::)</td>
+			</tr>
+			::end::
+			
+		</table>
+		
+		<h1>Responsables</h1>
+		
+		<table class="table table-bordered">
+			<tr>
+				<th>Id</th>
+				<th>Prenom</th>
+				<th>Nom</th>
+				<th>Amap</th>				
+			</tr>
+			::foreach u users::
+			<tr>
+			<td>::u.id::</td>
+			<td>::u.firstName::</td>
+			<td>::u.lastName::</td>
+			<td>::u.getAmaps()::</td>
+			</tr>
+			::end::
+		</table>
+	</div>
+	
+	
+	
+	
+</div>
+	
+	
+::end::

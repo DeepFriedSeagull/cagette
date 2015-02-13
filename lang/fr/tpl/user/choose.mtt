@@ -1,0 +1,20 @@
+::use 'design.mtt'::
+
+	
+	<div style="margin:32px auto 32px auto;width:400px;">
+		
+		<div class="block" style="text-align:center;">
+			
+			<h3>Choisissez l'AMAP avec laquelle vous souhaitez vous connecter :</h3>
+			
+			
+			::foreach a amaps::
+				<p>
+					<a class="btn" href="/user/choose?amap=::a.amapId::">::a._amap.name::</a>
+				</p>
+			::end::
+			
+		</div>
+	</div>
+
+::end::

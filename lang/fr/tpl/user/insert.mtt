@@ -1,0 +1,35 @@
+﻿::use 'design.mtt'::
+<div class="span12">
+	<div class="article">
+		<h3 ::cond title!=null::>::title::</h3>
+		
+		<p ::cond userSims!=null && userSims.length>0:: >
+			<strong>Ces personnes sont déjà dans la base de données, mais pas inscrites à cette Amap :	</strong>
+			<p>::foreach u userSims::
+				::u::<br/>
+			::end::
+			</p>
+		</p>
+		
+		
+		<p ::cond userAmaps!=null && userAmaps.length>0:: >
+			<strong>Ces personnes sont déjà inscrites à cette AMAP :</strong>
+			<p>
+			::foreach u userAmaps::
+				::u::<br/>
+			::end::
+			</p>
+		</p>
+		
+		
+		<div ::cond text!=null::>
+			::raw text::
+		</div>
+		
+		::if form != null::
+			::raw form::
+		::end::
+	</div>
+</div>
+
+::end::

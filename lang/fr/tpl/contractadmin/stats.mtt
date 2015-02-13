@@ -1,0 +1,54 @@
+::use 'contractadmin/design.mtt'::
+
+		<div>
+			<a href="/contractAdmin/stats/::c.id::/?stat=0">Ancienneté des souscripteurs</a> | 
+			<a href="/contractAdmin/stats/::c.id::/?stat=1">Répartition des commandes</a><br/>
+			
+		</div>
+		
+		::if stat==0::
+			<h3>Ancienneté des souscripteurs de "::c.name::"</h3>
+			<table class="table" style="width:50%;">
+				<tr>
+					<th>Nombre</th>
+					<th>Année</th>
+				</tr>
+				 ::foreach a anciennete::
+				 <tr>
+					 <td>::a.cnt::</td>
+					 <td>::a.uyear::</td>
+				 </tr>
+				 ::end::
+			</table>
+		::end::
+			
+		::if stat==1::
+			<h3>Répartition des commandes de "::c.name::"</h3>
+			
+			<table class="table">
+				<tr>
+					<th>Quantité</th>
+					<th>Produit</th>
+					<th>Prix total</th>
+					<th>% des commandes</th>
+				</tr>
+				::foreach r repartition::
+					<tr>
+						<td>::r.quantity::</td>
+						<td>::r.name::</td>
+						<td>::r.quantity*r.price:: €</td>
+						<td>::r.percent:: %</td>
+						
+					</tr>
+					
+				::end::
+				<tr>
+					<th colspan="2">Total: ::totalQuantity:: produits</th>
+					
+					<th>::totalPrice:: €</th>
+					<th></th>
+				</tr>
+			</table>
+			
+		::end::	
+::end::

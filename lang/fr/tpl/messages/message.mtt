@@ -1,0 +1,27 @@
+::use 'design.mtt'::
+<div class="span9">
+	<div class="article">
+	
+	<div>
+		<b>::msg.title::</b>
+	</div>
+	<div>
+		Envoyé le ::hDate(msg.date)::
+		<br/>par ::msg._sender.firstName:: ::msg._sender.lastName::
+		<br/>à la liste : ::list::
+	</div>
+	<hr/>
+	<div>
+		
+		::raw msg.body::
+		
+	</div>
+	
+	<a href="/messages" class="btn">Retour</a>	
+		
+	</div>
+</div>
+
+
+
+::end::

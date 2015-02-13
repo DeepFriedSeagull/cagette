@@ -1,0 +1,68 @@
+::use 'design.mtt'::
+
+	<div class="span9" style="margin-top:18px;">
+		<div class="article" style="height:700px;">
+		<div>
+			<img src="/img/logo2.gif" style="display: block;position: absolute;top: -15px;right: 15px;width:130px; height:130px;" />
+					
+			<div style="display: block;position: absolute;top:50px;padding:8px 15px;">
+				
+				<h1>Vos données</h1>
+				
+				<p>
+					<strong>Vos données sont privées et doivent le rester</strong><br/>
+					L’équipe de Cagette.net s’engage à ne jamais donner ou vendre vos données. 
+Votre e-mail, votre nom, votre adresse et vos informations de commandes sont uniquement stockées pour le bon fonctionnement de l’AMAP et ne sortions jamais de la base de données de cagette.net.
+</p><p>
+	<strong>Accès aux données</strong><br/>
+Seuls le coordinateur général de l’AMAP et les responsables contrat auront la possibilité de voir vos coordonnées et vos commandes. Notez que seuls le nom, prénom et e-mail sont obligatoires. Les autres informations comme l’adresse ou le numéro de téléphone sont facultatives. Lors de chaque distribution, une feuille d’émargement sera éventuellement imprimée et fournira votre numéro de téléphone et e-mail afin de permettre aux distributeurs de vous contacter si vous avez oublié de vous présenter à la distribution.
+</p><p>
+	<strong>Sécurité</strong><br/>
+L’équipe Cagette.net s’engage à mettre en oeuvre les méthodes d’usage dans l’industrie du web et de la sécurité informatique afin de protéger au mieux les données des utilisateurs.
+</p>
+				
+				<p>	
+					<strong>Loi informatique et libertés</strong><br/>
+					Conformément à la loi « informatique et libertés » du 6 janvier 1978, vous bénéficiez d'un droit d'accès et de rectification aux informations qui vous concernent, que vous pouvez exercer en envoyant 
+					un courrier à <i>"Cagette.net - François Barbut 10 rue goubeau 33800 Bordeaux."</i>
+
+				</p>
+		
+				<p>
+					<a href="/">&raquo; Retour à la page d'accueil	</a>
+				</p>
+				
+			</div>
+		</div>
+		
+		</div>
+	</div>
+	
+	<div class="span3" style="margin-top:18px;">
+		<div class="article">
+			
+			::if user!=null::
+				Bonjour ::user.name::<br/> 
+					
+				<a href="/user/logout" class="btn btn-mini">Déconnexion</a>
+			::else::
+				
+				Vous avez déjà un compte ?<br/>
+				Cliquez ici pour vous connecter<br/>
+				<a href="/user/login" class="btn btn-medium btn-primary">Connexion</a>
+			::end::
+			
+		</div>
+		
+	</div>
+	
+	<div class="span3" style="margin-top:4px;">
+		<div class="block">
+			Vous souhaitez ouvrir un compte pour votre AMAP ?<br/>
+			<a href="/contact" class="btn btn-medium">Ecrivez-nous</a>
+			
+		</div>
+		
+	</div>
+	
+::end::

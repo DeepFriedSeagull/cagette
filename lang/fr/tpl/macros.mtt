@@ -1,0 +1,167 @@
+<macros>
+
+	<macro name="jsConfirm(?text)">confirm(::if text==null::'Confirmer cette action ?'::else::'::escapeJS(text)::'::end::)</macro>
+	
+	<macro name="confirm(?text)" onclick="return $$jsConfirm(::text::)"/>
+	
+	<macro name="file(id,?def)">::if id == null && def != null::::def::::else::/file/::makeFileSign(id)::.png::end::</macro>
+	
+	<macro name="img(id,?def)"><img src="$$file(::id::,::def::)"/></macro>
+	
+
+	<macro name="browse(b,url)">$$browseCustom(::b::,::url::,Page ::b.page:: ::if b.pages::/ ::b.pages::::end::)</macro>
+
+	<macro name="browseCustom(b,url,custom)">
+		&lt; ::if b.prev::<a href="::url::/?page=::b.prev::">Précédent</a>::else::Précédent::end::
+		| ::custom:: |
+		::if b.next::<a href="::url::/?page=::b.next::">Suivant</a>::else::Suivant::end:: &gt;
+	</macro>
+	
+	<macro name="swf(file,id,width,height,vars,?wmode)">
+		<div id="swf_::id::" class="swf::if wmode:: ::wmode::::end::" style="width : ::width::px; height : ::height::px"></div>
+		<script type="text/javascript">
+		var so = new js.SWFObject("http://data.::HOST::/swf/::file::?v=::variable(file)::","::id::",::width::,::height::,9,"#E4E2E0");
+		so.addParam("AllowScriptAccess","always");
+		so.addParam("FlashVars","::vars::");
+		so.addParam("menu","false");
+		so.addParam("scale","noScale");
+		::if wmode::so.addParam("wmode","::wmode::");::end::
+		so.write("swf_::id::");
+		</script>
+	</macro>
+	
+	<macro name="nullSafe(text)">
+		::if text==null::
+		::else::
+			::text::
+		::end::
+	</macro>
+	
+	<macro name="edit(text,url)">
+		<!--<img src="/img/icons/application_edit.png" style="vertical-align:middle;" />&nbsp;<a href="::url::">::text::</a>-->
+		<a href="::url::" class="btn btn-mini"><i class="icon-edit"></i>&nbsp;::text::</a>	
+	</macro>
+	
+	<macro name="insert(text,url)">
+		<!--<img src="/img/icons/add.png" style="vertical-align:middle;" />&nbsp;<a href="::url::">::text::</a>-->
+		<a href="::url::" class="btn btn-mini"><i class="icon-plus"></i>&nbsp;::text::</a>	
+	</macro>
+	
+	<macro name="delete(text,url)">
+		<a href="::url::" $$confirm(Supprimer ?) class="btn btn-mini" >
+			<i class="icon-remove"></i>
+		::if text!=null::	
+			&nbsp;::text::
+		::end::
+		</a>
+	</macro>
+	
+	<macro name="export()">
+		<a href="?csv=1" class="btn"><i class="icon-list-alt"></i> Export Excel/CSV</a>	
+	</macro>
+	
+	<macro name="bool(v)">
+		::if v==true::
+		<img src="/img/icons/accept.png" />
+		::else::
+		<img src="/img/icons/stop.png" />
+		::end::
+	</macro>
+	
+	
+	<macro name="date(dow,d,m,y,place)">
+		<div class="dateBox" >
+			<div style="line-height:18px;background-color:#FFFFFF;color:#666;font-size:14px;font-weight:bold;text-align:center;margin-bottom:4px;border-radius:3px;">
+				<div>::dow::</div>
+				<div style="font-size:28px;color:#990000;">::d::</div>
+				<div>::m::</div>				
+			</div>
+			<i class="icon-map-marker"></i> <a href="/place/view/::place.id::">::place::</a>
+		</div>		
+	</macro>
+	<macro name="today(dow,d,m,y,place)">
+		<div class="dateBox" style="background-color:#080;" >
+			<img src="/img/go.png"/>
+			<div style="font-size:16px;margin-bottom:8px;">
+				::if Std.parseInt(h)<12::
+					CE MATIN
+				::elseif Std.parseInt(h)<18::
+					<span style="font-size:14px;">CET<br/>APRES-MIDI</span>
+				::else::
+					CE SOIR
+				::end::
+				
+			</div>
+			<i class="icon-map-marker"></i> <a href="/place/view/::place.id::">::place.name::</a>
+		</div>		
+	</macro>
+	
+	<macro name="contact(u)">
+		<div class="contact">
+			<i class="icon-user"></i>
+			<b>::u.firstName:: ::u.lastName::</b><br/>
+			<span ::cond u.address1!=null::>::u.address1::<br/></span>
+			<span ::cond u.address2!=null::>::u.address2::<br/></span>
+			<span ::cond u.zipCode!=null::>::u.zipCode:: ::u.city::<br/></span>
+			<span ::cond u.email!=null::><i class="icon-envelope"></i> <a href="mailto: ::u.email::">::u.email::</a><br/></span>
+			<span ::cond u.phone!=null::>Téléphone : ::u.phone::<br/></span>
+		</div>
+	</macro>
+	
+	<macro name="cagettePrices()">
+		<div>
+		
+		<div class="span4">
+		<table class="table table-bordered">
+			<tr>
+				<th colspan="2">Nbre de foyers adhérents</th>
+				<th></th>
+			</tr>
+			<tr>
+				<th>Minimum</th>
+				<th>Maximum</th>
+				<th>Prix</th>
+			</tr>
+			<tr>
+				<td>0</td>
+				<td>20</td>
+				<td>Gratuit</td>
+			</tr>
+			<tr>
+				<td>21</td>
+				<td>100</td>
+				<td>50 &euro;</td>
+			</tr>
+			<tr>
+				<td>101</td>
+				<td>200</td>
+				<td>100 &euro;</td>
+			</tr>
+			
+		</table>
+		</div>
+		
+		<div class="span4">
+		<table class="table table-bordered" >
+			<tr>
+				<th>Packs Communication</th>
+				<th>Prix</th>
+			</tr>
+			<tr>
+				<td>Pack 10000 emails</td>
+				<td>5 &euro;</td>
+			</tr>
+			<tr>
+				<td>Pack 1000 SMS </td>
+				<td>100 &euro;</td>
+			</tr>
+		</table>
+		</div>
+		
+		</div>
+	</macro>
+	
+	
+	
+	
+</macros>

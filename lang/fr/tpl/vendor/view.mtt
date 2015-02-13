@@ -1,0 +1,22 @@
+::use 'design.mtt'::
+<div class="span9">
+	<div class="article">
+	
+	<h2>::vendor.name::</h2>
+	Fournisseur<br/>
+	
+	
+	$$edit(Modifier,/vendor/edit/::vendor.id::)
+	
+	
+	</div>
+</div>
+
+<div class="span3">
+	
+	
+	<div class="block">
+	</div>
+</div>
+
+::end::

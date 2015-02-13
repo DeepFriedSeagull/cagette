@@ -1,0 +1,29 @@
+﻿::use 'design.mtt'::
+
+<h1>Erreur</h1>
+
+<p>
+	Une erreur s'est produite lors de l'accès à la page demandée.
+</p>
+
+<p>
+	Si le site est indisponible, merci de revenir dans quelques minutes. En cas d'erreur répétées, merci de nous contacter de façon à ce que nous corrigions votre problème.
+</p>
+
+<h2>Description technique de l'erreur</h2>
+
+<pre id="error_msg">
+::message::
+</pre>
+
+::if stack::
+
+<h2>Stack (ADMIN|DEBUG)</h2>
+
+<pre>
+::stack::
+</pre>
+::end::
+
+
+::end::

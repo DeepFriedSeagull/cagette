@@ -1,0 +1,84 @@
+::use 'design.mtt'::
+
+
+<div class="span9">
+	<div class="article">
+		<h3>Mon AMAP</h3>		
+		
+		<p>
+			<strong>::membersNum::</strong> foyers adhérents.<br/>
+			<strong>::contractsNum::</strong> contrats en cours.<br/>
+		</p>
+		
+		<p>
+			<a href="/amap/edit" class="btn btn-small">Modifier les propriétés de mon Amap</a>
+		</p>
+		
+		<p>
+			<a href="/amapadmin/rights/" class="btn btn-small">Droits et accès</a>
+		</p>
+		
+	</div>
+	
+	::if !aboOk::
+		<div class="alert alert-danger">
+			<strong>Attention :</strong>
+			<p>
+				Votre compte est bloqué car votre abonnement 
+				a expiré.<br/> Pour débloquer votre compte, merci
+				de renouveller votre abonnement.
+			</p>
+			<a href="/amapadmin/abo" class="btn-small btn">Renouveler</a>
+		</div>
+	::end::
+		
+	
+</div>
+
+<div class="span3">
+	<div class="block">
+		<h4>Abonnement Cagette.net</h4>
+		
+		::if user._amap.aboType==0::
+			::set aboType = "Gratuit jusqu'à 20 foyers"::
+		::elseif user._amap.aboType==1::
+			::set aboType = "Jusqu'à 100 foyers"::
+		::elseif user._amap.aboType==2::
+			::set aboType = "Jusqu'à 150 foyers"::
+		::elseif user._amap.aboType==3::
+			::set aboType = "Jusqu'à 200 foyers"::
+		::elseif user._amap.aboType==4::
+			::set aboType = "Jusqu'à 250 foyers"::
+		::end::
+		
+		Type : <b>::aboType::</b><br/>
+		
+		::if user._amap.aboEnd!=null && user._amap.aboType!=0::
+			::set aboEnd = hDate(user._amap.aboEnd)::
+		::else::
+			::set aboEnd = "illimité"::
+		::end::
+		
+		Valable jusqu'au <b>::aboEnd::</b><br/>
+		
+		
+		<a href="/amapadmin/abo" class="btn-small btn">Renouveler</a>
+	</div>
+	
+	<div class="block">
+		<h4>Stock Email</h4>
+		Vous pouvez encore envoyer <br/>
+		<b>::user._amap.emailStock:</b> emails <br/>
+		<a href="/amapadmin/abo" class="btn-small btn">Commander</a>
+	</div>
+	
+	<div class="block">
+		<h4>Stock SMS</h4>
+		Vous pouvez encore envoyer <br/>
+		<b>::user._amap.smsStock:</b> SMS<br/>
+		<a href="/amapadmin/abo" class="btn-small btn">Commander</a>
+	</div>
+</div>
+
+
+::end::

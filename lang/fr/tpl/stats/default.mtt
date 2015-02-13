@@ -1,0 +1,30 @@
+::use 'design.mtt'::
+
+<div class="span3">
+		<ul class="nav nav-tabs nav-stacked" >
+			<li><a style="background-color:#FFF;" href="#">Produits</a></li>
+			<li><a style="background-color:#FFF;" href="#">Produits</a></li>
+		</ul>
+</div>
+
+
+<div class="span9">
+	<div class="article">
+	
+		<span class="title" style="margin-bottom: 18px;display: block;">titre</span>
+		
+		
+		<div class="span4">
+		
+			blabla
+		</div>
+		
+	
+	</div>
+</div>
+	
+	
+	
+
+
+::end::

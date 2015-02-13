@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" xml:lang="::LANG::" lang="::LANG::" />
+		<title>::NAME::</title>
+		<!--<meta name="description" ::attr content if( pageMeta == null ) "Default Meta" else pageMeta::/>-->
+		
+		<link rel="stylesheet" type="text/css" href="/css/::getVariable('css')::/style.css"/>
+		<link href='http://fonts.googleapis.com/css?family=Cantora+One&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+		<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+		
+		<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>-->
+		<script type="text/javascript" src="/js/jquery.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/js/::getVariable('js')::/app.js"></script>
+		
+	</head>
+
+
+	<body class="container">
+		
+		::if user != null::
+			
+			<div class="row" style="display:block;position:relative;">
+				<div class="span12 amapTitle">
+					::if user.getAmap()!=null::
+						::user.getAmap().name::
+					::else::
+						Cagette.net
+					::end::
+				</div>
+				<div style="position:absolute;right:0px;bottom:4px;">
+					::user.getName()::
+					::if user.firstName2!=null::
+						et ::user.lastName2:: ::user.firstName2::  						
+					::end::
+					<a href="/user/logout" class="btn btn-mini">Déconnexion</a>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="span12">
+					<div class="navbar" ::cond user.getAmap()!=null:: >
+						<div class="navbar-inner">
+							<ul class="nav">
+								<li ::attr class if(category=="home" ) 'active' ::><a href="/">Accueil</a></li>
+								<li ::attr class if(category=="contract" ) 'active' ::><a href="/contract">Mon compte</a></li>
+								<li ::attr class if(category=="amap" ) 'active' ::><a href="/amap">Mon Amap</a></li>
+								<!--<li ::attr class if(category=="account" ) 'active' ::><a href="/account">Compte</a></li>-->
+								<li ::attr class if(category=="members" ) 'active' ::><a href="/member" ::cond user.canAccessMembership()::>Gestion adhérents</a></li>
+								<li ::attr class if(category=="contractadmin" ) 'active' ::><a href="/contractAdmin" ::cond user.isContractManager(null)::>Gestion contrats</a></li>
+								<li ::attr class if(category=="messages" ) 'active' ::><a href="/messages" ::cond user.canAccessMessages()::>Messagerie</a></li>
+									<li ::attr class if(category=="amapadmin" ) 'active' ::><a href="/amapadmin" ::cond user.isAmapManager()::>Gestion Amap</a></li>
+								<li ><a href="/admin" ::cond isAdmin::>[ADM]</a></li>
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div id="content" class="span12">
+					::set notification = getMessages()::
+					<div class="alert ::if notification.error:: alert-danger ::else:: alert-success ::end::" ::cond notification::>
+						::raw notification.text::					
+					</div>
+				</div>	
+			</div>
+			
+		::else::
+			<div style="margin-top:12px;">
+				<div id="content" class="span12">
+					::set notification = getMessages()::
+					<div class="alert ::if notification.error:: alert-danger ::else:: alert-success ::end::" ::cond notification::>
+						::raw notification.text::					
+					</div>
+				</div>	
+			</div>
+			
+		::end::
+			
+			<div class="row">
+				::raw __content__::
+			</div>		
+			
+			<div id="footer" class="span12">
+				
+				
+					<a href="/intro">Cagette.net</a> • 
+					<!--<a href="http://aide.cagette.net" target="_blank">Aide</a> •-->
+					<a href="http://cagette.uservoice.com/knowledgebase" target="_blank">Aide</a> •
+					<a href="http://cagette.uservoice.com/" target="_blank">Proposez une amélioration</a> •
+					<a href="https://groups.google.com/forum/?hl=fr#!forum/cagette" target="_blank">Forum</a> •
+					<a href="/cgu/">Données et vie privée</a> •
+					<a href="https://www.facebook.com/cagette/" target="_blank"><img src="/img/facebook-16.png" align="middle" /> Cagette sur Facebook</a>
+				
+			</div>
+		
+		
+		<!--  SQL LOG -->
+		<table class="sqlLog" ::cond sqlLog:: style=";margin-top:30px;">
+		::foreach r sqlLog::
+		<tr ::attr class if(r.bad) 'badSql'::>
+			<td>::r.t::ms</td>
+			<td>::r.length::</td>
+			<td><a href="#" onclick="javascript:alert('::r.explain::');return false;">Exp</a></td>
+			<td><a href="#" onclick="javascript:alert('::r.stack::');return false;">Stack</a></td>
+			<td>::r.sql::</td>
+		</tr>
+		::end::
+		</table>
+		
+		
+		
+			<script>
+			// Include the UserVoice JavaScript SDK (only needed once on a page)
+			UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/sayZ1eIZLfSZUa3IwslHCw.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
+
+			//
+			// UserVoice Javascript SDK developer documentation:
+			// https://www.uservoice.com/o/javascript-sdk
+			//
+
+			// Set colors
+			UserVoice.push(['set', {
+			  accent_color: '#6aba2e',
+			  trigger_color: 'white',
+			  trigger_background_color: '#e2753a'
+			}]);
+
+			// Identify the user and pass traits
+			// To enable, replace sample data with actual user traits and uncomment the line
+			UserVoice.push(['identify', {
+			  //email:      'john.doe@example.com', // User’s email address
+			  //name:       'John Doe', // User’s real name
+			  //created_at: 1364406966, // Unix timestamp for the date the user signed up
+			  //id:         123, // Optional: Unique id of the user (if set, this should not change)
+			  //type:       'Owner', // Optional: segment your users by type
+			  //account: {
+			  //  id:           123, // Optional: associate multiple users with a single account
+			  //  name:         'Acme, Co.', // Account name
+			  //  created_at:   1364406966, // Unix timestamp for the date the account was created
+			  //  monthly_rate: 9.99, // Decimal; monthly rate of the account
+			  //  ltv:          1495.00, // Decimal; lifetime value of the account
+			  //  plan:         'Enhanced' // Plan name for the account
+			  //}
+			}]);
+
+			// Add default trigger to the bottom-right corner of the window:
+			UserVoice.push(['addTrigger', { mode: 'smartvote', trigger_position: 'bottom-right' }]);
+
+			// Or, use your own custom trigger:
+			//UserVoice.push(['addTrigger', '#id', { mode: 'smartvote' }]);
+
+			// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+			UserVoice.push(['autoprompt', {}]);
+			</script>
+		
+		
+		
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-17932663-2']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+		
+	</body>
+</html>

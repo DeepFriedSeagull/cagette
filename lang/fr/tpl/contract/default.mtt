@@ -1,0 +1,38 @@
+::use 'design.mtt'::
+<div id="content" class="span8">
+	<div class="article">
+	<h2>Mes contrats</h2>
+
+	<table class="table" ::cond userContracts!=null::>
+			<tr>
+				<th>Quantité</th>
+				<th>Produit</th>
+				<th>Prix</th>
+				<th>Contrat</th>
+				<th>Producteur</th>
+			</tr>
+			::foreach p userContracts::
+				<tr>
+					<td>::p.quantity::</td>
+					<td>::p._product.name::</td>
+					<td>::p._product.price*p.quantity:: €</td>
+					<td>::p._product._contract.name::</td>
+					<td>::p._product._contract._vendor.name::</td>
+				</tr>
+			::end::
+			
+		</table>
+	
+	</div>
+</div>
+<div class="span4">
+	<div class="article">
+	$$contact(::user::)
+	
+	
+	$$edit(Modifier,/account/edit)
+	</div>
+</div>
+
+
+::end::

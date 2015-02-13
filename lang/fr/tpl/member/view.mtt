@@ -1,0 +1,89 @@
+::use 'design.mtt'::
+
+<div class="span4">
+	<h3>Coordonnées</h3>
+	<div class="article">
+		
+		<h3>::member.firstName:: ::member.lastName::
+		::if member.firstName2!=null::
+			& ::member.firstName2:: ::member.lastName2::
+			
+		::end::
+		</h3>
+		
+		
+		::member.address1::<br/>
+		::if member.address2!=null::
+			::member.address2::
+		::end::<br/>
+		::member.zipCode:: ::member.city::<br/>
+		<br/>
+		::if member.phone!=null::
+			Tel : ::member.phone::<br/>
+		::end::
+
+		::if member.email!=null::
+			E-mail : <a href="mailto: ::member.email::">::member.email::</a><br/>
+		::end::
+		
+		::if member.email2!=null::
+			E-mail : <a href="mailto: ::member.email2::">::member.email2::</a><br/>
+		::end::
+		
+		<div style="color:#AAA;font-size:11px;">
+		Dernière connexion : ::if member.ldate!=null:: ::member.ldate.toString():: ::else:: ??? ::end::<br/>
+		Enregistré depuis : ::if member.cdate!=null:: ::member.cdate.toString():: ::else:: ??? ::end::<br/>
+		</div>
+		
+		<!--$$edit(Modifier,/db/Member/edit/::member.id::)-->
+		$$edit(Modifier,/member/edit/::member.id::)<br/>
+		$$delete(Supprimer,/member/delete/::member.id::)
+	</div>
+</div>
+
+<div class="span4">
+	<h3>Contrats</h3>
+	<div class="article">
+		
+		<ul ::cond userContracts!=null::>
+			::foreach p userContracts::
+				<li>
+					<b>::p._product.name::</b> (::p._product._contract.name::)
+				</li>
+			::end::
+		</ul>		
+	</div>
+</div>
+
+<div class="span4" ::cond user._amap.hasMembership()::>
+	<h3>Cotisation</h3>
+	<div class="article">
+		Dernière cotisation :
+		::if userAmap.hasValidMembership()::
+			<span style="color:#080">::hDate(userAmap.lastMemberShip)::</span>		
+		::else::
+			<span style="color:#F00">::hDate(userAmap.lastMemberShip)::</span>
+			<br/>
+			<a href="/member/setMembership/::member.id::" class="btn btn-small"><i class="icon-plus-sign"></i> Enregistrer une cotisation</a>
+		::end::
+		
+		
+	</div>
+</div>
+
+
+
+<div class="span4" ::cond userAmap.rights!=null && userAmap._rights!=null::>
+	<h3>Droits</h3>
+	<div class="article">
+		<ul>
+			
+		
+		::foreach r userAmap._rights::
+		<li>::userAmap.getRightName(r)::</li>
+		::end::
+		</ul>
+	</div>	
+</div>
+
+::end::

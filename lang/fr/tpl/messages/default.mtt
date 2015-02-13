@@ -1,0 +1,51 @@
+::use 'design.mtt'::
+
+<script src="/js/tinymce.min.js"></script>
+<script src="/js/jquery.tinymce.min.js"></script>
+
+
+
+<div class="span3">
+	<div class="block">
+		Stock Email :
+		<b>::user._amap.emailStock:</b>
+		<a href="/amapadmin/abo" ::cond user.isAmapManager()&&user._amap.emailStock<100 :: class="btn-small btn">Commander</a>
+	</div>
+
+	<div class="article">
+		::if user.isAmapManager()::
+			<b>Tous les messages envoyés</b>
+			
+		::else::
+			<b>Derniers messages envoyés</b>
+		::end::
+		<div style="overflow-y:scroll;height:600px;">
+		::foreach m sentMessages::
+		<a href="/messages/message/::m.id::">::m.title::
+		<div style="color:#666;font-size:11px;border-bottom:1px solid #DDD;">::hDate(m.date)::</div> 
+		</a>
+		::end::
+		</div>
+		
+	</div>
+</div>
+
+
+<div class="span9">
+	<div class="article">
+		<h3>Envoyer un e-mail	</h3>		
+		
+		::raw form::
+	</div>
+</div>
+
+<script>
+	$(function(){
+		tinymce.init({
+			selector: "textarea"
+		 });
+
+	});
+</script>
+
+::end::

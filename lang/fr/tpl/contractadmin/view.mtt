@@ -1,0 +1,51 @@
+::use 'contractadmin/design.mtt'::
+
+	
+		<span class="title" style="margin-bottom: 18px;display: block;">Récapitulatif : ::contract.name::</span>
+		
+		<h4>Dates</h4>
+		
+		<table class="table table-bordered" style="width:400px;">
+			<tr>
+				<td>Début</td>
+				<td>::hDate(contract.startDate)::</td>
+			</tr>
+			<tr>
+				<td>Fin</td>
+				<td>::hDate(contract.endDate)::</td>
+			</tr>
+		</table>
+		
+		
+		<h4>Producteur</h4>
+		<table class="table table-bordered" style="width:400px;">
+			<tr>
+				<td>Nom</td>
+				<td><b>::contract._vendor.name::</b></td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td>::contract._vendor.email::</td>
+			</tr>
+			<tr>
+				<td>Téléphone </td>
+				<td>::contract._vendor.phone::</td>
+			</tr>
+		</table>
+		
+		
+		<h4><a href="/contractAdmin/products/::c.id::">Produits</a></h4>
+		<table class="table table-bordered" style="width:400px;">
+			::foreach p contract.getProducts()::
+			<tr>
+				<td><img src="/img/::p.getImage()::" style="width:32px;height:32px;" />	</td>
+				<td>::p.name::</td>
+				<td>::p.price:: &euro;</td>					
+			</tr>
+			::end::
+		</table>
+			
+	
+	
+
+::end::

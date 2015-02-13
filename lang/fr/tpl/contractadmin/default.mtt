@@ -1,0 +1,77 @@
+::use 'design.mtt'::
+
+<div class="span9">
+	<div class="article">
+		<h2>Contrats</h2>
+		<table class="table">
+			::foreach c contracts::
+				::if c.endDate!=null && c.endDate.getTime() < Date.now().getTime()::
+						::set style = "opacity:0.5;"::
+					::else::
+						::set style = ""::
+					::end::
+				<tr  style="::style::" >
+					<td>
+						<b>::c.name::</b>
+						<div style="font-size:11px;color:#333;">du ::c.startDate.toString().substr(0,10)::
+						au ::c.endDate.toString().substr(0,10)::</div>
+					</td>
+					
+					<td>::c._vendor.name::</td>
+					<td>
+						$$edit(Gestion,/contractAdmin/view/::c.id::)
+						$$delete(Suppr.,/contract/delete/::c.id::?chk=::token::)
+						</td>
+				</tr>
+			::end::
+		</table>
+	
+		
+	::if user.isAmapManager():: 
+		$$insert(Nouveau contrat,/contract/insert/)
+	::end::
+		
+	</div>
+	
+	<div class="article" ::cond user.isAmapManager()::>
+		<h2>Producteurs</h2>
+		<table class="table">
+			::foreach v vendors::		
+				<tr>
+					<td><b>::v.name::</b></td>
+					<td>$$edit(Modifier,/vendor/edit/::v.id::)</td>
+				</tr>
+			::end::
+		</table>
+		$$insert(Nouveau producteur,/vendor/insert/)
+	</div>	
+	<div class="article" ::cond user.isAmapManager()::>
+		
+		<h2>Lieux</h2>
+		<table class="table">
+			::foreach p places::		
+				<tr>
+					<td><b>::p.name::</b></td>
+					<td>$$edit(Modifier,/place/edit/::p.id::)</td>
+				</tr>
+			::end::
+		</table>
+		$$insert(Nouveau lieu,/place/insert/)
+	</div>
+	
+	
+</div>
+	
+	
+	
+<div class="span3">
+	<div class="block">
+		<p>
+			En tant que responsable de contrat, vous pouvez définir <b>la liste des produits</b> disponibles dans ce contrat, les <b>dates de distribution</b> et bien sûr gérer <b>les commandes des amapiens</b>.
+		</p>
+		
+	</div>
+</div>
+
+
+::end::

@@ -1,0 +1,31 @@
+::use 'design.mtt'::
+
+	
+	<div style="margin:32px auto 32px auto;width:400px;">
+		<span class="amapTitle">Connexion</span>
+		<div class="block">
+			<form action="/user/login" method="post">
+				<table>
+					<tr>
+						<td>Email : </td>
+						<td><input type="text" name="name" value=""/></td>
+					</tr>
+					<tr>
+						<td>Mot de passe : </td>
+						<td><input type="password" name="pass" value=""/></td>
+					</tr>
+					
+				</table>
+				
+				
+				<input type="submit" value="OK"/>
+			</form>
+
+			<p>
+				<a href="/user/forgottenPassword">Mot de passe oublié</a>
+			</p>
+	
+		</div>
+	</div>
+
+::end::
