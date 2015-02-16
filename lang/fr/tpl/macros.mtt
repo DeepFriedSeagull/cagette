@@ -56,8 +56,8 @@
 		</a>
 	</macro>
 	
-	<macro name="export()">
-		<a href="?csv=1" class="btn"><i class="icon-list-alt"></i> Export Excel/CSV</a>	
+	<macro name="export(url)">
+		<a href="::url::" class="btn"><i class="icon-list-alt"></i> Export Excel/CSV</a>	
 	</macro>
 	
 	<macro name="bool(v)">
@@ -161,7 +161,7 @@
 		</div>
 	</macro>
 	
-	
+
 	
 	
 </macros>

@@ -42,4 +42,26 @@ class Admin extends Controller {
 		
 	}
 	
+	@tpl("admin/errors.mtt")
+	function doErrors( args:{?user: Int, ?like: String} ) {
+		view.now = Date.now();
+
+		view.u = args.user!=null ? db.User.manager.get(args.user,false) : null;
+		view.like = args.like!=null ? args.like : "";
+
+		var sql = "";
+		if( args.user!=null ) sql += " AND uid="+args.user;
+		if( args.like!=null && args.like != "" ) sql += " AND error like "+sys.db.Manager.cnx.quote("%"+args.like+"%");
+
+
+		var errorsStats = sys.db.Manager.cnx.request("select count(id) as c,date as d,DATE_FORMAT(date,'%d-%b') as day from Error where date > NOW()- INTERVAL 1 MONTH "+sql+" group by day order by d").results();
+		view.errorsStats = errorsStats;
+
+		view.browser = new sugoi.tools.ResultsBrowser(
+			sugoi.db.Error.manager.unsafeCount("SELECT count(*) FROM Error WHERE 1 "+sql),
+			20,
+			function(start, limit) {  return sugoi.db.Error.manager.unsafeObjects("SELECT * FROM Error WHERE 1 "+sql+" ORDER BY date DESC LIMIT "+start+","+limit,false); }
+		);
+	}
+	
 }

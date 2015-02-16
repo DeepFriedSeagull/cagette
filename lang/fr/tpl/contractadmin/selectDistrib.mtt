@@ -1,0 +1,30 @@
+::use 'contractAdmin/design.mtt'::
+		
+		::if distributions.length>0::
+			
+			<h3>Commandes</h3>
+		
+			<table class="table table-bordered">
+				
+			::foreach d distributions::
+				<tr>
+					<td>::hDate(d.date)::</td>
+					<td>
+						<a href="/contractAdmin/orders/::c.id::?d=::d.id::" class="btn btn-default">Commandes</a>
+						
+					</td>
+				</tr>
+			::end::
+			</table>
+			
+		::else::
+			<div class="alert alert-danger">
+				Ce contrat est un <b>contrat à commandes variables</b>, vous devez donc d'abord créer une ou des distributions pour pouvoir y relier
+				des commandes.<br/>
+				
+				<a href="/contractAdmin/distributions/::c.id::" class="btn btn-default">Gérer les distributions</a>
+			</div>
+		::end::
+	
+
+::end::

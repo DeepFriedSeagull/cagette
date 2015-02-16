@@ -1,5 +1,7 @@
 ::use 'design.mtt'::
 
+
+
 <div class="span9">
 	<div class="article">
 		<h2>Contrats</h2>
@@ -20,7 +22,7 @@
 					<td>::c._vendor.name::</td>
 					<td>
 						$$edit(Gestion,/contractAdmin/view/::c.id::)
-						$$delete(Suppr.,/contract/delete/::c.id::?chk=::token::)
+						$$delete(Suppr.,/contract/delete/::c.id::?token=::token::)
 						</td>
 				</tr>
 			::end::
@@ -28,7 +30,7 @@
 	
 		
 	::if user.isAmapManager():: 
-		$$insert(Nouveau contrat,/contract/insert/)
+		$$insert(Nouveau contrat,/contract/insertChoose/)
 	::end::
 		
 	</div>

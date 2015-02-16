@@ -29,6 +29,11 @@ class UserContract extends Object
 	
 	public var paid : SBool;
 	
+	//if not null : varying orders
+	@:relation(distributionId)
+	public var distribution:SNull<db.Distribution>;
+	public var distributionId : SNull<SInt>;
+	
 	public function new() 
 	{
 		super();

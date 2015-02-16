@@ -46,9 +46,18 @@ class Main extends Controller {
 			for ( d in distribs) {
 				
 				var x = { distrib:d,contracts:[] };
-				for (c in contracts) {
-					if (c.product.contract.id == d.contract.id) {
-						x.contracts.push(c);
+				for (order in contracts) {
+					var contract = order.product.contract;
+					if (contract.id == d.contract.id) {
+						
+						if (contract.type == db.Contract.TYPE_VARORDER) {
+							if (order.distributionId == d.id) {
+								x.contracts.push(order);
+							}
+						}else {
+							x.contracts.push(order);	
+						}
+						
 					}
 				}
 				var key = d.end.toString().substr(0,10)+"-p"+d.place.id;

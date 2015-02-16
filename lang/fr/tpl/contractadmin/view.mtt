@@ -1,11 +1,21 @@
 ::use 'contractadmin/design.mtt'::
 
 	
-		<span class="title" style="margin-bottom: 18px;display: block;">Récapitulatif : ::contract.name::</span>
+		<h3>Récapitulatif</h3>
 		
-		<h4>Dates</h4>
 		
 		<table class="table table-bordered" style="width:400px;">
+			<tr>
+				<td>Type</td>
+				<td>
+					::if contract.type==0::
+					Contrat à commande fixe
+					::else::
+					Contrat à commande variable
+					::end::
+					
+				</td>
+			</tr>
 			<tr>
 				<td>Début</td>
 				<td>::hDate(contract.startDate)::</td>
@@ -29,7 +39,7 @@
 			</tr>
 			<tr>
 				<td>Téléphone </td>
-				<td>::contract._vendor.phone::</td>
+				<td>$$nullSafe(::contract._vendor.phone::)</td>
 			</tr>
 		</table>
 		

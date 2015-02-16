@@ -91,44 +91,30 @@ class ContractAdmin extends Controller
 		view.form = form;
 	}
 	
-	
+	 
 	/**
-	 * experimental !
+	 * Overview of orders for this contract
 	 */
-	
-	/*function setCsvData(data:Array<Dynamic>,headers:Array<String>) {
-		if (app.params.exists("csv")) {
-			app.setTemplate('empty.mtt');
-			neko.Web.setHeader("Content-type", "text.csv");
-			neko.Web.setHeader('Content-disposition', 'attachment;filename=export-cagette.csv');
-			
-			Sys.println(Lambda.map(headers,function(t) return App.t._(t)).join(","));
-			
-			for (d in data) {
-				var row = [];
-				//for ( f in Reflect.fields(d)) {
-				for( f in headers){
-					row.push( Reflect.getProperty(d,f));	
-				}
-				Sys.println(row.join(","));
-			}
-			return true;
-		}
-		return false;
-	}*/
-	 
-	 
-	
 	@tpl("contractadmin/orders.mtt")
-	function doOrders(contract:db.Contract) {
+	function doOrders(contract:db.Contract,args:{?d:db.Distribution}) {
 		if (!app.user.canManageContract(contract)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
+		if (contract.type == db.Contract.TYPE_VARORDER && args.d == null ) { 
+			throw Redirect("/contractAdmin/selectDistrib/" + contract.id); 
+		}
+		
+		if (contract.type == db.Contract.TYPE_VARORDER ) view.distribution = args.d;
 		view.c = contract;
 		
 		var pids = db.Product.manager.search($contract == contract, false);
 		var pids = Lambda.map(pids, function(x) return x.id);
 		
+		var orders : List<Dynamic>;
+		if (contract.type == db.Contract.TYPE_VARORDER ) {
+			orders = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,p.price as price, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" and up.distributionId="+args.d.id+" order by uname asc;").results();	
+		}else {
+			orders = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,p.price as price, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" order by uname asc;").results();
+		}
 		
-		var orders = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,p.price as price, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" order by uname asc;").results();
 		var totalPrice = 0;
 		for ( o in orders) {
 			totalPrice += o.quantity * o.price;
@@ -315,81 +301,115 @@ class ContractAdmin extends Controller
 		
 		view.form = form;
 	}*/
+	@tpl("contractadmin/selectDistrib.mtt")
+	function doSelectDistrib(c:db.Contract) {
+		view.c = c;
+		view.distributions = c.getDistribs();
+	}
 	
 	/**
 	 * Modifier la commande d'un utilisateur
 	 */
 	@tpl("contractadmin/edit.mtt")
-	function doEdit(c:db.Contract, ?user:db.User) {
+	function doEdit(c:db.Contract, ?user:db.User, args:{?d:db.Distribution}) {
+	
 		if (!app.user.canManageContract(c)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
+		
 		view.c = view.contract = c;
 		view.u = user;
+		view.distribution = args.d;
 		
-		if (user == null) {
-			view.users = app.user.amap.getMembersFormElementData();
-		}
-		
-		var userOrders = new Array<{order:db.UserContract,product:db.Product}>();
-		var products = c.getProducts();
-		
-		for ( p in products) {
-			var ua = { order:null, product:p };
-			var o = db.UserContract.manager.select($user == user && $productId == p.id, true);
-			if (o != null) ua.order = o;
-			userOrders.push(ua);
-		}
-		
-		//form check
-		if (checkToken()) {
+		//need to select a distribution for varying orders contracts
+		if (c.type == db.Contract.TYPE_VARORDER && args.d == null ) {
 			
-			//c'est une nouvelle commande, le user a été défini dans le formulaire
+			throw Redirect("/contractAdmin/orders/" + c.id);
+			
+		}else {
 			if (user == null) {
-				user = db.User.manager.get(Std.parseInt(app.params.get("user")));
-				if (user == null) throw "user #"+app.params.get("user")+" introuvable";
-				if (!user.isMemberOf(app.user.amap)) throw user + " ne fait pas partie de cette amap";
+				view.users = app.user.amap.getMembersFormElementData();
 			}
 			
+			var userOrders = new Array<{order:db.UserContract,product:db.Product}>();
+			var products = c.getProducts();
 			
-			for (k in app.params.keys()) {
-				var param = app.params.get(k);
-				if (k.substr(0, "product".length) == "product") {
-					
-					//trouve le produit dans userOrders
-					var pid = Std.parseInt(k.substr("product".length));
-					var uo = Lambda.find(userOrders, function(uo) return uo.product.id == pid);
-					if (uo == null) throw "Impossible de retrouver le produit " + pid;
-					var q = Std.parseInt(param);
-					
-					var order = new db.UserContract();
-					if (uo.order != null) {
-						//record existant
-						order = uo.order;
-						if (q == 0) {
-							order.lock();
-							order.delete();
+			for ( p in products) {
+				var ua = { order:null, product:p };
+				
+				var order : db.UserContract = null;
+				if (c.type == db.Contract.TYPE_VARORDER) {
+					order = db.UserContract.manager.select($user == user && $productId == p.id && $distributionId==args.d.id, true);	
+				}else {
+					order = db.UserContract.manager.select($user == user && $productId == p.id, true);
+				}
+				
+				if (order != null) ua.order = order;
+				userOrders.push(ua);
+			}
+			
+			//form check
+			if (checkToken()) {
+				
+				//c'est une nouvelle commande, le user a été défini dans le formulaire
+				if (user == null) {
+					user = db.User.manager.get(Std.parseInt(app.params.get("user")));
+					if (user == null) throw "user #"+app.params.get("user")+" introuvable";
+					if (!user.isMemberOf(app.user.amap)) throw user + " ne fait pas partie de cette amap";
+				}
+				
+				//get dsitrib if needed
+				var distrib : db.Distribution = null;
+				if (c.type == db.Contract.TYPE_VARORDER) {
+					distrib = db.Distribution.manager.get(Std.parseInt(app.params.get("distribution")), false);
+				}
+				
+				for (k in app.params.keys()) {
+					var param = app.params.get(k);
+					if (k.substr(0, "product".length) == "product") {
+						
+						//trouve le produit dans userOrders
+						var pid = Std.parseInt(k.substr("product".length));
+						var uo = Lambda.find(userOrders, function(uo) return uo.product.id == pid);
+						if (uo == null) throw "Impossible de retrouver le produit " + pid;
+						var q = Std.parseInt(param);
+						
+						var order = new db.UserContract();
+						if (uo.order != null) {
+							//record existant
+							order = uo.order;
+							if (q == 0) {
+								order.lock();
+								order.delete();
+							}else {
+								order.lock();
+								order.quantity = q;
+								order.paid = (app.params.get("paid" + pid) == "1");
+								order.update();	
+							}
 						}else {
-							order.lock();
-							order.quantity = q;
-							order.paid = (app.params.get("paid" + pid) == "1");
-							order.update();	
-						}
-					}else {
-						//nouveau record
-						if (q != 0) {
-							order.user = user;
-							order.product = uo.product;
-							order.quantity = q;
-							order.paid = (app.params.get("paid" + pid) == "1");
-							order.amap = app.user.amap;
-							order.insert();	
+							//nouveau record
+							if (q != 0) {
+								order.user = user;
+								order.product = uo.product;
+								order.quantity = q;
+								order.paid = (app.params.get("paid" + pid) == "1");
+								order.amap = app.user.amap;
+								order.distribution = distrib;
+								order.insert();	
+							}
 						}
 					}
 				}
+				if (distrib != null) {
+					throw Ok("/contractAdmin/orders/" + c.id +"?d="+distrib.id, "La commande a été mise à jour");
+				}else {
+					throw Ok("/contractAdmin/orders/" + c.id, "La commande a été mise à jour");						
+				}
+				
 			}
-			throw Ok("/contractAdmin/orders/" + c.id, "La commande a été mise à jour");
+			view.userOrders = userOrders;
 		}
 		
-		view.userOrders = userOrders;
+		
 	}
 	
 	

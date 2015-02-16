@@ -1,7 +1,7 @@
 ::use 'contractadmin/design.mtt'::
 
 	
-		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
+		<h3>Produits</h3>
 		
 			<b>Produits</b>
 			<table class="table">

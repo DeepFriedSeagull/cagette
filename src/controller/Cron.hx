@@ -103,6 +103,14 @@ class Cron extends Controller
 			var x = users.get(o.userId);
 			if (x == null) x = {user:o.user,distrib:null,products:[]};
 			
+			if (o.product.contract.type == db.Contract.TYPE_VARORDER) {
+				//commande variable
+				if (o.distributionId != distribsByContractId.get(o.product.contract.id).id) {
+					//si cette commande ne correspond pas à cette distribution, on passe
+					continue;	
+				}
+			}
+			
 			x.distrib = distribsByContractId.get(o.product.contract.id);
 			x.products.push(o);
 			

@@ -23,24 +23,7 @@ class Contract extends Controller
 		var userContracts = app.user.getOrders();
 		view.userContracts = userContracts;
 	}
-	
-	
-	//function form() {
-	//
-		//var form = new Form("contract");
-		//form.addElement( new Hidden("id", "id") );
-		//form.addElement( new Input("name", "Nom") );
-		//form.addElement( new DateDropdowns("startDate", "Date de début") );
-		//form.addElement( new DateDropdowns("endDate", "Date de fin") );
-		//form.addElement( new Selectbox("userId", "Responsable", app.user.amap.getMembersFormElementData()));
-		//var vendors = db.Vendor.manager.search($amap == app.user.amap, false);
-		//var v = [];
-		//for (vendor in vendors) v.push({key:Std.string(vendor.id),value:vendor.name});
-		//form.addElement( new Selectbox("vendorId", "Producteur", v));		
-		//return form;
-		//
-	//}
-	
+
 	@tpl("form.mtt")
 	function doEdit(c:db.Contract) {
 		
@@ -48,6 +31,7 @@ class Contract extends Controller
 		var currentContact = c.contact;
 		var form = Form.fromSpod(c);
 		form.removeElement( form.getElement("amapId") );
+		form.removeElement(form.getElement("type"));
 		
 		if (form.checkToken()) {
 			form.toSpod(c);
@@ -81,18 +65,28 @@ class Contract extends Controller
 		view.form = form;
 	}
 	
+	@tpl("contract/insertChoose.mtt")
+	function doInsertChoose() {
+		//checkToken();
+		
+	}
+	
 	@tpl("form.mtt")
-	function doInsert() {
+	function doInsert(?type:Int) {
 		if (!app.user.isAmapManager()) throw Error('/', 'Action interdite');
+		
+		view.title = if (type == db.Contract.TYPE_CONSTORDERS)"Créer un contrat à commande fixe"else"Créer un contrat à commande variable";
 		
 		var c = new db.Contract();
 		
 		var form = Form.fromSpod(c);
 		form.removeElement( form.getElement("amapId") );
-		
+		form.removeElement(form.getElement("type"));
+			
 		if (form.checkToken()) {
 			form.toSpod(c);
 			c.amap = app.user.amap;
+			c.type = type;
 			c.insert();
 			
 			//right
@@ -136,23 +130,40 @@ class Contract extends Controller
 	}
 	
 	@tpl("contract/order.mtt")
-	function doOrder(c:db.Contract) {
+	function doOrder(c:db.Contract,args:{?d:db.Distribution}) {
 		if (!c.isUserOrderAvailable()) throw Error("/", "Ce contrat n'est pas ouvert aux commandes ");
-		
+		if (c.type == db.Contract.TYPE_VARORDER && args.d == null ) {
+			throw Error("/", "Ce contrat est à commande variable, vous devez sélectionner une date de distribution pour faire votre commande.");
+		}
 		view.c = view.contract = c;
+		view.distribution = args.d;
 		
 		var userOrders = new Array<{order:db.UserContract,product:db.Product}>();
 		var products = c.getProducts();
 		
 		for ( p in products) {
 			var ua = { order:null, product:p };
-			var o = db.UserContract.manager.select($user == app.user && $productId == p.id, true);
-			if (o != null) ua.order = o;
+			
+			var order : db.UserContract = null;
+			if (c.type == db.Contract.TYPE_VARORDER) {
+				order = db.UserContract.manager.select($user == app.user && $productId == p.id && $distributionId==args.d.id, true);	
+			}else {
+				order = db.UserContract.manager.select($user == app.user && $productId == p.id, true);
+			}
+			
+			if (order != null) ua.order = order;
 			userOrders.push(ua);
 		}
 		
 		//form check
 		if (checkToken()) {
+			
+			//get dsitrib if needed
+			var distrib : db.Distribution = null;
+			if (c.type == db.Contract.TYPE_VARORDER) {
+				distrib = db.Distribution.manager.get(Std.parseInt(app.params.get("distribution")), false);
+			}
+			
 			for (k in app.params.keys()) {
 				var param = app.params.get(k);
 				if (k.substr(0, "product".length) == "product") {
@@ -184,12 +195,18 @@ class Contract extends Controller
 							order.quantity = q;
 							order.paid = false;
 							order.amap = app.user.amap;
+							order.distribution = distrib;
 							order.insert();	
 						}
 					}
 				}
 			}
-			throw Ok("/contract/order/" + c.id, "Votre commande a été mise à jour");
+			if (distrib != null) {
+				throw Ok("/contract/order/" + c.id+"?d="+distrib.id, "Votre commande a été mise à jour");	
+			}else {
+				throw Ok("/contract/order/" + c.id, "Votre commande a été mise à jour");	
+			}
+			
 		}
 		
 		view.userOrders = userOrders;

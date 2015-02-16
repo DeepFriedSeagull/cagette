@@ -14,18 +14,30 @@
 	
 	::if aboOk::
 	
+		<!-- OPEN ORDERS -->
 		<div class="article span8" ::cond (aboOk && openContracts!=null && openContracts.length>0 )::>
 			<img src="/img/order.png" width="64" height="64" style="float:right;" />
-			<span class="title">Commandes ouvertes :</span>
+			<span class="title">Commandes ouvertes</span>
 			<br/>
 			<ul>
 				::foreach c openContracts::
-				<li><a href="/contract/order/::c.id::">::c.name::</a></li>
+					::if c.type==1::
+						<li>
+							::c.name::
+							<ul>
+								::foreach d c.getDistribs(true)::
+								<li><a href="/contract/order/::c.id::?d=::d.id::">Commande distribuée le ::hDate(d.date)::</a></li>
+								::end::
+							</ul>
+						</li>
+					::else::
+						<li><a href="/contract/order/::c.id::">::c.name::</a></li>	
+					::end::
 				::end::	
 			</ul>
 		</div>
 	
-	
+		<!-- PLANNING -->
 		::if distribs==null || distribs.length==0::
 		<div class="article span3">
 			Votre planning de distribution est vide pour l'instant.<br/>

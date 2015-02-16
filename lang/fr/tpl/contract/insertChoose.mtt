@@ -1,0 +1,30 @@
+::use 'design.mtt'::
+<div id="content" class="span8">
+	<div class="article">
+	<h2>Choisissez un type de contrat :</h2>
+
+	<a href="/contract/insert/0" class="btn btn-primary">Contrat à commande fixe</a>
+	
+	<div>
+		C'est typiquement un contrat avec un engagement à l'année ou à la saison. 
+		La commande est toujours la même à chaque distribution.<br/>
+		<i>Exemple : Imaginons un contrat maraîcher qui dure une année.
+		Jean prend un panier à 10€ pour toute l'année, et Brigitte prend un panier à 20€ pour toute l'année.</i>
+	</div>
+	
+	<br/>
+	<br/>
+	
+	<a href="/contract/insert/1" class="btn btn-warning">Contrat à commande variable</a>
+	
+	<div>
+		C'est un contrat dans lequel les adhérents peuvent changer leur commande à chaque distribution.
+		A chaque distribution correspond une commande différente.
+		<i>Exemple : Jean prend un panier à 10€ pour la première distribution, puis rien la deuxième distribution, puis un panier à 20€ ...etc</i>
+	</div>
+	
+	</div>
+</div>
+
+
+::end::

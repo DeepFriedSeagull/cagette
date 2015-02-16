@@ -1,4 +1,8 @@
 ::use 'design.mtt'::
+<div class="span12">
+	<h2>::c.name::</h2>	
+</div>
+
 <div class="span3">
 	
 		<ul class="nav nav-tabs nav-stacked" >

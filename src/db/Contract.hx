@@ -36,8 +36,12 @@ class Contract extends Object
 	public var distributorNum:STinyInt;
 	public var flags : SFlags<ContractFlags>;
 	
-	public var percentageValue : SNull<SInt>; 	//% commission sur les ventes
+	public var percentageValue : SNull<SInt>; 		//% commission sur les ventes
 	public var percentageName : SNull<SString<64>>;	//nom de la commission, ex "participation aux frais"
+	
+	public var type : SInt;
+	@:skip public static var TYPE_CONSTORDERS = 0; 	//à commande fixes
+	@:skip public static var TYPE_VARORDER = 1;		//à commandes variables
 	
 	public function new() 
 	{

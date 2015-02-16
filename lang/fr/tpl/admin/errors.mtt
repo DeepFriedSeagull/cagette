@@ -1,0 +1,93 @@
+﻿::use 'admin/design.mtt'::
+<div class="span12">
+		<div class="article">
+	<h1>Errors</h1>
+
+	<div class="box">
+		<form action="/admin/errors" method="GET">
+			User :
+			<input type="text" name="user" class="tid_userSearch" tid_optional="1" ::attr tid_value if(u!=null) u.name+"/"+u.id::/><br/>
+
+			Error :
+			<input type="text" name="like" value="::like::" /><br/>
+
+			<input type="submit" value="Search" class="btn btn-default btn-sm"/>
+		</form>
+	</div>
+
+	<div class="box">
+		Date serveur : ::now::<br/>
+
+		<a href="/admin/errors?empty=1" class="btn btn-default btn-sm" $$confirm()>Vider la table</a>
+
+	</div>
+
+
+		<script type="text/javascript" src="/js/rgraph/RGraph.common.core.js" ></script>
+		<script type="text/javascript" src="/js/rgraph/RGraph.bar.js" ></script>
+		<canvas id="graph" width="900" height="150">[No canvas support]</canvas>
+		<script>
+			window.onload = function ()
+			{
+
+				var datas = [];
+				var labels = [];
+				::foreach e errorsStats::
+					datas.push(::e.c::);
+					labels.push( '::e.day::' );
+				::end::
+
+				var bar = new RGraph.Bar('graph', datas);
+				bar.Set('chart.labels', labels);
+				bar.Set('chart.colors', ['#C00']);
+				bar.Set('chart.title', 'Last errors');
+				bar.Set('chart.labels.above', true);
+				bar.Set('chart.background.barcolor1', 'white');
+				bar.Set('chart.background.barcolor2', 'white');
+				bar.Set('chart.background.grid', true);
+				bar.Set('chart.gutter.left', 60);
+				bar.Set('chart.gutter.bottom', 40);
+				bar.Set('chart.text.angle', 45);
+				bar.Draw();
+		  }
+		</script>
+
+		::set url = "?like="+like+(if(u!=null)";user="+u.id else "")+";page="::
+		$$browse(::browser::,::url::)
+		<table class="table table-bordered table-striped table-condensed table-hover">
+			<tr>
+				<th>id</th>
+				<th>date</th>
+				<th>Error</th>
+				<th>IP</th>
+				<th>user id</th>
+				<th>URL</th>
+			</tr>
+			<tr ::repeat r browser.current()::>
+				<td>::r.id::</td>
+				<td>::r.date::</td>
+
+				::set e = r.error.split('Called')::
+				<td>
+					::e.shift()::
+					::if e.length > 0::
+						<a href="#" onclick="$(this).next().toggle(); return false;">[stack]</a>
+						<div style="display:none;">
+							<pre>Called::e.join("Called")::</pre>
+						</div>
+					::end::
+				</td>
+				<td>::r.ip::</td>
+				<td>
+					<span ::cond r.uid!=null::>
+						::r._user.getName()::					
+					</span>
+				</td>
+				<td>::r.url::</td>
+			</tr>
+		</table>
+		$$browse(::browser::,::url::)
+</div>
+</div>
+::end::
+

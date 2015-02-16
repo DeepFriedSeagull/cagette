@@ -3,7 +3,7 @@
 <div class="span12">
 	<div class="article">
 		::amaps.length:: Amaps	<br/>
-		::users.length:: Responsables $$export()<br/>
+		::users.length:: Responsables $$export(/admin/marketing?csv=1)<br/>
 		
 		<h1>Amaps</h1>
 		
