@@ -1,7 +1,6 @@
 package controller;
 import db.UserContract;
 import haxe.Utf8;
-import sugoi.form.elements.FileUpload;
 import sugoi.form.elements.Selectbox;
 import sugoi.form.Form;
 import sugoi.form.validators.EmailValidator;

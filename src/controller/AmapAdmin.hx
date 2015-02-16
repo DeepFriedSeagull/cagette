@@ -39,6 +39,7 @@ class AmapAdmin extends Controller
 				Reflect.setField(u, "rights", null);
 				u.update();
 				users.remove(u);
+				continue;
 			}
 			
 			//droits sur un contrat effacé
