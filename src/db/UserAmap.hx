@@ -24,6 +24,8 @@ class UserAmap extends Object
 	public var rights : SNull<SData<Array<Right>>>;
 	
 
+	
+	
 	public static function get(user:User, amap:Amap, ?lock = false) {
 		return manager.select($user == user && $amap == amap, lock);
 	}	

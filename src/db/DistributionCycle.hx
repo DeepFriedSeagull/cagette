@@ -14,6 +14,8 @@ enum DayOfWeek {
 
 enum CycleType {
 	Weekly;
+	//BiWeekly;
+	//TriWeekly;
 	Monthly;
 }
 
@@ -67,6 +69,22 @@ class DistributionCycle extends Object
 			d.place = dc.place;
 			
 			//date de la distrib
+			var oneDay = 1000 * 60 * 60 * 24.0;
+			switch(dc.cycleType) {
+				case Weekly :
+					datePointer = DateTools.delta(datePointer, oneDay * 7.0);
+					App.log("datePointer : " + datePointer);
+					
+				case Monthly :
+					datePointer = DateTools.delta(datePointer, oneDay * 28.0);
+					App.log("monthly datePointer +28j : "+datePointer);
+					while (datePointer.getDay() != dayOfWeek ) {
+						
+						datePointer = DateTools.delta(datePointer, oneDay);
+						App.log("monthly datePointer +24h : "+datePointer);
+					}
+			}
+			/*
 			if (dc.cycleType == Weekly) {
 				datePointer = DateTools.delta(datePointer, 1000 * 60 * 60 * 24 * 7.0);
 				App.log("datePointer : "+datePointer);
@@ -79,7 +97,7 @@ class DistributionCycle extends Object
 					datePointer = DateTools.delta(datePointer, 1000 * 60 * 60 * 24.0);
 					App.log("monthly datePointer +24h : "+datePointer);
 				}
-			}
+			}*/
 			
 			if (datePointer.getTime() > dc.endDate.getTime()) {
 				App.log("finish");
@@ -90,7 +108,7 @@ class DistributionCycle extends Object
 			
 			//applique heure de debut et fin
 			d.date = new Date(datePointer.getFullYear(), datePointer.getMonth(), datePointer.getDate(), dc.startHour.getHours(), dc.startHour.getMinutes(), 0);
-			d.end = new Date(datePointer.getFullYear(), datePointer.getMonth(), datePointer.getDate(), dc.endHour.getHours(), dc.endHour.getMinutes(), 0);
+			d.end  = new Date(datePointer.getFullYear(), datePointer.getMonth(), datePointer.getDate(), dc.endHour.getHours(), dc.endHour.getMinutes(), 0);
 			d.insert();
 		}
 	}

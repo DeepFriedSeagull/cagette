@@ -8,6 +8,7 @@
 			<ul>
 				<li><a href="/db">DB</a> </li>
 				<li><a href="/admin/marketing">Marketing</a> </li>
+				<li><a href="/admin/createAccount">Créer un compte</a> </li>
 				<li><a href="/admin/errors">Errors</a> </li>
 			</ul>
 			

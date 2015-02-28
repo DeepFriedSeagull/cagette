@@ -1,5 +1,5 @@
 ::use 'design.mtt'::
-<div class="col-md-9">
+<div class="span9">
 <div class="article">
 	::if select!=null::
 		<h2>Sélection : 
@@ -86,7 +86,7 @@
 </div>
 </div>
 
-<div class="col-md-3">
+<div class="span3">
 	<!--<div class="article">
 		<b>Importation</b>
 		<p>

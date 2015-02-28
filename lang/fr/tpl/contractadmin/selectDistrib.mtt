@@ -1,4 +1,4 @@
-::use 'contractAdmin/design.mtt'::
+::use 'contractadmin/design.mtt'::
 		
 		::if distributions.length>0::
 			
