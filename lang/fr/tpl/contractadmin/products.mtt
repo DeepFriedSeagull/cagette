@@ -12,7 +12,7 @@
 					<td>::formatNum(p.price):: &euro;</td>
 					<td>
 						$$edit(modifier,/product/edit/::p.id::)
-						$$delete(Suppr.,/product/delete/::p.id::?chk=::token::)
+						$$delete(Suppr.,/product/delete/::p.id::?token=::token::)
 					</td>
 				</tr>
 				::end::
