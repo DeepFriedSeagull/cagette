@@ -28,22 +28,25 @@ class User extends Controller
 			var pass = Md5.encode( App.config.get('key') + StringTools.trim(args.pass));
 			var user = db.User.manager.select( ($email == StringTools.trim(args.name) || $email2 ==StringTools.trim(args.name) ) && $pass == pass, true);
 			if (user == null) {
-				throw Error("/user/login", "email ou mot de passe incorrect");
-			}else {
-				user.ldate = Date.now();
-				user.update();
-				App.current.session.setUser(user);
-				//trace("user" + user);
-				
-				//sugoi.db.Session.clean();
-				
-				if (user.getAmap() == null) {
-					throw Ok("/user/choose/", "Bonjour " + user.firstName+" !");
-				}else {
-					
-					throw Ok("/", "Bonjour " + user.firstName+" !");
+				//empty pass
+				user = db.User.manager.select( ($email == StringTools.trim(args.name) || $email2 ==StringTools.trim(args.name) ) && $pass == "", true);
+				if (user == null) {
+					throw Error("/user/login", "email ou mot de passe incorrect");	
 				}
 			}
+			
+			user.ldate = Date.now();
+			user.update();
+			App.current.session.setUser(user);
+			
+			//sugoi.db.Session.clean();
+			
+			if (user.getAmap() == null) {
+				throw Ok("/user/choose/", "Bonjour " + user.firstName+" !");
+			}else {				
+				throw Ok("/", "Bonjour " + user.firstName+" !");
+			}
+			
 		}
 	}
 	
@@ -67,10 +70,8 @@ class User extends Controller
 	}
 	
 	function doLogout() {
-		//if (app.user != null) {
-			App.current.session.delete();
-			throw Redirect('/');
-		//}
+		App.current.session.delete();
+		throw Redirect('/');
 	}
 	
 	/**

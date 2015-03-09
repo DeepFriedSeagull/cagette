@@ -156,6 +156,7 @@ class Member extends Controller
 	function doDelete(user:db.User) {
 		
 		if (!app.user.isContractManager()) throw "Vous ne pouvez pas faire ça.";
+		if (user.id == app.user.id) throw "Vous ne pouvez pas vous effacer vous même.";
 		
 		var ua = db.UserAmap.get(user, app.user.amap, true);
 		if (ua != null) {
