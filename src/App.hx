@@ -74,6 +74,8 @@ class App extends sugoi.BaseApp {
 		out.set("cycleType", "Récurrence");
 		out.set("Weekly", "hebdomadaire");
 		out.set("Monthly", "mensuelle");
+		out.set("BiWeekly", "toutes les deux semaines");
+		out.set("TriWeekly", "toutes les 3 semaines");
 		out.set("price", "prix");
 		out.set("uname", "Nom");
 		out.set("pname", "Produit");

@@ -13,10 +13,10 @@ enum DayOfWeek {
 }
 
 enum CycleType {
-	Weekly;
-	//BiWeekly;
-	//TriWeekly;
+	Weekly;	
 	Monthly;
+	BiWeekly;
+	TriWeekly;
 }
 
 
@@ -75,14 +75,20 @@ class DistributionCycle extends Object
 					datePointer = DateTools.delta(datePointer, oneDay * 7.0);
 					App.log("datePointer : " + datePointer);
 					
+				case BiWeekly : 	
+					datePointer = DateTools.delta(datePointer, oneDay * 14.0);
+					
+				case TriWeekly : 	
+					datePointer = DateTools.delta(datePointer, oneDay * 21.0);
+					
 				case Monthly :
 					datePointer = DateTools.delta(datePointer, oneDay * 28.0);
-					App.log("monthly datePointer +28j : "+datePointer);
-					while (datePointer.getDay() != dayOfWeek ) {
-						
-						datePointer = DateTools.delta(datePointer, oneDay);
-						App.log("monthly datePointer +24h : "+datePointer);
-					}
+					//App.log("monthly datePointer +28j : "+datePointer);
+					//while (datePointer.getDay() != dayOfWeek ) {
+						//
+						//datePointer = DateTools.delta(datePointer, oneDay);
+						//App.log("monthly datePointer +24h : "+datePointer);
+					//}
 			}
 			/*
 			if (dc.cycleType == Weekly) {
