@@ -263,14 +263,24 @@ class Member extends Controller
 					continue;
 				}
 				
-				//mets les champs "" en null
+				
 				for (i in 0...user.length) {
-					if (user[i] == "") user[i] = null;
+					//mets les champs "" en null
+					if (user[i] == "") {
+						user[i] = null;
+						continue;
+					}
+					
+					//clean espaces et autres caracteres inutiles
+					user[i] = StringTools.trim(user[i]);
+					user[i] = StringTools.replace(user[i], "\n", "");
+					user[i] = StringTools.replace(user[i], "\t", "");
+					user[i] = StringTools.replace(user[i], "\r", "");
 				}
 				
 				//check nom+prenom
 				if (user[0] == null || user[1] == null) throw "Vous devez remplir le nom et prénom de la personne. <br/>Cette ligne est incomplète : " + user;
-				
+				if (user[2] == null) throw "Chaque personne doit avoir un email, sinon elle ne pourra pas se connecter. "+user[0]+" "+user[1]+" n'en a pas.";
 				//uppercase du nom
 				if(user[1]!=null) user[1] = user[1].toUpperCase();
 				if (user[5] != null) user[5] = user[5].toUpperCase();

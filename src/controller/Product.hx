@@ -71,4 +71,54 @@ class Product extends Controller
 		throw Error("/contractAdmin", "Erreur de token");
 	}
 	
+	
+	@tpl('product/import.mtt')
+	function doImport(c:db.Contract, ?args: { confirm:Bool } ) {
+			
+		var step = 1;
+		var request = sugoi.tools.Utils.getMultipart(1024 * 1024 * 4);
+		view.contract = c;
+		
+		//on recupere le contenu de l'upload
+		if (request.get("file") != null) {
+			
+			var csv = new sugoi.tools.Csv();
+			var datas = csv.importDatas(request.get("file"));
+			
+			app.session.data.csvImportedData = datas;
+
+			view.data = datas;
+			
+			step = 2;
+		}
+		
+		if (args != null && args.confirm) {
+			var i : Iterable<Dynamic> = cast app.session.data.csvImportedData;
+			for (p in i) {
+				if (p[0] == null || p[0] == "") continue;
+
+				var product = new db.Product();
+				product.name = p[0];
+				
+				var fv = new sugoi.form.filters.FloatFilter();
+				product.price = fv.filter(p[1]);
+				product.contract = c;
+				product.insert();
+				
+			}
+			
+			view.numImported = app.session.data.csvImportedData.length;
+			app.session.data.csvImportedData = null;
+			
+			step = 3;
+		}
+		
+		if (step == 1) {
+			//reset import when back to import page
+			app.session.data.csvImportedData =	null;
+		}
+		
+		view.step = step;
+	}
+	
 }

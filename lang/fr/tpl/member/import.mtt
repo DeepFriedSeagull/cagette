@@ -19,7 +19,7 @@
 		<div style="margin-bottom:24px;">
 			::if data!=null && data.length>0::
 			
-			<table class="table" style="font-size:11px;background-color:#FFF;">
+			<table class="table table-bordered" style="font-size:11px;background-color:#FFF;">
 				<tr>
 					<th>Prénom</th>
 					<th>Nom</th>

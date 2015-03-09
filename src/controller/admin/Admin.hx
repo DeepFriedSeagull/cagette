@@ -63,7 +63,7 @@ class Admin extends Controller {
 			vendor.insert();
 			
 			var contract = new db.Contract();
-			contract.name = "Contrat Maraîcher";
+			contract.name = "Contrat Maraîcher Exemple";
 			contract.amap  = amap;
 			contract.type = 0;
 			contract.vendor = vendor;

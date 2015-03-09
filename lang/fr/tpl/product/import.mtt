@@ -1,0 +1,120 @@
+::use 'design.mtt'::
+
+<div class="span12">
+<div class="article">
+	<h2>Importer des produits</h2>
+	
+	
+	::if step==1::
+		
+	
+		<form action="/product/import/::contract.id::" method="POST" enctype="multipart/form-data">
+			<input name="file" type="file"/>
+			<input type="submit" value="OK"/>
+		</form>
+	
+	
+	::elseif step==2::
+		<h4>Produits à importer</h4>
+		<div style="margin-bottom:24px;">
+			::if data!=null && data.length>0::
+			
+			<table class="table table-bordered" style="/*font-size:11px;*/background-color:#FFF;">
+				<tr>
+					<th>Nom</th>
+					<th>Prix (sans symbole euro)</th>
+				</tr>
+				::foreach d data::
+				<tr>
+					::foreach r d::
+					<td>
+						::if r!=null:: ::r:: ::end::
+					</td>
+					::end::
+				</tr>
+				::end::
+			</table>
+			<div class="alert alert-error">
+					<b>Attention</b>
+					<p>
+						Avant de valider l'importation, vérifiez bien que le tableau ci dessus est correctement rempli.<br/>
+						Si des données sont décalées ou ne correspondent pas à la bonne colonne, c'est que votre fichier CSV n'est pas correct.
+					</p>
+					<a href="/product/import/::contract.id::">Recommencer</a>
+				</div>
+			<a href="/product/import/::contract.id::?confirm=1" class="btn btn-danger">Importer ces produits dans la base de données</a>
+			::else::
+				
+				<div class="alert alert-error">
+					<b>Oups !</b>
+					<p>On dirait qu'il n'y a aucune donnée à importer. 
+					Vérifiez que les données de votre fichier sont valides ou que les produits ne sont pas déjà enregistrées dans la base de données de Cagette.net</p>
+					<a href="/product/import/::contract.id::">Recommencer</a>
+				</div>
+			
+			::end::
+		</div>
+		
+		<!--<div ::cond data2.length > 0:: >
+			
+			<h4>Produits déjà présentes dans la base de données</h4>
+			<table class="table" style="font-size:11px;color:#666666;background-color:#FFF;">
+				<tr>
+					<th>Nom</th>
+					<th>Prix</th>
+			</tr>
+			::foreach d data2::
+			<tr>
+				::foreach r d::
+				<td>
+					::if r!=null:: ::r:: ::end::
+				</td>
+				::end::
+			</tr>
+			::end::
+			</table>
+		</div>-->
+	::elseif step==3::
+		::if numImported>0::
+		
+		<div class="alert alert-success">
+			<b>Bravo ! Vous avez importé ::numImported:: produits dans votre base de données</b>
+		</div>
+		
+		::else::
+		<p>Vous n'avez rien importé dans votre base de données car votre fichier était vide ou contenait des produits déjà enregistrées dans votre base de données.</p>
+		::end::
+		<a href="/contractAdmin/products/::contract.id::">Revenir à la gestion des produits</a>
+		
+		
+	::end::
+	
+	
+	
+	
+</div>
+
+<div class="block">
+	<h3>Aide</h3>
+	Cette page va vous permettre d'importer un grand nombre de produits dans votre base de données à partir d'un fichier Excel
+	ou Libre Office.<br/>
+	<ul>
+		<li>Pour commencer, <a href="/produits.xls">téléchargez ce fichier de démonstration.</a></li>
+		<li>Remplissez correctement ce fichier, ou modifiez votre fichier existant pour respecter scrupuleusement l'ordre des colonnes.</li>
+		<li>Une fois votre fichier rempli, cliquez sur "enregistrer sous" dans votre tableur, et choisissez le format "CSV"</li>
+		<li>Choisissez les options suivantes : caractère de séparation : <b>virgule</b>, encodage : <b>Unicode UTF8</b></li>
+		<li>Enregistrez votre fichier</li>
+		<li>Ensuite, cliquez sur le bouton "choisissez un fichier" ci dessus et envoyez votre fichier</li>
+	</ul>
+	
+	
+	
+	
+
+</div>
+
+
+</div>
+
+
+::end::

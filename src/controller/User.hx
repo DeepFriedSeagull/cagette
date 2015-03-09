@@ -25,8 +25,8 @@ class User extends Controller
 	function doLogin(?args: { name:String,pass:String } ) {
 		
 		if (args != null) {
-			var pass = Md5.encode( App.config.get('key') + args.pass);
-			var user = db.User.manager.select( ($email == args.name || $email2 ==args.name ) && $pass == pass, true);
+			var pass = Md5.encode( App.config.get('key') + StringTools.trim(args.pass));
+			var user = db.User.manager.select( ($email == StringTools.trim(args.name) || $email2 ==StringTools.trim(args.name) ) && $pass == pass, true);
 			if (user == null) {
 				throw Error("/user/login", "email ou mot de passe incorrect");
 			}else {
