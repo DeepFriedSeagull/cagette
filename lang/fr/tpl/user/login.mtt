@@ -2,7 +2,8 @@
 
 	
 	<div style="margin:32px auto 32px auto;width:400px;">
-		<span class="amapTitle">Connexion</span>
+		
+		<h1>Connexion</h1>
 		<div class="block">
 			<form action="/user/login" method="post">
 				<table>

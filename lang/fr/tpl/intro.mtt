@@ -1,6 +1,6 @@
 ::use 'design.mtt'::
 
-	<div class="span9" style="margin-top:18px;">
+	<div class="col-md-9" style="margin-top:18px;">
 		<div class="article" style="height:700px;">
 		<div>
 			<img src="/img/logo2.gif" style="display: block;position: absolute;top: -15px;left: 15px;" />
@@ -96,13 +96,13 @@
 		</div>
 	</div>
 	
-	<div class="span3" style="margin-top:18px;">
+	<div class="col-md-3" style="margin-top:18px;">
 		<div class="article">
 			
 			::if user!=null::
 				Bonjour ::user.name::<br/> 
 					
-				<a href="/user/logout" class="btn btn-mini">Déconnexion</a>
+				<a href="/user/logout" class="btn btn-default btn-sm">Déconnexion</a>
 			::else::
 				
 				Vous avez déjà un compte ?<br/>
@@ -114,10 +114,10 @@
 		
 	</div>
 	
-	<div class="span3" style="margin-top:4px;">
+	<div class="col-md-3" style="margin-top:4px;">
 		<div class="block">
 			Vous souhaitez ouvrir un compte pour votre AMAP ?<br/>
-			<a href="/contact" class="btn btn-medium">Ecrivez-nous</a>
+			<a href="/contact" class="btn btn-default btn-medium">Ecrivez-nous</a>
 			
 		</div>
 		

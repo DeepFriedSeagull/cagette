@@ -1,6 +1,6 @@
 ::use 'design.mtt'::
 
-<div id="content" class="span9">
+<div id="content" class="col-md-8">
 	::if !aboOk::
 		<div class="alert alert-danger">
 			<strong>Attention :</strong>
@@ -14,39 +14,27 @@
 	
 	::if aboOk::
 	
-		<!-- OPEN ORDERS -->
-		<div class="article span8" ::cond (aboOk && openContracts!=null && openContracts.length>0 )::>
+		<div class="article" ::cond (aboOk && openContracts!=null && openContracts.length>0 )::>
 			<img src="/img/order.png" width="64" height="64" style="float:right;" />
-			<span class="title">Commandes ouvertes</span>
+			<h2>Commandes ouvertes</h2>
 			<br/>
 			<ul>
 				::foreach c openContracts::
-					::if c.type==1::
-						<li>
-							::c.name::
-							<ul>
-								::foreach d c.getDistribs(true)::
-								<li><a href="/contract/order/::c.id::?d=::d.id::">Commande distribuée le ::hDate(d.date)::</a></li>
-								::end::
-							</ul>
-						</li>
-					::else::
-						<li><a href="/contract/order/::c.id::">::c.name::</a></li>	
-					::end::
+				<li><a href="/contract/order/::c.id::">::c.name::</a></li>
 				::end::	
 			</ul>
 		</div>
 	
-		<!-- PLANNING -->
+	
 		::if distribs==null || distribs.length==0::
-		<div class="article span3">
+		<div class="article">
 			Votre planning de distribution est vide pour l'instant.<br/>
 		</div>
 		::end::
 		
 		::foreach ds distribs::
 		
-			<div class="article span8">
+			<div class="article">
 				
 				::set x = getDate( ds[0].distrib.end )::
 				::if isToday(ds[0].distrib.date)::
@@ -59,14 +47,14 @@
 					<div class="content">
 						
 						
-						<div class="title">
+						<h2>
 							::set s = getDate(d.distrib.date) ::
 							::set e = getDate(d.distrib.end)::
 							
 							<span style="color:#999;">::s.h+":"+s.i:: - ::e.h+":"+e.i::</span>
 							&nbsp;Distribution ::d.distrib._contract.name::
 							
-						</div>
+						</h2>
 						
 						<p ::cond d.distrib.text!=null:: style="border:2px solid #EEE;padding:4px;margin:4px 0;border-radius:4px;">
 							::d.distrib.text::
@@ -154,7 +142,7 @@
 	::end::
 	
 </div>
-<div class="span3">
+<div class="col-md-4">
 	
 	<div class="block" ::cond user._amap.txtHome!=null && user._amap.txtHome!=""::>
 		::raw nl2br(user._amap.txtHome)::
@@ -176,7 +164,7 @@
 	<div class="alert alert-danger" ::cond nopass::>
 		Attention, vous n'avez défini aucun mot de passe.<br/>
 		N'importe qui pourrait se connecter sur votre compte si il connait votre e-mail.<br/>
-		<a href="/user/definePassword" class="btn btn-mini">Définir un mot de passe</a>
+		<a href="/user/definePassword" class="btn btn-default btn-sm">Définir un mot de passe</a>
 		
 	</div>
 </div>

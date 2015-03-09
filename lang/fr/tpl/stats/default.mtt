@@ -1,6 +1,6 @@
 ::use 'design.mtt'::
 
-<div class="span3">
+<div class="col-md-3">
 		<ul class="nav nav-tabs nav-stacked" >
 			<li><a style="background-color:#FFF;" href="#">Produits</a></li>
 			<li><a style="background-color:#FFF;" href="#">Produits</a></li>
@@ -8,7 +8,7 @@
 </div>
 
 
-<div class="span9">
+<div class="col-md-9">
 	<div class="article">
 	
 		<span class="title" style="margin-bottom: 18px;display: block;">titre</span>

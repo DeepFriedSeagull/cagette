@@ -1,7 +1,7 @@
 ::use 'design.mtt'::
 
 
-<div class="span9">
+<div class="col-md-9">
 	<div class="article">
 		<h3>Mon AMAP</h3>		
 		
@@ -35,7 +35,7 @@
 	
 </div>
 
-<div class="span3">
+<div class="col-md-3">
 	<div class="block">
 		<h4>Abonnement Cagette.net</h4>
 		

@@ -1,7 +1,7 @@
 ::use 'design.mtt'::
 
 
-<div class="span9">
+<div class="col-md-9">
 	<div class="article">
 		<h3>Gestion des droits et accès</h3>		
 		
@@ -27,7 +27,7 @@
 					</ul>
 				</td>
 				<td>
-					$$edit(Modifier,/amapadmin/editRight/::u.userId::)
+					$$insert(Modifier,/amapadmin/editRight/::u.userId::)
 				</td>
 				
 				
@@ -40,7 +40,7 @@
 	</div>
 </div>
 
-<div class="span3">
+<div class="col-md-3">
 	<div class="block">
 		<p>
 			Sur cette page, vous pouvez donner ou supprimer des droits à un adhérent.

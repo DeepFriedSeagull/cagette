@@ -1,7 +1,7 @@
 ::use 'design.mtt'::
 
 	
-	<div class="span3">
+	<div class="col-md-3">
 		<div class="block2">
 			::raw nl2br(user.getAmap().txtIntro)::
 			<br/>
@@ -13,7 +13,7 @@
 
 	</div>
 	
-	<div class="span9">
+	<div class="col-md-9">
 		<div class="article">
 									
 			<div style="display:inline-block;vertical-align:top;margin-bottom:18px;width:300px;">

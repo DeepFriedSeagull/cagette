@@ -1,5 +1,5 @@
 ::use 'design.mtt'::
-<div class="span9">
+<div class="col-md-9">
 	<div class="article">
 	
 	<div>

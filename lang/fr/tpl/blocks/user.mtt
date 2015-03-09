@@ -2,11 +2,11 @@
 	::if user!=null::
 		Bonjour ::user.getName()::<br/> 
 			
-		<a href="/user/logout" class="btn btn-mini">Déconnexion</a>
+		<a href="/user/logout" class="btn btn-default btn-sm">Déconnexion</a>
 	::else::
 		
 		Vous avez déjà un compte ?<br/>
 		Cliquez ici pour vous connecter<br/>
-		<a href="/user/login" class="btn btn-mini btn-primary">Connexion</a>
+		<a href="/user/login" class="btn btn-default btn-sm btn-primary">Connexion</a>
 	::end::
 </div>

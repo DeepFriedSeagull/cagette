@@ -1,12 +1,12 @@
 ::use "design.mtt"::
 
-<div class="span9">
+<div class="col-md-9">
 	<div class="article" style="height:500px;">
 		
 		<iframe width="100%" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=::addr::&output=embed"></iframe>
 	</div>
 </div>
-<div class="span3">
+<div class="col-md-3">
 	<div class="article" style="height:500px;font-size:1.2em;">
 		
 		<strong>::place.name::</strong><br/>
@@ -14,7 +14,7 @@
 		$$nullSafe(::place.address2::)<br/>
 		$$nullSafe(::place.zipCode::) $$nullSafe(::place.city::)
 		<div>
-			<a href="/" class="btn btn-mini">Retour</a>
+			<a href="/" class="btn btn-default btn-sm">Retour</a>
 		</div>
 	</div>
 	

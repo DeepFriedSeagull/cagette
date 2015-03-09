@@ -1,5 +1,5 @@
 ::use 'design.mtt'::
-<div id="content" class="span12">
+<div id="content" class="col-md-12">
 	<div class="article">
 		<span class="title">Planning des distributions : ::contract.name::</span>
 		

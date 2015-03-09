@@ -1,17 +1,11 @@
 ::use 'contractadmin/design.mtt'::
 	
-		<h3>Commandes</h3>
+		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
 		
-		::if distribution!=null::
-		Pour la distribution du <b>::hDate(distribution.date)::</b>
-		::end::
+		<b>Commandes</b>
 		
 		<div style="margin:8px 0;">
-			::if distribution!=null::
-			<a href="/contractAdmin/edit/::c.id::?d=::distribution.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
-			::else::
 			<a href="/contractAdmin/edit/::c.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
-			::end::
 		</div>
 		
 		<table class="table table-bordered table-hover"  style="width:100%;">
@@ -24,12 +18,7 @@
 						<th colspan="4">
 							::m.uname:: ::m.firstName:: 
 							
-							::if distribution!=null::
-							$$edit(modifier,/contractAdmin/edit/::c.id::/::m.uid::?d=::distribution.id::) 
-							::else::
 							$$edit(modifier,/contractAdmin/edit/::c.id::/::m.uid::) 
-							::end::
-							
 							::set name =  m.firstName+" "+m.uname ::		
 						</th>
 					
@@ -92,18 +81,8 @@
 				</table>
 
 				<div>
-					::if distribution!=null::
-					<a href="/contractAdmin/edit/::c.id::?d=::distribution.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
-					::else::
 					<a href="/contractAdmin/edit/::c.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
-					::end::
-					
-					::if distribution!=null::
-					$$export(/contractAdmin/orders/::c.id::?csv=1&d=::distribution.id::)
-					::else::
-					$$export(/contractAdmin/orders/::c.id::?csv=1)
-					::end::
-					
+					$$export()
 				</div>		
 		
 ::end::

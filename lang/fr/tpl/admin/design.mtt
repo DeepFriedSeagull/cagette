@@ -1,9 +1,7 @@
 ::use 'design.mtt'::
+	
 
-	<div class="span12">
-		<h2 class="muted">Admin</h2>
-	</div>
-	
 	::raw __content__::
-	
+
+
 ::end::

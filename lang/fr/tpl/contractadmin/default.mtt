@@ -1,8 +1,6 @@
 ::use 'design.mtt'::
 
-
-
-<div class="span9">
+<div class="col-md-9">
 	<div class="article">
 		<h2>Contrats</h2>
 		<table class="table">
@@ -22,7 +20,7 @@
 					<td>::c._vendor.name::</td>
 					<td>
 						$$edit(Gestion,/contractAdmin/view/::c.id::)
-						$$delete(Suppr.,/contract/delete/::c.id::?token=::token::)
+						$$delete(Suppr.,/contract/delete/::c.id::?chk=::chk::)
 						</td>
 				</tr>
 			::end::
@@ -30,7 +28,7 @@
 	
 		
 	::if user.isAmapManager():: 
-		$$insert(Nouveau contrat,/contract/insertChoose/)
+		$$insert(Nouveau contrat,/contract/insert/)
 	::end::
 		
 	</div>
@@ -66,7 +64,7 @@
 	
 	
 	
-<div class="span3">
+<div class="col-md-3">
 	<div class="block">
 		<p>
 			En tant que responsable de contrat, vous pouvez définir <b>la liste des produits</b> disponibles dans ce contrat, les <b>dates de distribution</b> et bien sûr gérer <b>les commandes des amapiens</b>.

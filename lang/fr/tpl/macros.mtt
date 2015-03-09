@@ -38,26 +38,32 @@
 	</macro>
 	
 	<macro name="edit(text,url)">
-		<!--<img src="/img/icons/application_edit.png" style="vertical-align:middle;" />&nbsp;<a href="::url::">::text::</a>-->
-		<a href="::url::" class="btn btn-mini"><i class="icon-edit"></i>&nbsp;::text::</a>	
+		
+		<a href="::url::" class="btn btn-default btn-sm">
+			<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+			&nbsp;::text::
+		</a>	
 	</macro>
 	
 	<macro name="insert(text,url)">
 		<!--<img src="/img/icons/add.png" style="vertical-align:middle;" />&nbsp;<a href="::url::">::text::</a>-->
-		<a href="::url::" class="btn btn-mini"><i class="icon-plus"></i>&nbsp;::text::</a>	
+		<a href="::url::" class="btn btn-default btn-sm">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+			&nbsp;::text::
+		</a>	
 	</macro>
 	
 	<macro name="delete(text,url)">
-		<a href="::url::" $$confirm(Supprimer ?) class="btn btn-mini" >
-			<i class="icon-remove"></i>
+		<a href="::url::" $$confirm(Supprimer ?) class="btn btn-default btn-sm" >
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 		::if text!=null::	
 			&nbsp;::text::
 		::end::
 		</a>
 	</macro>
 	
-	<macro name="export(url)">
-		<a href="::url::" class="btn"><i class="icon-list-alt"></i> Export Excel/CSV</a>	
+	<macro name="export()">
+		<a href="?csv=1" class="btn"><i class="icon-list-alt"></i> Export Excel/CSV</a>	
 	</macro>
 	
 	<macro name="bool(v)">
@@ -161,7 +167,7 @@
 		</div>
 	</macro>
 	
-
+	
 	
 	
 </macros>

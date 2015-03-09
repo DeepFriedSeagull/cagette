@@ -1,7 +1,7 @@
 ::use 'contractadmin/design.mtt'::
 
 	
-		<h3>Produits</h3>
+		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
 		
 			<b>Produits</b>
 			<table class="table">
@@ -10,16 +10,11 @@
 					<td><img src="/img/::p.getImage()::" style="width:32px;height:32px;" />	</td>
 					<td>::p.name::</td>
 					<td>::formatNum(p.price):: &euro;</td>
-					<td>
-						$$edit(modifier,/product/edit/::p.id::)
-						$$delete(Suppr.,/product/delete/::p.id::?chk=::token::)
-					</td>
+					<td>$$edit(modifier,/product/edit/::p.id::)</td>
 				</tr>
 				::end::
 			</table>
 			$$insert(Nouveau produit,/product/insert/::c.id::)
-			
-			<a href="/product/import/::c.id::" class="btn btn-mini"><i class="icon-list-alt"></i> Import Excel/CSV</a>	
 	
 	
 

@@ -6,15 +6,10 @@
 		<h3>Saisir une commande pour ::u.getName()::</h3>
 		::end::
 		
-		::if distribution!=null::
-		Pour la distribution du <b>::hDate(distribution.date)::</b>
-		::end::
+		
 		
 		<form name="order" id="order" method="POST" action="">
-			<input type="hidden" name="token" value="::token::"/>
-			::if distribution!=null::
-			<input type="hidden" name="distribution" value="::distribution.id::"/>
-			::end::
+			<input type="hidden" name="chk" value="::chk::"/>
 			
 			::if users!=null:: 
 			Adhérent : 
