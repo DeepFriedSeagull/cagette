@@ -1,3 +1,12 @@
+h1 {
+	font-family :  'Cantora One', sans-serif !important;
+	color :  #583816 !important;
+}
+h2, h3, h4 {
+	font-family :  'Cantora One', sans-serif !important;
+	color :  #008800 !important;
+	font-weight : normal !important;
+}
 #footer {
 	text-align : center;
 	background : #F0D277;

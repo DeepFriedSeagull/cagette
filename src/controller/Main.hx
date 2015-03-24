@@ -10,9 +10,6 @@ class Main extends Controller {
 	function doDefault() {
 		view.category = 'home';
 		
-		//trace(App.getTranslationArray().get("Monthly"));
-		
-		
 		if (app.user != null) {
 		
 			if (!app.user.amap.isAboOk()) {
@@ -86,7 +83,7 @@ class Main extends Controller {
 			view.nopass = app.user.pass == "859738d2fed6a98902defb00263f0d35";
 			
 		}else {
-			throw Redirect("/intro");
+			throw Redirect("/user/login");
 		}
 		
 	}
@@ -97,17 +94,8 @@ class Main extends Controller {
 		sys.db.Admin.handler();
 	}
 	
-	@tpl('intro.mtt')
-	function doIntro() {}
-	
 	@tpl('cgu.mtt')
 	function doCgu() {}
-	
-	//@tpl('prices.mtt')
-	//function doPrices() {}
-	//
-	//@tpl('features.mtt')
-	//function doFeatures() {}
 	
 	//login and stuff
 	function doUser(d:Dispatch) {
