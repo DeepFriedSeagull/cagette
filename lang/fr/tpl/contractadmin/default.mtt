@@ -21,8 +21,12 @@
 					
 					<td>::c._vendor.name::</td>
 					<td>
+						
 						$$edit(Gestion,/contractAdmin/view/::c.id::)
+						
+						::if user.isAmapManager()::
 						$$delete(Suppr.,/contract/delete/::c.id::?token=::token::)
+						::end::
 						</td>
 				</tr>
 			::end::
