@@ -6,7 +6,7 @@
 		<title>::NAME::</title>
 		<!--<meta name="description" ::attr content if( pageMeta == null ) "Default Meta" else pageMeta::/>-->
 		
-		<link rel="stylesheet" type="text/css" href="/css/::variable('css')::/style.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/::getVariable('css')::/style.css"/>
 		<link href='http://fonts.googleapis.com/css?family=Cantora+One&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<!-- Latest compiled and minified CSS -->
@@ -19,7 +19,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 		
 		
-		<script type="text/javascript" src="/js/::variable('js')::/app.js"></script>
+		<script type="text/javascript" src="/js/::getVariable('js')::/app.js"></script>
 	</head>
 
 
@@ -75,7 +75,7 @@
 		
 		<div class="row">
 			<div id="content" class="col-md-12">
-				::set notification = getNotification()::
+				::set notification = getMessages()::
 				<div class="alert ::if notification.error:: alert-danger ::else:: alert-success ::end::" ::cond notification::>
 					::raw notification.text::					
 				</div>
