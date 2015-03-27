@@ -28,7 +28,7 @@
 		::if user != null::
 			
 			<div class="row">
-				<div class="col-md-9">
+				<div class="col-md-7">
 					<h1>
 					::if user.getAmap()!=null::
 						::user.getAmap().name::
@@ -37,12 +37,12 @@
 					::end::
 					</h1>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-5" style="margin-top:12px;text-align:right;">
 					::user.getName()::
 					::if user.firstName2!=null::
 						et ::user.lastName2:: ::user.firstName2::  						
 					::end::
-					<a href="/user/logout" class="btn btn-default btn-sm">Déconnexion</a>
+					<a href="/user/logout" class="btn btn-default btn-xs">Déconnexion</a>
 				</div>
 			</div>
 			
@@ -91,12 +91,9 @@
 		<div class="row">
 			<div class="col-md-12" >
 				<div id="footer">
-					<a href="/intro">Cagette.net</a> • 
-					<!--<a href="http://aide.cagette.net" target="_blank">Aide</a> •-->
-					<a href="http://aide.cagette.net" target="_blank">Aide</a> •
-					<a href="http://cagette.uservoice.com/" target="_blank">Proposez une amélioration</a> •
+					<a href="http://www.cagette.net" target="_blank">Cagette.net</a> • 
+					<a href="http://aide.cagette.net" target="_blank">Documentation</a> •
 					<a href="https://groups.google.com/forum/?hl=fr#!forum/cagette" target="_blank">Forum</a> •
-					<a href="/cgu/">Données et vie privée</a> •
 					<a href="https://www.facebook.com/cagette/" target="_blank"><img src="/img/facebook-16.png" align="middle" /> Cagette sur Facebook</a>
 				</div>
 			</div>

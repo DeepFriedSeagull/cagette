@@ -1,7 +1,7 @@
 ::use 'contractadmin/design.mtt'::
 
 	
-		<span class="title" style="margin-bottom: 18px;display: block;">Récapitulatif : ::contract.name::</span>
+		<h3>Récapitulatif</h3>
 		
 		<h4>Dates</h4>
 		
@@ -25,11 +25,11 @@
 			</tr>
 			<tr>
 				<td>Email</td>
-				<td>::contract._vendor.email::</td>
+				<td>$$nullSafe(::contract._vendor.email::)</td>
 			</tr>
 			<tr>
 				<td>Téléphone </td>
-				<td>::contract._vendor.phone::</td>
+				<td>$$nullSafe(::contract._vendor.phone::)</td>
 			</tr>
 		</table>
 		
@@ -40,7 +40,7 @@
 			<tr>
 				<td><img src="/img/::p.getImage()::" style="width:32px;height:32px;" />	</td>
 				<td>::p.name::</td>
-				<td>::p.price:: &euro;</td>					
+				<td>::formatNum(p.price)::&nbsp;&euro;</td>					
 			</tr>
 			::end::
 		</table>

@@ -17,10 +17,20 @@
 		<div class="article" ::cond (aboOk && openContracts!=null && openContracts.length>0 )::>
 			<img src="/img/order.png" width="64" height="64" style="float:right;" />
 			<h2>Commandes ouvertes</h2>
-			<br/>
 			<ul>
 				::foreach c openContracts::
-				<li><a href="/contract/order/::c.id::">::c.name::</a></li>
+					::if c.type==1::
+						<li>
+							::c.name::
+							<ul>
+								::foreach d c.getDistribs(true)::
+								<li><a href="/contract/order/::c.id::?d=::d.id::">Livraison du ::hDate(d.date)::</a></li>
+								::end::
+							</ul>
+						</li>
+					::else::
+						<li><a href="/contract/order/::c.id::">::c.name::</a></li>	
+					::end::
 				::end::	
 			</ul>
 		</div>
@@ -28,7 +38,7 @@
 	
 		::if distribs==null || distribs.length==0::
 		<div class="article">
-			Votre planning de distribution est vide pour l'instant.<br/>
+			Votre planning de livraison est vide pour l'instant.<br/>
 		</div>
 		::end::
 		
@@ -46,13 +56,12 @@
 				::foreach d ds::
 					<div class="content">
 						
-						
 						<h2>
 							::set s = getDate(d.distrib.date) ::
 							::set e = getDate(d.distrib.end)::
 							
 							<span style="color:#999;">::s.h+":"+s.i:: - ::e.h+":"+e.i::</span>
-							&nbsp;Distribution ::d.distrib._contract.name::
+							&nbsp;Livraison ::d.distrib._contract.name::
 							
 						</h2>
 						
@@ -111,13 +120,13 @@
 					<div class="place">
 					
 						::if user.isContractManager(d.distrib._contract) || d.distrib.distributor1Id==user.id || d.distrib.distributor2Id==user.id || d.distrib.distributor3Id==user.id || d.distrib.distributor4Id==user.id:: 
-							<i class="icon-print"></i> <a href="/distribution/list/::d.distrib.id::">Liste d'émargement</a>
+							<span class="glyphicon glyphicon-print"></span> <a href="/distribution/list/::d.distrib.id::">Liste d'émargement</a>
 						::end::
 						
-						<a href="/place/view/::d.distrib._place.id::"><i class="icon-map-marker"></i> Carte</a>
+						<span class="glyphicon glyphicon-map-marker"></span>&nbsp;<a href="/place/view/::d.distrib._place.id::">Carte</a>
 						
 						<span ::cond d.distrib.distributor1Id!=null || d.distrib.distributor2Id!=null || d.distrib.distributor3Id!=null || d.distrib.distributor4Id!=null::>
-							&nbsp; <i class="icon-user"></i> <a href="#" onclick="$('#distributors::d.distrib.id::').toggle();return false;">Distributeurs</a>
+							&nbsp; <span class="glyphicon glyphicon-user"></span> <a href="#" onclick="$('#distributors::d.distrib.id::').toggle();return false;">Distributeurs</a>
 						</span>
 						<div id="distributors::d.distrib.id::" style="display:none;margin:8px;">
 							<ul>

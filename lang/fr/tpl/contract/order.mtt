@@ -1,17 +1,25 @@
 ::use 'design.mtt'::
-<div id="content" class="span8">
+<div id="content" class="col-md-8">
 	<div class="article">
-		<h2>Commander</h2>
+		<h2>Commande ::c.name::</h2>
 		
-		<h3>::c.name::</h3>
 		
+		
+		::if distribution!=null::
+		Pour la distribution du <b>::hDate(distribution.date)::</b>
+		::end::
+		<hr/>
 		<p>
 			Tant que les commandes sont ouvertes, vous pouvez revenir sur cette page et modifier votre commande.
 		</p>
 		
 		<form name="order" id="order" method="POST" action="">
-			<input type="hidden" name="chk" value="::chk::"/>
-		<table class="table table-bordered">
+			<input type="hidden" name="token" value="::token::"/>
+			
+			::if distribution!=null::
+			<input type="hidden" name="distribution" value="::distribution.id::"/>
+			::end::
+			<table class="table table-bordered">
 			<tr>
 				<td></td>
 				<th>Produit</th>
@@ -52,14 +60,12 @@
 					<th>Total commande</th>
 					<th>::total::€</th>
 					<th></th>
-					<th></th>
 				</tr>
 				<tr>
 					<th></th>
 					<td>::c.percentageName:: (::c.percentageValue::%)</td>
 					::set extra = total*(c.percentageValue/100)::
 					<td>::roundTo(extra,2)::€</td>
-					<th></th>
 					<th></th>
 				</tr>
 				
@@ -71,7 +77,6 @@
 					<th>Total</th>
 					<th>::roundTo(total+extra,2)::€</th>
 					<th></th>
-					<th></th>
 				</tr>
 		</table>
 		
@@ -81,7 +86,7 @@
 	
 	</div>
 </div>
-<div class="span4">
+<div class="col-md-4">
 	<div class="article">
 		Producteur : <b>::c._vendor.name::</b>
 		<br/>

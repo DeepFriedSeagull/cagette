@@ -2,8 +2,16 @@
 	
 		<h3>Commandes</h3>
 		
+		::if distribution!=null::
+		Distribution du <b>::hDate(distribution.date)::</b>
+		::end::
+		
 		<div style="margin:8px 0;">
+			::if distribution!=null::
+			<a href="/contractAdmin/edit/::c.id::?d=::distribution.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
+			::else::
 			<a href="/contractAdmin/edit/::c.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
+			::end::
 		</div>
 		
 		<table class="table table-bordered table-hover"  style="width:100%;">
@@ -16,7 +24,12 @@
 						<th colspan="4">
 							::m.uname:: ::m.firstName:: 
 							
+							::if distribution!=null::
+							$$edit(modifier,/contractAdmin/edit/::c.id::/::m.uid::?d=::distribution.id::) 
+							::else::
 							$$edit(modifier,/contractAdmin/edit/::c.id::/::m.uid::) 
+							::end::
+							
 							::set name =  m.firstName+" "+m.uname ::		
 						</th>
 					
@@ -33,7 +46,7 @@
 						::m.quantity:: x ::m.pname::
 					</td>
 					<td>
-						::formatNum(m.quantity*m.price)::€
+						::formatNum(m.quantity*m.price)::&nbsp;€
 					</td>
 					<td>
 						::if m.paid==true::
@@ -79,8 +92,18 @@
 				</table>
 
 				<div>
+					::if distribution!=null::
+					<a href="/contractAdmin/edit/::c.id::?d=::distribution.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
+					::else::
 					<a href="/contractAdmin/edit/::c.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
-					$$export()
+					::end::
+					
+					::if distribution!=null::
+					$$export(/contractAdmin/orders/::c.id::?csv=1&d=::distribution.id::)
+					::else::
+					$$export(/contractAdmin/orders/::c.id::?csv=1)
+					::end::
+					
 				</div>		
 		
 ::end::

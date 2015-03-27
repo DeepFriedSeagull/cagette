@@ -1,11 +1,22 @@
 h1 {
 	font-family :  'Cantora One', sans-serif !important;
 	color :  #583816 !important;
+	margin-top : 4px !important;
+	margin-bottom : 8px !important;
+	font-weight : bold !important;
+}
+h1 {
+	font-size : 28px !important;
+}
+h2 {
+	font-size : 24px !important;
 }
 h2, h3, h4 {
 	font-family :  'Cantora One', sans-serif !important;
 	color :  #007700 !important;
 	font-weight : normal !important;
+	margin-top : 4px !important;
+	margin-bottom : 8px !important;
 }
 #footer {
 	text-align : center;
@@ -87,7 +98,7 @@ i {
 	color : #666;
 	font-weight : bold;
 	margin-top : 13px;
-	padding-left : 26px;
+	padding : 8px;
 	font-size : 13px;
 	background-color : #EEE;
 	border-top : 1px solid #CCC;

@@ -19,7 +19,7 @@
 		::end::
 	</table>
 	$$insert(Nouveau produit,/product/insert/::c.id::)
-	
+	<a href="/product/import/::c.id::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list-alt"></span> Import Excel/CSV</a>	
 	
 
 ::end::
