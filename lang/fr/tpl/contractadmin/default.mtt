@@ -1,6 +1,6 @@
 ::use 'design.mtt'::
 
-<div class="col-md-9">
+<div class="col-md-12">
 	<div class="article">
 		<h2>Contrats</h2>
 		<table class="table">
@@ -19,8 +19,13 @@
 					
 					<td>::c._vendor.name::</td>
 					<td>
+						
 						$$edit(Gestion,/contractAdmin/view/::c.id::)
-						$$delete(Suppr.,/contract/delete/::c.id::?chk=::chk::)
+						
+						::if user.isAmapManager()::
+						$$delete(Suppr.,/contract/delete/::c.id::?token=::token::)
+						::end::
+
 						</td>
 				</tr>
 			::end::
@@ -33,6 +38,9 @@
 		
 	</div>
 	
+</div>
+
+<div class="col-md-6">
 	<div class="article" ::cond user.isAmapManager()::>
 		<h2>Producteurs</h2>
 		<table class="table">
@@ -45,6 +53,9 @@
 		</table>
 		$$insert(Nouveau producteur,/vendor/insert/)
 	</div>	
+</div>
+
+<div class="col-md-6">
 	<div class="article" ::cond user.isAmapManager()::>
 		
 		<h2>Lieux</h2>
@@ -58,20 +69,9 @@
 		</table>
 		$$insert(Nouveau lieu,/place/insert/)
 	</div>
-	
-	
 </div>
 	
-	
-	
-<div class="col-md-3">
-	<div class="block">
-		<p>
-			En tant que responsable de contrat, vous pouvez définir <b>la liste des produits</b> disponibles dans ce contrat, les <b>dates de distribution</b> et bien sûr gérer <b>les commandes des amapiens</b>.
-		</p>
-		
-	</div>
-</div>
+
 
 
 ::end::

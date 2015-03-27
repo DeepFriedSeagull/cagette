@@ -1,3 +1,12 @@
+h1 {
+	font-family :  'Cantora One', sans-serif !important;
+	color :  #583816 !important;
+}
+h2, h3, h4 {
+	font-family :  'Cantora One', sans-serif !important;
+	color :  #007700 !important;
+	font-weight : normal !important;
+}
 #footer {
 	text-align : center;
 	background : #F0D277;
@@ -20,19 +29,6 @@ body {
 	margin-top : 24px;
 	font-size : 10px;
 	background : #AAA;
-}
-.amapTitle {
-	color : #583816;
-	font-size : 28px;
-	font-weight : bold;
-	margin : 18px 0;
-	font-family : "Cantora One", sans-serif;
-}
-.title {
-	color : #008800;
-	margin-bottom : 8px;
-	font-size : 23px;
-	font-family : "Cantora One", sans-serif;
 }
 .contact {
 	border : 2px solid #CCC;

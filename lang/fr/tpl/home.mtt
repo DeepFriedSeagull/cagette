@@ -109,11 +109,12 @@
 					</div>
 				
 					<div class="place">
-						
-						
-						::if true || user.isContractManager() || d.distrib.distributor1Id==user.id || d.distrib.distributor2Id==user.id || d.distrib.distributor3Id==user.id || d.distrib.distributor4Id==user.id:: 
+					
+						::if user.isContractManager(d.distrib._contract) || d.distrib.distributor1Id==user.id || d.distrib.distributor2Id==user.id || d.distrib.distributor3Id==user.id || d.distrib.distributor4Id==user.id:: 
 							<i class="icon-print"></i> <a href="/distribution/list/::d.distrib.id::">Liste d'émargement</a>
 						::end::
+						
+						<a href="/place/view/::d.distrib._place.id::"><i class="icon-map-marker"></i> Carte</a>
 						
 						<span ::cond d.distrib.distributor1Id!=null || d.distrib.distributor2Id!=null || d.distrib.distributor3Id!=null || d.distrib.distributor4Id!=null::>
 							&nbsp; <i class="icon-user"></i> <a href="#" onclick="$('#distributors::d.distrib.id::').toggle();return false;">Distributeurs</a>
@@ -127,7 +128,7 @@
 							</ul>
 						</div>
 						
-						<a href="/place/view/::d.distrib._place.id::"><i class="icon-map-marker"></i> Carte</a>
+						
 						
 						
 						<div class="distribMessage" ::cond d.distrib.distributor1Id==user.id || d.distrib.distributor2Id==user.id || d.distrib.distributor3Id==user.id || d.distrib.distributor4Id==user.id::>

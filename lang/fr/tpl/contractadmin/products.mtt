@@ -1,20 +1,24 @@
 ::use 'contractadmin/design.mtt'::
-
 	
-		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
 		
-			<b>Produits</b>
-			<table class="table">
-				::foreach p c.getProducts()::
-				<tr>
-					<td><img src="/img/::p.getImage()::" style="width:32px;height:32px;" />	</td>
-					<td>::p.name::</td>
-					<td>::formatNum(p.price):: &euro;</td>
-					<td>$$edit(modifier,/product/edit/::p.id::)</td>
-				</tr>
-				::end::
-			</table>
-			$$insert(Nouveau produit,/product/insert/::c.id::)
+	<h3>Produits</h3>
+	
+	<table class="table">
+		::foreach p c.getProducts()::
+		<tr>
+			<td><img src="/img/::p.getImage()::" style="width:32px;height:32px;" />	</td>
+			<td>::p.name::</td>
+			<td>::formatNum(p.price):: &euro;</td>
+
+			<td>
+				$$edit(modifier,/product/edit/::p.id::)
+				$$delete(Suppr.,/product/delete/::p.id::?token=::token::)
+			</td>
+
+		</tr>
+		::end::
+	</table>
+	$$insert(Nouveau produit,/product/insert/::c.id::)
 	
 	
 

@@ -18,6 +18,18 @@
 				<option value="::uu.key::">::uu.value::</option>
 				::end::			
 			</select>
+			
+			::if distribution==null::
+			<br/>
+			Optionnel : commande alternée avec 
+			<select name="user2">
+				<option value="0">Personne</option>
+				::foreach uu users::
+				<option value="::uu.key::">::uu.value::</option>
+				::end::			
+			</select>
+			::end::
+			
 			::end::
 			
 			<table class="table table-bordered">
@@ -48,6 +60,15 @@
 						
 						::set total = total+(q*uo.product.price)::
 						<input type="text" class="" name="product::uo.product.id::" id="product::uo.product.id::" value="::q::" />
+						
+						::if uo.order!=null::
+							<br/>
+							
+							::if uo.order._user2!=null::
+							( alterné avec ::uo.order._user2.getName():: )
+							::end::
+						::end::
+						
 					</td>
 					<td>
 						Payé : 

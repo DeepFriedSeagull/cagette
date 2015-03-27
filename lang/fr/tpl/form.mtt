@@ -2,9 +2,9 @@
 <div class="col-md-12">
 	<div class="article">
 		<h3 ::cond title!=null::>::title::</h3>
-		<div ::cond text!=null::>
+		<p ::cond text!=null::>
 			::raw text::
-		</div>
+		</p>
 		
 		::raw form::
 	</div>

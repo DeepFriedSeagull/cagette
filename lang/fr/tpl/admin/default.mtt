@@ -1,16 +1,7 @@
 ::use 'admin/design.mtt'::
-<div class="col-md-12">
-		<div class="article">
-			<ul>
-				<li><a href="/db">DB</a> </li>
-				<li><a href="/admin/marketing">Marketing</a> </li>
-				<li>
-					<a href="/admin/cssDemo">CssDemo</a>
-				</li>
-			</ul>
-			
-		</div>
-	
-</div>	
-	
+
+
+Console d'administration de Cagette.net
+
+
 ::end::

@@ -1,15 +1,20 @@
 ::use 'design.mtt'::
+
+<div class="col-md-12">
+	<h2>::c.name:: - ::c._vendor.name::</h2>
+</div>
+
 <div class="col-md-3">
-	
-		<ul class="nav nav-tabs nav-stacked" >
-			<li><a style="background-color:#FFF;" href="/contractAdmin/view/::c.id::">Récapitulatif</a></li>
-			<li><a style="background-color:#FFF;" href="/contract/edit/::c.id::">Modifier contrat</a></li>
-			<li><a style="background-color:#FFF;" href="/contractAdmin/products/::c.id::">Produits</a></li>
-			<li><a style="background-color:#FFF;" href="/contractAdmin/distributions/::c.id::">Distributions</a></li>
-			<li><a style="background-color:#FFF;" href="/contractAdmin/orders/::c.id::">Commandes</a></li>
-			<li><a style="background-color:#FFF;" href="/contractAdmin/stats/::c.id::">Statistiques</a></li>
+	<div class="article">
+		<ul class="nav nav-pills nav-stacked">
+			<li><a href="/contractAdmin/view/::c.id::">Récapitulatif</a></li>
+			<li><a href="/contract/edit/::c.id::">Modifier contrat</a></li>
+			<li><a href="/contractAdmin/products/::c.id::">Produits</a></li>
+			<li><a href="/contractAdmin/distributions/::c.id::">Distributions</a></li>
+			<li><a href="/contractAdmin/orders/::c.id::">Commandes</a></li>
+			<li><a href="/contractAdmin/stats/::c.id::">Statistiques</a></li>
 		</ul>
-	
+	</div>
 </div>
 
 

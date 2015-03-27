@@ -32,6 +32,7 @@ class Contract extends Controller
 		var form = Form.fromSpod(c);
 		form.removeElement( form.getElement("amapId") );
 		form.removeElement(form.getElement("type"));
+		form.getElement("userId").required = true;
 		
 		if (form.checkToken()) {
 			form.toSpod(c);
@@ -82,6 +83,7 @@ class Contract extends Controller
 		var form = Form.fromSpod(c);
 		form.removeElement( form.getElement("amapId") );
 		form.removeElement(form.getElement("type"));
+		form.getElement("userId").required = true;
 			
 		if (form.checkToken()) {
 			form.toSpod(c);
@@ -105,6 +107,9 @@ class Contract extends Controller
 	}
 	
 	function doDelete(c:db.Contract/*,args:{chk:String}*/) {
+		
+		if (!app.user.isAmapManager()) throw Error("/contractAdmin", "Vous n'avez pas le droit de supprimer un contrat");
+		
 		if (checkToken()) {
 			
 			//verif qu'il n'y a pas de commandes sur ce contrat

@@ -10,6 +10,9 @@ class Distribution extends Controller
 		
 	}
 	
+	/**
+	 * Liste d'émargement
+	 */
 	@tpl('distribution/list.mtt')
 	function doList(d:db.Distribution) {
 		view.distrib = d;
@@ -18,7 +21,6 @@ class Distribution extends Controller
 		
 		var pids = db.Product.manager.search($contract == d.contract, false);
 		var pids = Lambda.map(pids, function(x) return x.id);
-		
 		
 		view.contracts = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,u.firstName2 , u.lastName2, u.phone, u.email, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" order by uname asc;").results();
 		
@@ -124,7 +126,9 @@ class Distribution extends Controller
 		view.title = "Programmer une distribution récurrente";
 	}
 	
-	
+	/**
+	 * Doodle like
+	 */
 	@tpl("distribution/planning.mtt")
 	public function doPlanning(contract:db.Contract) {
 	

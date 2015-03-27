@@ -22,9 +22,7 @@ enum ProductType {
 class Product extends Object
 {
 	public var id : SId;
-	public var name : SString<64>;
-	
-	//public var type : SEnum<ContractType>;
+	public var name : SString<128>;
 	public var type : SInt;
 	
 	@:relation(contractId)

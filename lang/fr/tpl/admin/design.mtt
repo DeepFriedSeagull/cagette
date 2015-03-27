@@ -1,7 +1,26 @@
 ::use 'design.mtt'::
 	
+<div class="col-md-3">
+	<ul class="nav nav-tabs nav-stacked" >
+		<li><a href="/db">Base de données</a> </li>
+		<li><a href="/admin/errors">Errors</a> </li>
+		<li><a href="/admin/marketing">Marketing</a> </li>
+		<li><a href="/admin/plugins">Plugins</a> </li>
+		
+		<div ::cond nav!=null::>
+			<li>Plugins</li>
+			::foreach i nav::
+				<li><a href="::i.link::">::i.name::</a> </li>
+			::end::	
+		</div>
+		
+	</ul>
+</div>
 
-	::raw __content__::
-
+<div class="col-md-9">
+	::raw __content__::	
+</div>
+	
+	
 
 ::end::

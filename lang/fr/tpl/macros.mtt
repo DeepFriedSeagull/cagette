@@ -63,7 +63,7 @@
 	</macro>
 	
 	<macro name="export()">
-		<a href="?csv=1" class="btn"><i class="icon-list-alt"></i> Export Excel/CSV</a>	
+		<a href="?csv=1" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i> Export Excel/CSV</a>	
 	</macro>
 	
 	<macro name="bool(v)">

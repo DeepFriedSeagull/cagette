@@ -1,10 +1,23 @@
 package controller.admin;
 import haxe.web.Dispatch;
+import Types;
 class Admin extends Controller {
+	
+	public function new() {
+		super();
+		view.category = 'admin';
+		
+		//lance un event pour demander aux plugins si ils veulent ajouter un item dans la nav
+		var nav = new Array<Link>();
+		var e = new event.NavEvent();
+		e.navId = "admin";
+		App.eventDispatcher.dispatch(e);
+		view.nav = e.nav;
+		
+	}
 
 	@tpl("admin/default.mtt")
 	function doDefault() {
-		view.category = 'admin';
 		
 	}
 	
@@ -22,91 +35,8 @@ class Admin extends Controller {
 		//}
 	}
 	
-	@tpl("form.mtt")
-	function doCreateAccount() {
-		
-		var f = new sugoi.form.Form("c");
-		f.addElement(new sugoi.form.elements.Input("amapName", "Nom de l'Amap"));
-		f.addElement(new sugoi.form.elements.Input("userFirstName", "Prenom du compte"));
-		f.addElement(new sugoi.form.elements.Input("userLastName", "Nom du compte"));
-		f.addElement(new sugoi.form.elements.Input("userEmail", "Email du compte"));
-		
-		if (f.checkToken()) {
-			
-			var user = new db.User();
-			user.email = f.getValueOf("userEmail");
-			user.firstName = f.getValueOf("userFirstName");
-			user.lastName = f.getValueOf("userLastName");
-			user.pass = "859738d2fed6a98902defb00263f0d35";
-			user.insert();
-			
-			var amap = new db.Amap();
-			amap.name = f.getValueOf("amapName");
-			amap.contact = user;
-			amap.insert();
-			
-			var ua = new db.UserAmap();
-			ua.user = user;
-			ua.amap = amap;
-			ua.rights = [db.UserAmap.Right.AmapAdmin,db.UserAmap.Right.Membership,db.UserAmap.Right.Messages,db.UserAmap.Right.ContractAdmin(null)];
-			ua.insert();
-			
-			//example datas
-			var place = new db.Place();
-			place.name = "Place du marché";
-			place.amap = amap;
-			place.insert();
-			
-			var vendor = new db.Vendor();
-			vendor.amap = amap;
-			vendor.name = "Jean Martin EURL";
-			vendor.insert();
-			
-			var contract = new db.Contract();
-			contract.name = "Contrat Maraîcher Exemple";
-			contract.amap  = amap;
-			contract.type = 0;
-			contract.vendor = vendor;
-			contract.startDate = Date.now();
-			contract.endDate = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * 364);
-			contract.contact = user;
-			contract.distributorNum = 2;
-			contract.insert();
-			
-			var p = new db.Product();
-			p.name = "Gros panier de légumes";
-			p.price = 15;
-			p.contract = contract;
-			p.insert();
-			
-			var p = new db.Product();
-			p.name = "Petit panier de légumes";
-			p.price = 10;
-			p.contract = contract;
-			p.insert();
-		
-			var uc = new db.UserContract();
-			uc.user = user;
-			uc.product = p;
-			uc.amap = amap;
-			uc.paid = true;
-			uc.quantity = 1;
-			uc.insert();
-			
-			var d = new db.Distribution();
-			d.contract = contract;
-			d.date = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * 14);
-			d.end = DateTools.delta(d.date, 1000.0 * 60 * 90);
-			d.place = place;
-			d.insert();
-			
-			throw Ok("/admin", "Amap créée");
-			
-			
-		}
-		
-		view.form= f;
-		
+	function doPlugins(d:Dispatch) {
+		d.dispatch(new controller.admin.Plugins());
 	}
 	
 	function doMarketing(d: haxe.web.Dispatch) {
@@ -164,4 +94,47 @@ class Admin extends Controller {
 		);
 	}
 	
+	
+	function doTest() {
+		
+		
+		var dispatcher = new hxevents.Dispatcher<Event>();
+		
+		var obs1 = new controller.admin.Admin.Observer();
+		var obs2 = new controller.admin.Admin.Observer2();
+		
+		dispatcher.add(obs1.onEvent);
+		dispatcher.add(obs2.onEvent);
+		
+		
+		var e = new controller.admin.Admin.Event();
+		e.data = "prout";
+		dispatcher.dispatch( e );
+		
+	}
+	
+	
 }
+
+class Event {
+	public function new(){}
+	public var data : String;
+}
+
+
+class Observer {
+	public function new(){}
+	public function onEvent(e:Event) {
+		trace("Observer1 , j'ai "+e.data+"<br>");
+	}
+}
+
+class Observer2 {
+	public function new(){}
+	public function onEvent(e:Event) {
+		trace("Observer2 , j'ai "+e.data+"<br>");
+	}
+}
+
+
+

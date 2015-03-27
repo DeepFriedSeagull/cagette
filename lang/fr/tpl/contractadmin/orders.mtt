@@ -1,11 +1,9 @@
 ::use 'contractadmin/design.mtt'::
 	
-		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
-		
-		<b>Commandes</b>
+		<h3>Commandes</h3>
 		
 		<div style="margin:8px 0;">
-			<a href="/contractAdmin/edit/::c.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
+			<a href="/contractAdmin/edit/::c.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
 		</div>
 		
 		<table class="table table-bordered table-hover"  style="width:100%;">
@@ -81,7 +79,7 @@
 				</table>
 
 				<div>
-					<a href="/contractAdmin/edit/::c.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
+					<a href="/contractAdmin/edit/::c.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
 					$$export()
 				</div>		
 		

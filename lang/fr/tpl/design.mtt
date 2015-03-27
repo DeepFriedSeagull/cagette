@@ -46,6 +46,7 @@
 				</div>
 			</div>
 			
+
 			<nav class="navbar navbar-default" ::cond user.getAmap()!=null::>
 					<div class="navbar-header">
 					  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cagette-navbar">
@@ -65,8 +66,9 @@
 							<li ::attr class if(category=="contractadmin" ) 'active' ::><a href="/contractAdmin" ::cond user.isContractManager(null)::>Gestion contrats</a></li>
 							<li ::attr class if(category=="messages" ) 'active' ::><a href="/messages" ::cond user.canAccessMessages()::>Messagerie</a></li>
 							<li ::attr class if(category=="amapadmin" ) 'active' ::><a href="/amapadmin" ::cond user.isAmapManager()::>Gestion Amap</a></li>
-							<li ><a href="/admin" ::cond user.isAdmin()::>[ADM]</a></li>
+							<li ><a href="/admin" ::cond user.isAdmin()::>Admin</a></li>
 						</ul>
+
 					</div>
 				
 			</nav>
@@ -91,7 +93,7 @@
 				<div id="footer">
 					<a href="/intro">Cagette.net</a> • 
 					<!--<a href="http://aide.cagette.net" target="_blank">Aide</a> •-->
-					<a href="http://cagette.uservoice.com/knowledgebase" target="_blank">Aide</a> •
+					<a href="http://aide.cagette.net" target="_blank">Aide</a> •
 					<a href="http://cagette.uservoice.com/" target="_blank">Proposez une amélioration</a> •
 					<a href="https://groups.google.com/forum/?hl=fr#!forum/cagette" target="_blank">Forum</a> •
 					<a href="/cgu/">Données et vie privée</a> •

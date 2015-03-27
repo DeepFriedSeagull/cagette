@@ -92,7 +92,7 @@
 					</td>
 					<td>
 						::if m.firstName+" "+m.uname != name::
-						::m.email::, ::m.phone::
+							$$nullSafe(::m.phone::)
 						::end::
 						
 					</td>

@@ -10,9 +10,6 @@ class Main extends Controller {
 	function doDefault() {
 		view.category = 'home';
 		
-		//trace(App.getTranslationArray().get("Monthly"));
-		
-		
 		if (app.user != null) {
 		
 			if (!app.user.amap.isAboOk()) {
@@ -86,7 +83,7 @@ class Main extends Controller {
 			view.nopass = app.user.pass == "859738d2fed6a98902defb00263f0d35";
 			
 		}else {
-			throw Redirect("/intro");
+			throw Redirect("/user/login");
 		}
 		
 	}
@@ -97,17 +94,8 @@ class Main extends Controller {
 		sys.db.Admin.handler();
 	}
 	
-	@tpl('intro.mtt')
-	function doIntro() {}
-	
 	@tpl('cgu.mtt')
 	function doCgu() {}
-	
-	//@tpl('prices.mtt')
-	//function doPrices() {}
-	//
-	//@tpl('features.mtt')
-	//function doFeatures() {}
 	
 	//login and stuff
 	function doUser(d:Dispatch) {
@@ -116,6 +104,31 @@ class Main extends Controller {
 	
 	function doCron(d:Dispatch) {
 		d.dispatch(new controller.Cron());
+	}
+	
+	function doP(d:Dispatch) {
+		
+		/*
+		 * Invalid array access
+Stack (ADMIN|DEBUG)
+
+Called from C:\HaxeToolkit\haxe\std/haxe/web/Dispatch.hx line 463
+Called from controller/Main.hx line 117
+		 * 
+		var plugin = d.parts.shift();
+		for ( p in App.plugins) {
+			var n = Type.getClassName(Type.getClass(p)).toLowerCase();
+			n = n.split(".").pop();
+			if (plugin == n) {
+				d.dispatch( p.getController() );
+				return;
+			}
+		}
+		
+		throw Error("/","Plugin '"+plugin+"' introuvable.");
+		*/
+		
+		d.dispatch(new controller.Plugin());
 	}
 	
 

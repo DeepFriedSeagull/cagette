@@ -319,6 +319,8 @@ class ContractAdmin extends Controller
 		view.u = user;
 		view.distribution = args.d;
 		
+		var user2 : db.User = null;
+		
 		//need to select a distribution for varying orders contracts
 		if (c.type == db.Contract.TYPE_VARORDER && args.d == null ) {
 			
@@ -354,6 +356,15 @@ class ContractAdmin extends Controller
 					user = db.User.manager.get(Std.parseInt(app.params.get("user")));
 					if (user == null) throw "user #"+app.params.get("user")+" introuvable";
 					if (!user.isMemberOf(app.user.amap)) throw user + " ne fait pas partie de cette amap";
+					
+					//panier alterné
+					if (app.params.get("user2") != null && app.params.get("user2") != "0") {
+						user2 = db.User.manager.get(Std.parseInt(app.params.get("user2")));
+						if (user2 == null) throw "user #"+app.params.get("user2")+" introuvable";
+						if (!user2.isMemberOf(app.user.amap)) throw user2 + " ne fait pas partie de cette amap";
+						if (user.id == user2.id) throw "Les deux comptes sélectionnés doivent être différents";
+					}
+					
 				}
 				
 				//get dsitrib if needed
@@ -389,6 +400,7 @@ class ContractAdmin extends Controller
 							//nouveau record
 							if (q != 0) {
 								order.user = user;
+								if (user2 != null) order.user2 = user2;
 								order.product = uo.product;
 								order.quantity = q;
 								order.paid = (app.params.get("paid" + pid) == "1");
