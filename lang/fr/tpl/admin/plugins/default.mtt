@@ -1,0 +1,33 @@
+::use 'admin/design.mtt'::
+
+<h2>Plugins</h2>
+<p>
+	L'installation des plugins se fait sur la machine de développement.	
+</p>
+
+
+<table class="table table-bordered">
+::foreach p plugins::
+	<tr>
+		<th>Nom</th>
+		<th>Installé</th>
+	</tr>
+	<tr>
+		<td>::p.name::</td>
+		<td>
+			::set i = p.isInstalled():: 
+			$$bool(::i::)
+			
+			::if i==false::
+			<a href="/admin/plugins/install/::p.getName()::" class="btn btn-default">Installer</a>
+			::end::
+		</td>
+		<td>
+			
+		</td>
+	</tr>
+::end::
+	
+</table>
+
+::end::

@@ -4,6 +4,27 @@
 		<h2 class="muted">Admin</h2>
 	</div>
 	
-	::raw __content__::
+	<div class="span3" style="background-color:white;">
+		<ul class="nav nav-tabs nav-stacked" >
+			<li><a href="/db">Base de données</a> </li>
+			<li><a href="/admin/errors">Errors</a> </li>
+			<li><a href="/admin/marketing">Marketing</a> </li>
+			<li><a href="/admin/plugins">Plugins</a> </li>
+			
+			<div ::cond nav!=null::>
+				<li>Plugins</li>
+				::foreach i nav::
+					<li><a href="::i.link::">::i.name::</a> </li>
+				::end::	
+			</div>
+			
+		</ul>
+	</div>
+	
+	<div class="span9" style="background-color:white;">
+		::raw __content__::	
+	</div>
+	
+	
 	
 ::end::

@@ -1,19 +1,5 @@
 ::use 'admin/design.mtt'::
 
-	
-	
+Console d'administration de Cagette.net
 
-	<div class="span12">
-		<div class="article">
-			<ul>
-				<li><a href="/db">DB</a> </li>
-				<li><a href="/admin/marketing">Marketing</a> </li>
-				<li><a href="/admin/createAccount">Créer un compte</a> </li>
-				<li><a href="/admin/errors">Errors</a> </li>
-			</ul>
-			
-		</div>
-	</div>
-
-	
 ::end::

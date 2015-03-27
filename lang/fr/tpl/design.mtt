@@ -45,13 +45,13 @@
 							<ul class="nav">
 								<li ::attr class if(category=="home" ) 'active' ::><a href="/">Accueil</a></li>
 								<li ::attr class if(category=="contract" ) 'active' ::><a href="/contract">Mon compte</a></li>
-								<li ::attr class if(category=="amap" ) 'active' ::><a href="/amap">Mon Amap</a></li>
+								<li ::attr class if(category=="amap" ) 'active' ::><a href="/amap">Mon groupe</a></li>
 								<!--<li ::attr class if(category=="account" ) 'active' ::><a href="/account">Compte</a></li>-->
-								<li ::attr class if(category=="members" ) 'active' ::><a href="/member" ::cond user.canAccessMembership()::>Gestion adhérents</a></li>
-								<li ::attr class if(category=="contractadmin" ) 'active' ::><a href="/contractAdmin" ::cond user.isContractManager(null)::>Gestion contrats</a></li>
+								<li ::attr class if(category=="members" ) 'active' ::><a href="/member" ::cond user.canAccessMembership()::>Adhérents</a></li>
+								<li ::attr class if(category=="contractadmin" ) 'active' ::><a href="/contractAdmin" ::cond user.isContractManager(null)::>Contrats</a></li>
 								<li ::attr class if(category=="messages" ) 'active' ::><a href="/messages" ::cond user.canAccessMessages()::>Messagerie</a></li>
-									<li ::attr class if(category=="amapadmin" ) 'active' ::><a href="/amapadmin" ::cond user.isAmapManager()::>Gestion Amap</a></li>
-								<li ><a href="/admin" ::cond isAdmin::>[ADM]</a></li>
+								<li ::attr class if(category=="amapadmin" ) 'active' ::><a href="/amapadmin" ::cond user.isAmapManager()::>Groupe</a></li>
+								<li ><a href="/admin" ::cond isAdmin::>Admin</a></li>
 							</ul>
 						</div>
 						

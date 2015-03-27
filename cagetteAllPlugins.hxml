@@ -2,11 +2,12 @@
 -lib templo
 -lib weblog
 -lib sugoi
+-lib hxevents
+-lib cagette-hosted
 -cp src
--cp lang/fr/tpl
 -neko www/index.n
 -D spod_macro
--D twinBase
+-D plugins
 -main App
 -D debugip=localhost:18080
 -D weblogid=cagette

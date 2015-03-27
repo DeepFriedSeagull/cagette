@@ -201,11 +201,11 @@ class User extends Controller
 		if (App.current.user != null) throw Redirect('/');
 		
 		view.title = "Essayez Cagette.net";
-		view.text = "Vous êtes sur le point de vous créer un compte de test sur Cagette.net.<br/>Ce compte sera limité à 20 adhérents mais vous pourrez passer à tout moment à des abonements de niveau supérieur.";
+		view.text = "Vous êtes sur le point de vous créer un compte de test sur Cagette.net.<br/>Ce compte sera limité à 20 adhérents mais vous pourrez passer à tout moment à des abonnements de niveau supérieur.";
 		
 		var f = new sugoi.form.Form("c");
 		f.addElement(new sugoi.form.elements.Input("amapName", "Nom de votre groupement"));
-		f.addElement(new sugoi.form.elements.Input("userFirstName", "Votre prenom"));
+		f.addElement(new sugoi.form.elements.Input("userFirstName", "Votre prénom"));
 		f.addElement(new sugoi.form.elements.Input("userLastName", "Votre nom de famille"));
 		f.addElement(new sugoi.form.elements.Input("userEmail", "Votre email"));
 		

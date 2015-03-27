@@ -106,6 +106,31 @@ class Main extends Controller {
 		d.dispatch(new controller.Cron());
 	}
 	
+	function doP(d:Dispatch) {
+		
+		/*
+		 * Invalid array access
+Stack (ADMIN|DEBUG)
+
+Called from C:\HaxeToolkit\haxe\std/haxe/web/Dispatch.hx line 463
+Called from controller/Main.hx line 117
+		 * 
+		var plugin = d.parts.shift();
+		for ( p in App.plugins) {
+			var n = Type.getClassName(Type.getClass(p)).toLowerCase();
+			n = n.split(".").pop();
+			if (plugin == n) {
+				d.dispatch( p.getController() );
+				return;
+			}
+		}
+		
+		throw Error("/","Plugin '"+plugin+"' introuvable.");
+		*/
+		
+		d.dispatch(new controller.Plugin());
+	}
+	
 
 	@logged
 	function doMember(d:Dispatch) {
