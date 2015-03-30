@@ -79,6 +79,12 @@
 			<div id="content" class="col-md-12">
 				::set notification = getMessages()::
 				<div class="alert ::if notification.error:: alert-danger ::else:: alert-success ::end::" ::cond notification::>
+					::if notification.error::
+					<span class="glyphicon glyphicon glyphicon-alert"></span>
+					::else::
+					<span class="glyphicon glyphicon-ok"></span>
+					::end::
+					
 					::raw notification.text::					
 				</div>
 			</div>	

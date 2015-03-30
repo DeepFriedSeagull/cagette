@@ -39,10 +39,7 @@ class Admin extends Controller {
 		d.dispatch(new controller.admin.Plugins());
 	}
 	
-	function doMarketing(d: haxe.web.Dispatch) {
-		d.dispatch(new controller.admin.Marketing());
-	}
-	
+		
 	//@tpl('admin/mailchimp.mtt')
 	function doMailchimp() {
 		
@@ -95,46 +92,6 @@ class Admin extends Controller {
 	}
 	
 	
-	function doTest() {
-		
-		
-		var dispatcher = new hxevents.Dispatcher<Event>();
-		
-		var obs1 = new controller.admin.Admin.Observer();
-		var obs2 = new controller.admin.Admin.Observer2();
-		
-		dispatcher.add(obs1.onEvent);
-		dispatcher.add(obs2.onEvent);
-		
-		
-		var e = new controller.admin.Admin.Event();
-		e.data = "prout";
-		dispatcher.dispatch( e );
-		
-	}
-	
 	
 }
-
-class Event {
-	public function new(){}
-	public var data : String;
-}
-
-
-class Observer {
-	public function new(){}
-	public function onEvent(e:Event) {
-		trace("Observer1 , j'ai "+e.data+"<br>");
-	}
-}
-
-class Observer2 {
-	public function new(){}
-	public function onEvent(e:Event) {
-		trace("Observer2 , j'ai "+e.data+"<br>");
-	}
-}
-
-
 

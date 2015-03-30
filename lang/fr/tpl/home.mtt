@@ -14,7 +14,7 @@
 	
 	::if aboOk::
 	
-		<div class="article" ::cond (aboOk && openContracts!=null && openContracts.length>0 )::>
+		<div class="homeBlock" ::cond (aboOk && openContracts!=null && openContracts.length>0 )::>
 			<img src="/img/order.png" width="64" height="64" style="float:right;" />
 			<h2>Commandes ouvertes</h2>
 			<ul>
@@ -37,14 +37,14 @@
 	
 	
 		::if distribs==null || distribs.length==0::
-		<div class="article">
+		<div class="homeBlock">
 			Votre planning de livraison est vide pour l'instant.<br/>
 		</div>
 		::end::
 		
 		::foreach ds distribs::
 		
-			<div class="article">
+			<div class="homeBlock">
 				
 				::set x = getDate( ds[0].distrib.end )::
 				::if isToday(ds[0].distrib.date)::

@@ -1,5 +1,5 @@
 ::use 'design.mtt'::
-<div class="span9">
+<div class="col-md-9">
 <div class="article">
 	::if select!=null::
 		<h2>Sélection : 
@@ -62,31 +62,22 @@
 	</table>
 
 	<div>
-		<a href="/member/insert" class="btn btn-default"><i class="icon-plus-sign"></i> Nouvel adhérent</a>	
+		<a href="/member/insert" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvel adhérent</a>	
+		
+
 	</div>
 	
 	<hr/>
 	
-	<form class="form-search" action="/member/" method="get">
-	  <div class="input-append">
-		::if search==null::
-			::set ssearch=""::
-		::else::
-			::set ssearch=search::
-		::end::
-		  
-		<input type="text" class="span2 search-query" name="search" value="::ssearch::" />
-		<button type="submit" class="btn btn-default"><i class="icon-search"></i> Rechercher</button>
-	  </div>
-	 </form>
 	
 	
+	 
 	<!--$$export(::Web.getURI()::?::Web.getParamsString():: )-->
 	
 </div>
 </div>
 
-<div class="span3">
+<div class="col-md-3">
 	<!--<div class="article">
 		<b>Importation</b>
 		<p>
@@ -97,20 +88,28 @@
 	</div>-->
 	
 	<div class="block">
-		<p>
-		Vous avez accès à la gestion des adhérents 
-		car vous êtes responsable d'un contrat ou responsable de l'AMAP en général.
-		</p>
-		
-	</div>
-	
-	<div class="block">
 		<b>Sélections</b>
 		<ul>
 			<li><a href="/member/">Tous les amapiens</a></li>
 			<li><a href="/member/?select=nocontract">Sans contrats</a></li>
 			<li ::cond user._amap.hasMembership()::><a href="/member/?select=nomembership">Adhésion à renouveller</a></li>
 		</ul>
+		
+		<form class="form-search" action="/member/" method="get">
+			<div class="input-group">
+				::if search==null::
+					::set ssearch=""::
+				::else::
+					::set ssearch=search::
+				::end::
+				  
+				<input type="text" class="form-control" name="search" value="::ssearch::" />
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Rechercher</button>
+				</span>
+				
+			  </div>
+		 </form>
 	</div>
 	
 </div>

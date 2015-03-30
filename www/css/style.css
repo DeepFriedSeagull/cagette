@@ -18,6 +18,9 @@ h2, h3, h4 {
 	margin-top : 4px !important;
 	margin-bottom : 8px !important;
 }
+a {
+	color : #007700;
+}
 #footer {
 	text-align : center;
 	background : #F0D277;
@@ -51,7 +54,7 @@ body {
 	width : 250px;
 	min-height : 100px;
 }
-.article {
+.homeBlock {
 	margin-bottom : 32px;
 	background : #FFF;
 	border-radius : 8px;
@@ -60,8 +63,31 @@ body {
 	position : relative;
 	padding : 8px;
 }
-.article .content {
+.homeBlock .content {
 	margin : 8px 8px 8px 90px;
+}
+span.panel-title {
+	font-family :  'Cantora One', sans-serif !important;
+	color :  #966125 !important;
+	font-size : 20px !important;
+	font-weight : normal !important;
+}
+.article {
+	margin-bottom : 16px;
+	background : #FFF;
+	border-radius : 8px;
+	-moz-border-radius : 8px;
+	-webkit-border-radius : 8px;
+	position : relative;
+	padding : 8px;
+}
+.white {
+	margin-bottom : 16px;
+	background : #FFF;
+	border-radius : 4px;
+	-moz-border-radius : 4px;
+	-webkit-border-radius : 4px;
+	position : relative;
 }
 .block {
 	margin-bottom : 32px;

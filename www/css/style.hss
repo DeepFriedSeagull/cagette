@@ -19,7 +19,9 @@ h2,h3,h4{
 	margin-top: CSS("4px !important");
 	margin-bottom: CSS("8px !important");
 }
-
+a{
+	color:#007700;
+}
 
 #footer{
 	text-align:center;
@@ -57,9 +59,8 @@ body{
 	
 }
 
-.article{
+.homeBlock{
 	margin-bottom:32px;
-	
 	background:#FFF;
 	border-radius:8px;
 	position: relative;
@@ -68,8 +69,32 @@ body{
 		margin: 8px 8px 8px 90px;
 
 	}
+}
+
+//pour les hauts de nav
+span.panel-title{
+	font-family:CSS(" 'Cantora One', sans-serif !important");
+	color: CSS(" #966125 !important");
+	font-size: 20px !important;
+	font-weight:normal !important;
 	
 }
+
+.article{
+	margin-bottom:16px;
+	background:#FFF;
+	border-radius:8px;
+	position: relative;
+	padding:8px;	
+}
+
+.white{
+	margin-bottom:16px;
+	background:#FFF;
+	border-radius:4px;
+	position: relative;
+}
+
 
 /* block marron */
 .block{	

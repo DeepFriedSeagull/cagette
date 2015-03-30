@@ -17,13 +17,13 @@
 		<div class="article">
 									
 			<div style="display:inline-block;vertical-align:top;margin-bottom:18px;width:300px;">
-				<span class="title">Coordinateur général</span>
+				<h2>Coordinateur général</h2>
 				$$contact(::user.getAmap()._contact::)
 			</div>
 			
 			::foreach c contracts::
 				<div style="display:inline-block;vertical-align:top;margin-bottom:18px;width:300px;" >
-					<span class="title">::c.name::</span>
+					<h2>::c.name::</h2>
 					::if c._contact!=null::
 						$$contact(::c._contact::)
 					::end::

@@ -1,16 +1,8 @@
 ::use 'contractadmin/design.mtt'::
 
 	
-		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
+		<h2>Distributions</h2>
 		
-			<a href="/contractAdmin/distributionp/::c.id::" class="btn btn-default">
-				<i class="icon-user"></i> Participations aux distributions
-			</a>
-			<br/>
-			
-			<b>Distributions</b>
-			
-			
 			
 			<table class="table">
 				::foreach d c.getDistribs(false)::
@@ -50,9 +42,11 @@
 				
 				::end::
 			</table>				
-			$$insert(Nouvelle distribution,/distribution/insert/::c.id::)<br/>
+			$$insert(Nouvelle distribution,/distribution/insert/::c.id::)
 			$$insert(Distributions récurrentes,/distribution/insertCycle/::c.id::) 
-	
+			<a href="/contractAdmin/distributionp/::c.id::" class="btn btn-default btn-sm">
+				<span class="glyphicon glyphicon-user"></span> Participations aux distributions
+			</a>
 
 	
 	

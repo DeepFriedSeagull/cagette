@@ -1,8 +1,6 @@
-::use 'design.mtt'::
+::use 'amapadmin/design.mtt'::
 
 
-<div class="col-md-9">
-	<div class="article">
 		<h3>Gestion des droits et accès</h3>		
 		
 		$$insert(Ajouter un droit,/amapadmin/editRight)
@@ -37,20 +35,7 @@
 			::end::
 		</table>
 		
-	</div>
-</div>
 
-<div class="col-md-3">
-	<div class="block">
-		<p>
-			Sur cette page, vous pouvez donner ou supprimer des droits à un adhérent.
-		</p>
-		<p>
-			Un "droit" est une action qu'il aura le droit de faire, ou l'accès à une rubrique qui lui sera permis.
-		</p>
-		
-	</div>
-</div>
 
 
 ::end::
