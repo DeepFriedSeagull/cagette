@@ -80,6 +80,10 @@
 				</tr>
 		</table>
 		
+		
+		
+		
+		
 		<input type="submit" class="btn btn-primary" value="Valider la commande" name="submit" id="submit" />
 		
 		</form>
@@ -96,6 +100,27 @@
 		::c._contact.email::<br/>
 	</div>
 </div>
+
+<!-- total x nbre de distributions-->
+::if distributions!=null::
+	<div class="span4">
+		<div class="article">
+			<p>
+				<b>::distributions.length:: distributions</b>
+				<br/>
+				pour un prix total de ::distributions.length*(total+extra)::€	(::distributions.length:: x ::(total+extra)::€)
+			</p>
+			<p>
+				<ul>
+				::foreach d distributions::
+					<li>::hDate(d.date)::</li>
+				::end::
+				</ul>
+			</p>
+			
+		</div>
+	</div>
+::end::
 
 
 ::end::

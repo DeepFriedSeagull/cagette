@@ -7,7 +7,9 @@
 		<h2>Contrats</h2>
 		<table class="table">
 			::foreach c contracts::
-				::if c.endDate!=null && c.endDate.getTime() < Date.now().getTime()::
+					::if c.endDate!=null && c.endDate.getTime() < Date.now().getTime()::
+						::set style = "opacity:0.5;"::
+					::elseif c.startDate!=null && c.startDate.getTime() > Date.now().getTime()::
 						::set style = "opacity:0.5;"::
 					::else::
 						::set style = ""::

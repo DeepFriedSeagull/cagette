@@ -55,18 +55,24 @@ class Contract extends Object
 		return flags.has(PercentageOnOrders);
 	}
 	
-	
+	/**
+	 * 
+	 * @param	amap
+	 * @param	large = false	Si true, montre les contrats terminés depuis moins d'un mois
+	 * @param	lock = false
+	 */
 	public static function getActiveContracts(amap:Amap,?large = false, ?lock = false) {
-		
-		var start = Date.now();
+		var now = Date.now();
 		var end = Date.now();
-		
+	
 		if (large) {
-			start = DateTools.delta(start, 1000.0 * 60 * 60 * 24 * 30);
 			end = DateTools.delta(end , -1000.0 * 60 * 60 * 24 * 30);
+			return db.Contract.manager.search($amap == amap && $endDate > end,{orderBy:-startDate}, lock);	
+		}else {
+			return db.Contract.manager.search($amap == amap && $endDate > now && $startDate < now,{orderBy:-startDate}, lock);	
 		}
 		
-		return db.Contract.manager.search($amap == amap && $endDate > end && $startDate < start,{orderBy:-startDate}, lock);
+		
 	}
 	
 	public function getProducts():List<Product> {

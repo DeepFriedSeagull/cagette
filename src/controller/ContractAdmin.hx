@@ -39,11 +39,7 @@ class ContractAdmin extends Controller
 		//set a token for delete buttons
 		checkToken();
 	}
-	
-	//@tpl("contractadmin/contract.mtt")
-	//function doContract(contract:db.Contract) {
-		//view.c = contract;
-	//}
+
 	
 	@tpl("contractadmin/products.mtt")
 	function doProducts(contract:db.Contract) {

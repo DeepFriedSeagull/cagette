@@ -141,7 +141,11 @@ class Contract extends Controller
 			throw Error("/", "Ce contrat est à commande variable, vous devez sélectionner une date de distribution pour faire votre commande.");
 		}
 		view.c = view.contract = c;
-		view.distribution = args.d;
+		if (c.type == db.Contract.TYPE_VARORDER) {
+			view.distribution = args.d;
+		}else {
+			view.distributions = c.getDistribs(false);
+		}
 		
 		var userOrders = new Array<{order:db.UserContract,product:db.Product}>();
 		var products = c.getProducts();
