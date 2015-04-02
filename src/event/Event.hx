@@ -6,6 +6,7 @@ package event ;
  */
 class Event
 {
+	public var id : String;
 
 	public function new() 
 	{

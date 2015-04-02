@@ -37,18 +37,15 @@ class Messages extends Controller
 				if (d.email2 != null) mails.push(d.email2);
 			}
 			
-			app.user.amap.lock();
-			if (mails.length > app.user.amap.emailStock) throw Error("/messages", "Vous n'avez pas assez d'emails est stock pour envoyer " + mails.length + " emails");
-			app.user.amap.emailStock -= mails.length;
-			app.user.amap.update();
+			var e = new event.Event();
+			e.id = "sendEmail";
+			App.eventDispatcher.dispatch(e);
 			
 			//mails
 			for( m in mails) mail.addRecipient(m);
 			mail.setSender(app.user.email, app.user.firstName+" "+app.user.lastName);
 			mail.title = form.getElement("subject").value;
 			var text :String = form.getElement("text").value;
-			//text = text.split("\n").join("<br/>");
-			//text = text.split("\r").join("");
 			mail.setHtmlBody('mail/message.mtt', { text:text } );
 			mail.send();
 			

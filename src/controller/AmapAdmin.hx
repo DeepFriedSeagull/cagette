@@ -15,7 +15,7 @@ class AmapAdmin extends Controller
 		//lance un event pour demander aux plugins si ils veulent ajouter un item dans la nav
 		var nav = new Array<Link>();
 		var e = new event.NavEvent();
-		e.navId = "amapadmin";
+		e.id = "amapadmin";
 		App.eventDispatcher.dispatch(e);
 		view.nav = e.nav;
 	}
@@ -25,7 +25,7 @@ class AmapAdmin extends Controller
 	function doDefault() {
 		view.membersNum = UserAmap.manager.count($amap == app.user.amap);
 		view.contractsNum = app.user.amap.getActiveContracts().length;
-		view.aboOk = app.user.amap.isAboOk(); 
+		//view.aboOk = app.user.amap.isAboOk(); 
 	}
 	
 	

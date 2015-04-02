@@ -14,7 +14,6 @@ class Member extends Controller
 	public function new()
 	{
 		super();
-		if (!app.user.amap.isAboOk()) throw Redirect("/");
 		if (!app.user.canAccessMembership()) throw Redirect("/");
 		
 	}
@@ -401,9 +400,9 @@ class Member extends Controller
 	public function doInsert() {
 		
 		if (!app.user.isContractManager()) return;
-		if (!app.user.amap.canAddMember()) {
-			throw Error("/member", "Votre abonnement actuel vous limite à "+Const.ABO_MAX_MEMBERS[app.user.amap.aboType]+" foyers adhérents.<br/>Passez votre abonnement à un niveau supérieur pour pouvoir ajouter plus d'adhérents.");
-		}
+		//if (!app.user.amap.canAddMember()) {
+			//throw Error("/member", "Votre abonnement actuel vous limite à "+Const.ABO_MAX_MEMBERS[app.user.amap.aboType]+" foyers adhérents.<br/>Passez votre abonnement à un niveau supérieur pour pouvoir ajouter plus d'adhérents.");
+		//}
 	
 		var m = new db.User();
 		var form = sugoi.form.Form.fromSpod(m);

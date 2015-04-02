@@ -21,11 +21,6 @@ class Amap extends Object
 	public var txtHome:SNull<SText>; 	//texte accueil adhérents
 	public var txtDistrib:SText; //sur liste d'emargement
 	
-	public var aboEnd : SNull<SDate>; //dépassé = retombe en mode gratuit
-	public var aboType : STinyInt; //id de type d'abonnement
-	public var emailStock : SUInt;
-	public var smsStock : SUInt;
-	
 	public var membershipRenewalDate : SNull<SDate>;
 	public var membershipPrice : SNull<STinyInt>;
 	
@@ -34,38 +29,16 @@ class Amap extends Object
 	public function new() 
 	{
 		super();
-		aboType = 0;
-		emailStock = 200;
 	}
 	
-	public function isAboOk(?plusOne=false):Bool {
-	
-		var members = UserAmap.manager.count($amap == App.current.user.amap);
-		if (plusOne) members++;
-		
-		//abo null ou expiré ?
-		if (aboEnd == null || Date.now().getTime() > (aboEnd.getTime() + (1000*60*60*24))) {
-			
-			//mode free ?
-			if (members <= Const.ABO_MAX_MEMBERS[0]) return true;
-			
-			return false;
-		}else {
-			//abo valable
-			return (members <= Const.ABO_MAX_MEMBERS[aboType]); 
-			
-		}
-		
-		return false;
-	}
 	
 	public function hasMembership():Bool {
 		return flags != null && flags.has(HasMembership);
 	}
 	
-	public function canAddMember():Bool {
-		return isAboOk(true);
-	}
+	//public function canAddMember():Bool {
+	//	return isAboOk(true);
+	//}
 	
 	/**
 	 * Renvoie la liste des contrats actifs

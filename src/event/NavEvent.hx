@@ -6,7 +6,6 @@ import Types;
  */
 class NavEvent extends Event
 {
-	public var navId : String;
 	public var nav : Array<Link>;
 	
 	public function new() 

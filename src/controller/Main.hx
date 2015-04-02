@@ -12,12 +12,10 @@ class Main extends Controller {
 		
 		if (app.user != null) {
 		
-			if (!app.user.amap.isAboOk()) {
-				view.aboOk = false;
-				return;
-			}else {
-				view.aboOk = true;
-			}
+			var e = new event.Event();
+			e.id = "displayHome";
+			App.eventDispatcher.dispatch(e);
+			
 			
 			view.amap = app.user.getAmap();
 			

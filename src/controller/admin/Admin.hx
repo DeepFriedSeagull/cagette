@@ -10,7 +10,7 @@ class Admin extends Controller {
 		//lance un event pour demander aux plugins si ils veulent ajouter un item dans la nav
 		var nav = new Array<Link>();
 		var e = new event.NavEvent();
-		e.navId = "admin";
+		e.id = "admin";
 		App.eventDispatcher.dispatch(e);
 		view.nav = e.nav;
 		

@@ -30,7 +30,7 @@ class App extends sugoi.BaseApp {
 	}
 	
 	public static function log(t:Dynamic) {
-		if(App.App.config.DEBUG) {
+		if(App.config.DEBUG) {
 			//neko.Web.logMessage(Std.string(t));
 			Weblog.log(t);
 		}
