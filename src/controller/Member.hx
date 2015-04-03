@@ -16,6 +16,9 @@ class Member extends Controller
 		super();
 		if (!app.user.canAccessMembership()) throw Redirect("/");
 		
+		var e = new event.Event();
+		e.id = "displayMember";
+		App.eventDispatcher.dispatch(e);
 	}
 	
 	@logged

@@ -27,6 +27,11 @@
 			</p>
 	
 		</div>
+		
+		
+		<div class="block">
+			Si c'est votre <b>première connexion</b>, saisissez uniquement votre email et <b>laissez le champs "mot de passe" vide</b>.
+		</div>
 	</div>
 
 ::end::

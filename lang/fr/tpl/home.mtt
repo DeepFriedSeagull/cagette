@@ -1,18 +1,8 @@
 ::use 'design.mtt'::
 
 <div id="content" class="col-md-8">
-	::if !aboOk::
-		<div class="alert alert-danger">
-			<strong>Attention :</strong>
-			<p>
-				Cagette.net est bloqué car l'abonnement de votre Amap n'a pas été renouvellé.<br/>
-				Contactez le responsable de l'Amap afin de renouveler votre abonnement.
-			</p>
-			<a href="/amapadmin/abo" ::cond user.isAmapManager():: class="btn-small btn">Renouveler</a>
-		</div>
-	::end::
-	
-	::if aboOk::
+
+
 	
 		<div class="homeBlock" ::cond (aboOk && openContracts!=null && openContracts.length>0 )::>
 			<img src="/img/order.png" width="64" height="64" style="float:right;" />
@@ -149,7 +139,6 @@
 			
 		::end::
 
-	::end::
 	
 </div>
 <div class="col-md-4">

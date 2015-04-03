@@ -15,7 +15,7 @@ class App extends sugoi.BaseApp {
 		
 		#if plugins
 		//Gestion expérimentale de plugin. Si ça ne complile pas, commentez les lignes ci-dessous
-		plugins.push( new hosted.Hosted() );
+		plugins.push( new hosted.HostedPlugIn() );
 		#end
 		
 		sugoi.BaseApp.main();
