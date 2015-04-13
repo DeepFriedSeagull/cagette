@@ -1,31 +1,11 @@
 ::use 'amapadmin/design.mtt'::
 
-
-
-		<h3>Mon AMAP</h3>		
-		
-		<p>
-			<strong>::membersNum::</strong> foyers adhérents.<br/>
-			<strong>::contractsNum::</strong> contrats en cours.<br/>
-		</p>
-		
-
-		
-
+	<h3>Mon AMAP</h3>		
 	
-	::if !aboOk::
-		<div class="alert alert-danger">
-			<strong>Attention :</strong>
-			<p>
-				Votre compte est bloqué car votre abonnement 
-				a expiré.<br/> Pour débloquer votre compte, merci
-				de renouveller votre abonnement.
-			</p>
-			<a href="/amapadmin/abo" class="btn-small btn">Renouveler</a>
-		</div>
-	::end::
-		
-	
+	<p>
+		<strong>::membersNum::</strong> foyers adhérents.<br/>
+		<strong>::contractsNum::</strong> contrats en cours.<br/>
+	</p>
 
 
 ::end::

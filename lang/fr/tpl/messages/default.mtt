@@ -6,11 +6,6 @@
 
 
 <div class="col-md-3">
-	<div class="block">
-		Stock Email :
-		<b>::user._amap.emailStock:</b>
-		<a href="/amapadmin/abo" ::cond user.isAmapManager()&&user._amap.emailStock<100 :: class="btn-small btn">Commander</a>
-	</div>
 
 	<div class="article">
 		::if user.isAmapManager()::

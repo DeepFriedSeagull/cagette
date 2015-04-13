@@ -1,8 +1,6 @@
 ::use 'design.mtt'::
 
 <div id="content" class="col-md-8">
-
-
 	
 		<div class="homeBlock" ::cond (aboOk && openContracts!=null && openContracts.length>0 )::>
 			<img src="/img/order.png" width="64" height="64" style="float:right;" />

@@ -132,10 +132,11 @@ class Member extends Controller
 	@tpl('form.mtt')
 	function doEdit(member:db.User) {
 		
+		if (member.isAdmin()) throw Error("/","Vous ne pouvez pas modifier le compte d'un administrateur");
+		
 		var form = sugoi.form.Form.fromSpod(member);
 		
 		//cleaning
-		//form.removeElement( form.getElement("amapId") );
 		form.removeElement( form.getElement("pass") );
 		form.removeElement( form.getElement("rights") );
 		form.removeElement( form.getElement("lang") );		
@@ -144,7 +145,6 @@ class Member extends Controller
 		form.getElement("email2").addValidator(new EmailValidator());
 		
 		if (form.checkToken()) {
-			//trace(form.getData());
 			form.toSpod(member); //update model
 			member.lastName = member.lastName.toUpperCase();
 			if (member.lastName2 != null) member.lastName2 = member.lastName2.toUpperCase();

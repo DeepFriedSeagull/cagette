@@ -80,7 +80,7 @@
 				::set notification = getMessages()::
 				<div class="alert ::if notification.error:: alert-danger ::else:: alert-success ::end::" ::cond notification::>
 					::if notification.error::
-					<span class="glyphicon glyphicon glyphicon-alert"></span>
+					<span class="glyphicon glyphicon-exclamation-sign"></span>
 					::else::
 					<span class="glyphicon glyphicon-ok"></span>
 					::end::
