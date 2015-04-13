@@ -15,8 +15,11 @@
 				<tr  style="::style::" >
 					<td>
 						<b>::c.name::</b>
-						<div style="font-size:11px;color:#333;">du ::c.startDate.toString().substr(0,10)::
-						au ::c.endDate.toString().substr(0,10)::</div>
+						
+					</td>
+					<td>
+						du ::hDate(c.startDate)::
+						au ::hDate(c.endDate)::
 					</td>
 					
 					<td>::c._vendor.name::</td>

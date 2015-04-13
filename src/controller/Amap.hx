@@ -27,11 +27,7 @@ class Amap extends Controller
 		if (!app.user.isAmapManager()) throw "Vous n'avez pas accès a cette section";
 		
 		var form = Form.fromSpod(app.user.amap);
-		form.removeElement(form.getElement("aboType"));
-		form.removeElement(form.getElement("aboEnd"));
-		form.removeElement(form.getElement("smsStock"));
-		form.removeElement(form.getElement("emailStock"));
-		
+	
 		if (form.checkToken()) {
 			form.toSpod(app.user.amap);
 			app.user.amap.update();

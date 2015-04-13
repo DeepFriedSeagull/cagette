@@ -6,23 +6,31 @@ class App extends sugoi.BaseApp {
 	public static var t : sugoi.i18n.translator.ITranslator;
 	public static var config = sugoi.BaseApp.config;
 	
-	public static var eventDispatcher = new hxevents.Dispatcher<event.Event>();
-	public static var plugins = new Array<plugin.IPlugIn>();
+	public var eventDispatcher :hxevents.Dispatcher<event.Event>;	
+	public var plugins : Array<plugin.IPlugIn>;
 	
 	public static function main() {
 		
 		App.t = sugoi.form.Form.translator = new sugoi.i18n.translator.TMap(getTranslationArray(), "fr");
+		sugoi.BaseApp.main();
+	}
+	
+	/**
+	 * Init les plugins et le dispatcher juste avant de faire tourner l'app
+	 */
+	override public function mainLoop() {
 		
 		#if plugins
 		//Gestion expérimentale de plugin. Si ça ne complile pas, commentez les lignes ci-dessous
-		plugins.push( new hosted.HostedPlugIn() );
+		App.current.eventDispatcher = new hxevents.Dispatcher<event.Event>();
+		App.current.plugins = [];
+		App.current.plugins.push( new hosted.HostedPlugIn() );
 		#end
-		
-		sugoi.BaseApp.main();
-
+	
+		super.mainLoop();
 	}
 	
-	public static function getPlugin(name:String):plugin.IPlugIn {
+	public function getPlugin(name:String):plugin.IPlugIn {
 		for (p in plugins) {
 			if (p.getName() == name) return p;
 		}

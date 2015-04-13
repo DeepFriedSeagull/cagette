@@ -18,7 +18,7 @@ class Member extends Controller
 		
 		var e = new event.Event();
 		e.id = "displayMember";
-		App.eventDispatcher.dispatch(e);
+		App.current.eventDispatcher.dispatch(e);
 	}
 	
 	@logged

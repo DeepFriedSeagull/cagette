@@ -14,13 +14,13 @@ class Plugins extends controller.Controller
 	
 	@tpl("admin/plugins/default.mtt")
 	public function doDefault() {
-		view.plugins = App.plugins;
+		view.plugins = App.current.plugins;
 	}
 	
 	
 	public function doInstall(plugin:String) {
 		
-		var p = App.getPlugin(plugin);
+		var p = App.current.getPlugin(plugin);
 		if (p == null) throw Error("/admin/plugins","Le plugin '"+plugin+"' introuvable");
 		
 		if(p.isInstalled()) throw Ok("/admin/plugins","Le plugin '"+plugin+"' est déjà installé");

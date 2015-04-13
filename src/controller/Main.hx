@@ -14,7 +14,7 @@ class Main extends Controller {
 		
 			var e = new event.Event();
 			e.id = "displayHome";
-			App.eventDispatcher.dispatch(e);
+			App.current.eventDispatcher.dispatch(e);
 			
 			
 			view.amap = app.user.getAmap();

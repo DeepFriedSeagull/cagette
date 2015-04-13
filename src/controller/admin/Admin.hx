@@ -11,7 +11,7 @@ class Admin extends Controller {
 		var nav = new Array<Link>();
 		var e = new event.NavEvent();
 		e.id = "admin";
-		App.eventDispatcher.dispatch(e);
+		App.current.eventDispatcher.dispatch(e);
 		view.nav = e.nav;
 		
 	}

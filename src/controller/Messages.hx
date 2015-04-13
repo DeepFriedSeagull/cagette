@@ -49,7 +49,7 @@ class Messages extends Controller
 			var e = new event.MessageEvent();
 			e.id = "sendMessage";
 			e.message = mail;
-			App.eventDispatcher.dispatch(e);
+			App.current.eventDispatcher.dispatch(e);
 			
 			mail.send();
 			

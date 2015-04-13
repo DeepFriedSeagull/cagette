@@ -16,7 +16,7 @@ class AmapAdmin extends Controller
 		var nav = new Array<Link>();
 		var e = new event.NavEvent();
 		e.id = "amapAdmin";
-		App.eventDispatcher.dispatch(e);
+		App.current.eventDispatcher.dispatch(e);
 		view.nav = e.nav;
 	}
 	
@@ -128,7 +128,7 @@ class AmapAdmin extends Controller
 		var data = [];
 		var populate :Array<String> = [];
 		data.push({key:"contractAll",value:"Tous les contrats"});
-		for (r in app.user.amap.getActiveContracts()) {
+		for (r in app.user.amap.getActiveContracts(true)) {
 			data.push({key:"contract"+Std.string(r.id),value:r.name});
 		}
 		
