@@ -1,9 +1,9 @@
 ::use 'design.mtt'::
-<div id="content" class="span8">
+<div id="content" class="col-md-8">
 	<div class="article">
-		<h2>Commander</h2>
+		<h2>Commande ::c.name::</h2>
 		
-		<h3>::c.name::</h3>
+		
 		
 		::if distribution!=null::
 		Pour la distribution du <b>::hDate(distribution.date)::</b>
@@ -90,7 +90,7 @@
 	
 	</div>
 </div>
-<div class="span4">
+<div class="col-md-4">
 	<div class="article">
 		Producteur : <b>::c._vendor.name::</b>
 		<br/>

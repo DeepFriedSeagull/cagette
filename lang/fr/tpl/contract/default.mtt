@@ -1,5 +1,5 @@
 ::use 'design.mtt'::
-<div id="content" class="span8">
+<div class="col-md-8">
 	<div class="article">
 	<h2>Mes contrats</h2>
 
@@ -25,11 +25,9 @@
 	
 	</div>
 </div>
-<div class="span4">
+<div class="col-md-4">
 	<div class="article">
 	$$contact(::user::)
-	
-	
 	$$edit(Modifier,/account/edit)
 	</div>
 </div>

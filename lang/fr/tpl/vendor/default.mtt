@@ -1,5 +1,5 @@
 ::use 'design.mtt'::
-<div class="span9">
+<div class="col-md-9">
 <div class="article">
 	
 	<h2>Fournisseurs</h2>
@@ -35,7 +35,7 @@
 	</table>
 
 	<div>
-		<a href="/vendor/insert" class="btn">Nouveau fournisseur</a>	
+		<a href="/vendor/insert" class="btn btn-default">Nouveau fournisseur</a>	
 	</div>
 	
 	<hr/>
@@ -43,7 +43,7 @@
 </div>
 </div>
 
-<div class="span3">
+<div class="col-md-3">
 	
 	
 	<div class="block">

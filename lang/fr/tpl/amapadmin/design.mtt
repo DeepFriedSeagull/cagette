@@ -1,0 +1,37 @@
+::use 'design.mtt'::
+<div class="col-md-3">
+
+	<div class="panel panel-warning">
+		<div class="panel-heading">
+			<span class="panel-title"><a href="/amapadmin">Mon Amap</a></span>
+		</div>
+		
+		<ul class="nav nav-tabs nav-stacked" >
+			
+			<li><a href="/amap/edit">Propriétés</a></li>
+			<li><a href="/amapadmin/rights/">Droits et accès</a></li>
+			::if nav!=null::
+				
+				::foreach i nav::
+				<li><a href="::i.link::">::i.name::</a> </li>
+				::end::		
+				
+			::end::
+		</ul>
+		
+	</div>	
+	
+</div>
+
+
+<div class="col-md-9">
+	<div class="article">
+	::raw __content__::	
+	</div>
+	
+	
+	
+	
+</div>
+
+::end::

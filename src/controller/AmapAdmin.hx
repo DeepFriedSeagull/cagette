@@ -1,6 +1,8 @@
 package controller;
 import db.UserAmap;
 import sugoi.form.Form;
+import Types;
+
 
 class AmapAdmin extends Controller
 {
@@ -9,6 +11,13 @@ class AmapAdmin extends Controller
 	{
 		super();
 		if (!app.user.isAmapManager()) throw Error("/", "Accès non autorisé");
+		
+		//lance un event pour demander aux plugins si ils veulent ajouter un item dans la nav
+		var nav = new Array<Link>();
+		var e = new event.NavEvent();
+		e.id = "amapAdmin";
+		App.eventDispatcher.dispatch(e);
+		view.nav = e.nav;
 	}
 	
 	
@@ -16,13 +25,9 @@ class AmapAdmin extends Controller
 	function doDefault() {
 		view.membersNum = UserAmap.manager.count($amap == app.user.amap);
 		view.contractsNum = app.user.amap.getActiveContracts().length;
-		view.aboOk = app.user.amap.isAboOk(); 
 	}
 	
-	@tpl("amapadmin/abo.mtt")
-	function doAbo() {
-		
-	}
+	
 	
 	@tpl("amapadmin/rights.mtt")
 	public function doRights() {

@@ -10,7 +10,7 @@
 			
 			::foreach a amaps::
 				<p>
-					<a class="btn" href="/user/choose?amap=::a.amapId::">::a._amap.name::</a>
+					<a class="btn btn-default" href="/user/choose?amap=::a.amapId::">::a._amap.name::</a>
 				</p>
 			::end::
 			

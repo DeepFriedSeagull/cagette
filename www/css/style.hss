@@ -1,14 +1,27 @@
 h1{
 	font-family:CSS(" 'Cantora One', sans-serif !important");
 	color: CSS(" #583816 !important");
+	margin-top: CSS("4px !important");
+	margin-bottom: CSS("8px !important");
+	font-weight:bold !important;
+}
+h1{
+	font-size: 28px !important;
+}
+h2{
+	font-size: 24px !important;
 }
 
 h2,h3,h4{
 	font-family:CSS(" 'Cantora One', sans-serif !important");
-	color:CSS(" #008800 !important");
+	color:CSS(" #007700 !important");
 	font-weight:CSS("normal !important");
+	margin-top: CSS("4px !important");
+	margin-bottom: CSS("8px !important");
 }
-
+a{
+	color:#007700;
+}
 
 #footer{
 	text-align:center;
@@ -35,21 +48,6 @@ body{
 	font-size:10px;
 	background:#AAA;
 }
-.amapTitle{
-	color: #583816;
-	font-size: 28px;
-	font-weight: bold;
-	margin: 18px 0;
-	font-family: 'Cantora One', sans-serif;
-}
-
-.title{
-	color:#008800;
-	margin-bottom:8px;
-	//font-weight:bold;
-	font-size:23px;
-	font-family: 'Cantora One', sans-serif;
-}
 
 .contact{
 	border:2px solid #CCC ;
@@ -61,9 +59,8 @@ body{
 	
 }
 
-.article{
+.homeBlock{
 	margin-bottom:32px;
-	
 	background:#FFF;
 	border-radius:8px;
 	position: relative;
@@ -72,8 +69,32 @@ body{
 		margin: 8px 8px 8px 90px;
 
 	}
+}
+
+//pour les hauts de nav
+span.panel-title{
+	font-family:CSS(" 'Cantora One', sans-serif !important");
+	color: CSS(" #966125 !important");
+	font-size: 20px !important;
+	font-weight:normal !important;
 	
 }
+
+.article{
+	margin-bottom:16px;
+	background:#FFF;
+	border-radius:8px;
+	position: relative;
+	padding:8px;	
+}
+
+.white{
+	margin-bottom:16px;
+	background:#FFF;
+	border-radius:4px;
+	position: relative;
+}
+
 
 /* block marron */
 .block{	
@@ -116,7 +137,7 @@ i{
 	color:#666;
 	font-weight:bold;
 	margin-top:13px;
-	padding-left:26px;
+	padding:8px;
 	font-size:13px;
 	background-color:#EEE;
 	border-top:1px solid #CCC ;

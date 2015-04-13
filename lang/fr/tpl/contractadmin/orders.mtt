@@ -3,14 +3,14 @@
 		<h3>Commandes</h3>
 		
 		::if distribution!=null::
-		Pour la distribution du <b>::hDate(distribution.date)::</b>
+		Distribution du <b>::hDate(distribution.date)::</b>
 		::end::
 		
 		<div style="margin:8px 0;">
 			::if distribution!=null::
-			<a href="/contractAdmin/edit/::c.id::?d=::distribution.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
+			<a href="/contractAdmin/edit/::c.id::?d=::distribution.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
 			::else::
-			<a href="/contractAdmin/edit/::c.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
+			<a href="/contractAdmin/edit/::c.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
 			::end::
 		</div>
 		
@@ -46,7 +46,7 @@
 						::m.quantity:: x ::m.pname::
 					</td>
 					<td>
-						::formatNum(m.quantity*m.price)::€
+						::formatNum(m.quantity*m.price)::&nbsp;€
 					</td>
 					<td>
 						::if m.paid==true::
@@ -93,9 +93,9 @@
 
 				<div>
 					::if distribution!=null::
-					<a href="/contractAdmin/edit/::c.id::?d=::distribution.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
+					<a href="/contractAdmin/edit/::c.id::?d=::distribution.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
 					::else::
-					<a href="/contractAdmin/edit/::c.id::" class="btn"><i class="icon-plus-sign"></i> Nouvelle commande</a>	
+					<a href="/contractAdmin/edit/::c.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
 					::end::
 					
 					::if distribution!=null::

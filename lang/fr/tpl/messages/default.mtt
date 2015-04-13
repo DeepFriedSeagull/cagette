@@ -5,12 +5,7 @@
 
 
 
-<div class="span3">
-	<div class="block">
-		Stock Email :
-		<b>::user._amap.emailStock:</b>
-		<a href="/amapadmin/abo" ::cond user.isAmapManager()&&user._amap.emailStock<100 :: class="btn-small btn">Commander</a>
-	</div>
+<div class="col-md-3">
 
 	<div class="article">
 		::if user.isAmapManager()::
@@ -31,7 +26,7 @@
 </div>
 
 
-<div class="span9">
+<div class="col-md-9">
 	<div class="article">
 		<h3>Envoyer un e-mail	</h3>		
 		

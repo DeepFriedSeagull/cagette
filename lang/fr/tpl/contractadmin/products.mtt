@@ -1,26 +1,25 @@
 ::use 'contractadmin/design.mtt'::
-
 	
-		<h3>Produits</h3>
 		
-			<b>Produits</b>
-			<table class="table">
-				::foreach p c.getProducts()::
-				<tr>
-					<td><img src="/img/::p.getImage()::" style="width:32px;height:32px;" />	</td>
-					<td>::p.name::</td>
-					<td>::formatNum(p.price):: &euro;</td>
-					<td>
-						$$edit(modifier,/product/edit/::p.id::)
-						$$delete(Suppr.,/product/delete/::p.id::?token=::token::)
-					</td>
-				</tr>
-				::end::
-			</table>
-			$$insert(Nouveau produit,/product/insert/::c.id::)
-			
-			<a href="/product/import/::c.id::" class="btn btn-mini"><i class="icon-list-alt"></i> Import Excel/CSV</a>	
+	<h3>Produits</h3>
 	
+	<table class="table">
+		::foreach p c.getProducts()::
+		<tr>
+			<td><img src="/img/::p.getImage()::" style="width:32px;height:32px;" />	</td>
+			<td>::p.name::</td>
+			<td>::formatNum(p.price):: &euro;</td>
+
+			<td>
+				$$edit(modifier,/product/edit/::p.id::)
+				$$delete(Suppr.,/product/delete/::p.id::?token=::token::)
+			</td>
+
+		</tr>
+		::end::
+	</table>
+	$$insert(Nouveau produit,/product/insert/::c.id::)
+	<a href="/product/import/::c.id::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list-alt"></span> Import Excel/CSV</a>	
 	
 
 ::end::

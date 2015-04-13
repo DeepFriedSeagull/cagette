@@ -5,16 +5,32 @@ class App extends sugoi.BaseApp {
 	public static var current : App = null;
 	public static var t : sugoi.i18n.translator.ITranslator;
 	public static var config = sugoi.BaseApp.config;
-
+	
+	public static var eventDispatcher = new hxevents.Dispatcher<event.Event>();
+	public static var plugins = new Array<plugin.IPlugIn>();
+	
 	public static function main() {
 		
-		App.t = sugoi.form.Form.translator = new sugoi.i18n.translator.TMap(getTranslationArray(),"fr");
+		App.t = sugoi.form.Form.translator = new sugoi.i18n.translator.TMap(getTranslationArray(), "fr");
+		
+		#if plugins
+		//Gestion expérimentale de plugin. Si ça ne complile pas, commentez les lignes ci-dessous
+		plugins.push( new hosted.HostedPlugIn() );
+		#end
+		
 		sugoi.BaseApp.main();
 
 	}
 	
+	public static function getPlugin(name:String):plugin.IPlugIn {
+		for (p in plugins) {
+			if (p.getName() == name) return p;
+		}
+		return null;
+	}
+	
 	public static function log(t:Dynamic) {
-		if(App.App.config.DEBUG) {
+		if(App.config.DEBUG) {
 			//neko.Web.logMessage(Std.string(t));
 			Weblog.log(t);
 		}

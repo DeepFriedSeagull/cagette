@@ -1,5 +1,5 @@
 ﻿::use 'design.mtt'::
-<div class="span12">
+<div class="col-md-9">
 	<div class="article">
 		<h3 ::cond title!=null::>::title::</h3>
 		<p ::cond text!=null::>

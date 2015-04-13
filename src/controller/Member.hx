@@ -14,9 +14,11 @@ class Member extends Controller
 	public function new()
 	{
 		super();
-		if (!app.user.amap.isAboOk()) throw Redirect("/");
 		if (!app.user.canAccessMembership()) throw Redirect("/");
 		
+		var e = new event.Event();
+		e.id = "displayMember";
+		App.eventDispatcher.dispatch(e);
 	}
 	
 	@logged
@@ -130,10 +132,11 @@ class Member extends Controller
 	@tpl('form.mtt')
 	function doEdit(member:db.User) {
 		
+		if (member.isAdmin()) throw Error("/","Vous ne pouvez pas modifier le compte d'un administrateur");
+		
 		var form = sugoi.form.Form.fromSpod(member);
 		
 		//cleaning
-		//form.removeElement( form.getElement("amapId") );
 		form.removeElement( form.getElement("pass") );
 		form.removeElement( form.getElement("rights") );
 		form.removeElement( form.getElement("lang") );		
@@ -142,7 +145,6 @@ class Member extends Controller
 		form.getElement("email2").addValidator(new EmailValidator());
 		
 		if (form.checkToken()) {
-			//trace(form.getData());
 			form.toSpod(member); //update model
 			member.lastName = member.lastName.toUpperCase();
 			if (member.lastName2 != null) member.lastName2 = member.lastName2.toUpperCase();
@@ -401,9 +403,9 @@ class Member extends Controller
 	public function doInsert() {
 		
 		if (!app.user.isContractManager()) return;
-		if (!app.user.amap.canAddMember()) {
-			throw Error("/member", "Votre abonnement actuel vous limite à "+Const.ABO_MAX_MEMBERS[app.user.amap.aboType]+" foyers adhérents.<br/>Passez votre abonnement à un niveau supérieur pour pouvoir ajouter plus d'adhérents.");
-		}
+		//if (!app.user.amap.canAddMember()) {
+			//throw Error("/member", "Votre abonnement actuel vous limite à "+Const.ABO_MAX_MEMBERS[app.user.amap.aboType]+" foyers adhérents.<br/>Passez votre abonnement à un niveau supérieur pour pouvoir ajouter plus d'adhérents.");
+		//}
 	
 		var m = new db.User();
 		var form = sugoi.form.Form.fromSpod(m);

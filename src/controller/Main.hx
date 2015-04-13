@@ -12,12 +12,10 @@ class Main extends Controller {
 		
 		if (app.user != null) {
 		
-			if (!app.user.amap.isAboOk()) {
-				view.aboOk = false;
-				return;
-			}else {
-				view.aboOk = true;
-			}
+			var e = new event.Event();
+			e.id = "displayHome";
+			App.eventDispatcher.dispatch(e);
+			
 			
 			view.amap = app.user.getAmap();
 			
@@ -104,6 +102,31 @@ class Main extends Controller {
 	
 	function doCron(d:Dispatch) {
 		d.dispatch(new controller.Cron());
+	}
+	
+	function doP(d:Dispatch) {
+		
+		/*
+		 * Invalid array access
+Stack (ADMIN|DEBUG)
+
+Called from C:\HaxeToolkit\haxe\std/haxe/web/Dispatch.hx line 463
+Called from controller/Main.hx line 117
+		 * 
+		var plugin = d.parts.shift();
+		for ( p in App.plugins) {
+			var n = Type.getClassName(Type.getClass(p)).toLowerCase();
+			n = n.split(".").pop();
+			if (plugin == n) {
+				d.dispatch( p.getController() );
+				return;
+			}
+		}
+		
+		throw Error("/","Plugin '"+plugin+"' introuvable.");
+		*/
+		
+		d.dispatch(new controller.Plugin());
 	}
 	
 

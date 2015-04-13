@@ -3,3 +3,5 @@ lang/fr/tmp/*
 www/index.n
 config.xml
 Makefile
+www/plugin/*
+lang/fr/tpl/plugin/*

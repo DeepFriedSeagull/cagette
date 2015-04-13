@@ -1,0 +1,53 @@
+::use 'admin/design.mtt'::
+	
+	<div id="content" class="col-md-8">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h1>H1 Title</h1>
+				<h2>H2 Title</h2>
+				<h3>H3 Title</h3>
+				<h4>H4 Title</h4>
+			</div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h2>
+					Titre H2
+				</h2>
+				<p>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+					Donec ullamcorper venenatis augue, vitae tempor quam viverra at. 
+					Sed faucibus ipsum sit amet turpis consectetur finibus. Nulla facilisi. 
+					Vivamus consequat vestibulum blandit. Nunc laoreet tellus ac lorem commodo hendrerit. 	
+				</p>
+				<p>
+					Nulla gravida, libero et scelerisque convallis, nibh nisi ultrices nulla, sed faucibus sapien augue et turpis. 
+					Nunc quis tempor dolor. Duis elementum nisl eu dolor malesuada convallis. 
+					Sed id tellus euismod, eleifend neque ac, iaculis odio. Cras euismod odio quis elit elementum rhoncus. 
+					Mauris in elementum ex, ut scelerisque leo. Suspendisse viverra mi non neque vulputate, in fermentum sapien sodales.
+					Sed in laoreet ante. Suspendisse non velit sit amet lectus consequat ornare sit amet quis ipsum. 
+				</p>
+				
+				
+				<div class="well text-center">
+					Nulla gravida, libero et scelerisque convallis, nibh nisi ultrices nulla, sed faucibus sapien augue et turpis. 
+					Nunc quis tempor dolor. Duis elementum nisl eu dolor malesuada convallis. 
+					<br/>
+					<a href="#" class="btn btn-primary">Big Button</a>
+					<a href="#" class="btn btn-default">Big Button</a>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-md-4">
+		<div class="panel panel-default">
+		  <div class="panel-heading">Panel heading without title</div>
+		  <div class="panel-body">
+			Panel content
+		  </div>
+		</div>
+	</div>
+::end::

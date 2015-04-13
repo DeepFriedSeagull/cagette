@@ -1,7 +1,7 @@
 ::use 'design.mtt'::
 ::set c = contract::
 
-<div class="span3">
+<div class="col-md-3">
 	<div class="block">
 		<ul>
 			<li><a href="/contractAdmin/products/::c.id::">Produits</a></li>
@@ -12,7 +12,7 @@
 </div>
 
 
-<div class="span9">
+<div class="col-md-9">
 	<div class="article">
 	
 		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>

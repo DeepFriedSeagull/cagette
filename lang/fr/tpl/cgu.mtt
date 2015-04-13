@@ -1,6 +1,6 @@
 ::use 'design.mtt'::
 
-	<div class="span9" style="margin-top:18px;">
+	<div class="col-md-9" style="margin-top:18px;">
 		<div class="article" style="height:700px;">
 		<div>
 			<img src="/img/logo2.gif" style="display: block;position: absolute;top: -15px;right: 15px;width:130px; height:130px;" />
@@ -38,13 +38,13 @@ L’équipe Cagette.net s’engage à mettre en oeuvre les méthodes d’usage d
 		</div>
 	</div>
 	
-	<div class="span3" style="margin-top:18px;">
+	<div class="col-md-3" style="margin-top:18px;">
 		<div class="article">
 			
 			::if user!=null::
 				Bonjour ::user.name::<br/> 
 					
-				<a href="/user/logout" class="btn btn-mini">Déconnexion</a>
+				<a href="/user/logout" class="btn btn-default btn-sm">Déconnexion</a>
 			::else::
 				
 				Vous avez déjà un compte ?<br/>
@@ -56,7 +56,7 @@ L’équipe Cagette.net s’engage à mettre en oeuvre les méthodes d’usage d
 		
 	</div>
 	
-	<div class="span3" style="margin-top:4px;">
+	<div class="col-md-3" style="margin-top:4px;">
 		<div class="block">
 			Vous souhaitez ouvrir un compte pour votre AMAP ?<br/>
 			<a href="/contact" class="btn btn-medium">Ecrivez-nous</a>

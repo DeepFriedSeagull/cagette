@@ -38,18 +38,24 @@
 	</macro>
 	
 	<macro name="edit(text,url)">
-		<!--<img src="/img/icons/application_edit.png" style="vertical-align:middle;" />&nbsp;<a href="::url::">::text::</a>-->
-		<a href="::url::" class="btn btn-mini"><i class="icon-edit"></i>&nbsp;::text::</a>	
+		
+		<a href="::url::" class="btn btn-default btn-sm">
+			<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+			&nbsp;::text::
+		</a>	
 	</macro>
 	
 	<macro name="insert(text,url)">
 		<!--<img src="/img/icons/add.png" style="vertical-align:middle;" />&nbsp;<a href="::url::">::text::</a>-->
-		<a href="::url::" class="btn btn-mini"><i class="icon-plus"></i>&nbsp;::text::</a>	
+		<a href="::url::" class="btn btn-default btn-sm">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+			&nbsp;::text::
+		</a>	
 	</macro>
 	
 	<macro name="delete(text,url)">
-		<a href="::url::" $$confirm(Supprimer ?) class="btn btn-mini" >
-			<i class="icon-remove"></i>
+		<a href="::url::" $$confirm(Supprimer ?) class="btn btn-default btn-sm" >
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 		::if text!=null::	
 			&nbsp;::text::
 		::end::
@@ -57,7 +63,7 @@
 	</macro>
 	
 	<macro name="export(url)">
-		<a href="::url::" class="btn"><i class="icon-list-alt"></i> Export Excel/CSV</a>	
+		<a href="::url::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list-alt"></span> Export Excel/CSV</a>	
 	</macro>
 	
 	<macro name="bool(v)">
@@ -107,61 +113,8 @@
 			<span ::cond u.phone!=null::>Téléphone : ::u.phone::<br/></span>
 		</div>
 	</macro>
-	
-	<macro name="cagettePrices()">
-		<div>
-		
-		<div class="span4">
-		<table class="table table-bordered">
-			<tr>
-				<th colspan="2">Nbre de foyers adhérents</th>
-				<th></th>
-			</tr>
-			<tr>
-				<th>Minimum</th>
-				<th>Maximum</th>
-				<th>Prix</th>
-			</tr>
-			<tr>
-				<td>0</td>
-				<td>20</td>
-				<td>Gratuit</td>
-			</tr>
-			<tr>
-				<td>21</td>
-				<td>100</td>
-				<td>50 &euro;</td>
-			</tr>
-			<tr>
-				<td>101</td>
-				<td>200</td>
-				<td>100 &euro;</td>
-			</tr>
-			
-		</table>
-		</div>
-		
-		<div class="span4">
-		<table class="table table-bordered" >
-			<tr>
-				<th>Packs Communication</th>
-				<th>Prix</th>
-			</tr>
-			<tr>
-				<td>Pack 10000 emails</td>
-				<td>5 &euro;</td>
-			</tr>
-			<tr>
-				<td>Pack 1000 SMS </td>
-				<td>100 &euro;</td>
-			</tr>
-		</table>
-		</div>
-		
-		</div>
-	</macro>
-	
 
+	
 	
 	
 </macros>

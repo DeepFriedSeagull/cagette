@@ -37,19 +37,20 @@ class Messages extends Controller
 				if (d.email2 != null) mails.push(d.email2);
 			}
 			
-			app.user.amap.lock();
-			if (mails.length > app.user.amap.emailStock) throw Error("/messages", "Vous n'avez pas assez d'emails est stock pour envoyer " + mails.length + " emails");
-			app.user.amap.emailStock -= mails.length;
-			app.user.amap.update();
+			
 			
 			//mails
 			for( m in mails) mail.addRecipient(m);
 			mail.setSender(app.user.email, app.user.firstName+" "+app.user.lastName);
 			mail.title = form.getElement("subject").value;
 			var text :String = form.getElement("text").value;
-			//text = text.split("\n").join("<br/>");
-			//text = text.split("\r").join("");
 			mail.setHtmlBody('mail/message.mtt', { text:text } );
+			
+			var e = new event.MessageEvent();
+			e.id = "sendMessage";
+			e.message = mail;
+			App.eventDispatcher.dispatch(e);
+			
 			mail.send();
 			
 			var m = new db.Message();
@@ -160,33 +161,7 @@ class Messages extends Controller
 		}
 	}
 	
-	// fix les mails invalides
-	function doTest() {
-		var users = db.User.manager.all(false);
-		for ( u in users) {
-			var v = new EmailValidator();
-			u.lock();
-			Sys.print(u.id+"<br/>");
-			if (u.email != null) {
-				var valid = v.isValid(u.email);
-				Sys.print(u.email + " : " + valid + "<br/>");
-				if (!valid && u.email!=null) {
-					u.email = StringTools.trim(u.email);
-					if (u.email == "") u.email = null;
-				}
-			}
-			if (u.email2 != null) {
-				var valid = v.isValid(u.email2);
-				Sys.print(u.email2 + " : " + valid + "<br/>");
-				if (!valid && u.email2!=null) {
-					u.email2 = StringTools.trim(u.email2);
-					if (u.email2 == "") u.email2 = null;
-				}
-			}
-			u.update();
-		}
-		
-	}
+	
 
 	
 	

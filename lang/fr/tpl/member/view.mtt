@@ -1,15 +1,16 @@
 ::use 'design.mtt'::
 
-<div class="span4">
-	<h3>Coordonnées</h3>
+<div class="col-md-4">
+	<h2>Coordonnées</h2>
 	<div class="article">
 		
-		<h3>::member.firstName:: ::member.lastName::
+		
+		<div style="font-weight:bold;font-size:120%;">::member.firstName:: ::member.lastName::
 		::if member.firstName2!=null::
 			& ::member.firstName2:: ::member.lastName2::
 			
-		::end::
-		</h3>
+		::end::</div>
+		
 		
 		
 		::member.address1::<br/>
@@ -41,8 +42,8 @@
 	</div>
 </div>
 
-<div class="span4">
-	<h3>Contrats</h3>
+<div class="col-md-4">
+	<h2>Contrats</h2>
 	<div class="article">
 		
 		<ul ::cond userContracts!=null::>
@@ -55,8 +56,8 @@
 	</div>
 </div>
 
-<div class="span4" ::cond user._amap.hasMembership()::>
-	<h3>Cotisation</h3>
+<div class="col-md-4" ::cond user._amap.hasMembership()::>
+	<h2>Cotisation</h2>
 	<div class="article">
 		Dernière cotisation :
 		::if userAmap.hasValidMembership()::
@@ -73,7 +74,7 @@
 
 
 
-<div class="span4" ::cond userAmap.rights!=null && userAmap._rights!=null::>
+<div class="col-md-4" ::cond userAmap.rights!=null && userAmap._rights!=null::>
 	<h3>Droits</h3>
 	<div class="article">
 		<ul>
