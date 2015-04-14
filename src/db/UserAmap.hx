@@ -20,7 +20,7 @@ class UserAmap extends Object
 	public var user : db.User;
 	public var userId : SInt;
 	
-	public var lastMemberShip : SNull<SDate>;
+	//public var lastMemberShip : SNull<SDate>;
 	public var rights : SNull<SData<Array<Right>>>;
 	
 
@@ -87,17 +87,22 @@ class UserAmap extends Object
 	 * @return
 	 */
 	public function hasValidMembership():Bool {
-		if (lastMemberShip == null) return false;
 		
-		//trouve la date la plus recente de renouvellement de cotisation
-		var lastRenewal = amap.membershipRenewalDate;
-		lastRenewal =  new Date(Date.now().getFullYear(), lastRenewal.getMonth(), lastRenewal.getDate(),0,0,0);
-		if (lastRenewal.getTime() > Date.now().getTime()) {
-			lastRenewal =  new Date(Date.now().getFullYear()-1, lastRenewal.getMonth(), lastRenewal.getDate(),0,0,0);
-		}
+		if (amap.membershipRenewalDate == null) return false;
 		
-		return (lastMemberShip.getTime() > lastRenewal.getTime());
 
+		var cotis = db.Membership.get(this.user, this.amap, this.amap.getMembershipYear());
+		
+		return cotis != null;
+
+		////trouve la date la plus recente de renouvellement de cotisation
+		//var lastRenewal = amap.membershipRenewalDate;
+		//lastRenewal =  new Date(Date.now().getFullYear(), lastRenewal.getMonth(), lastRenewal.getDate(),0,0,0);
+		//if (lastRenewal.getTime() > Date.now().getTime()) {
+			//lastRenewal =  new Date(Date.now().getFullYear()-1, lastRenewal.getMonth(), lastRenewal.getDate(),0,0,0);
+		//}
+		//
+		//return (lastMemberShip.getTime() > lastRenewal.getTime());
 	}
 	
 }

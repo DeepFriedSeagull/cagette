@@ -1,11 +1,20 @@
 ::use 'contractadmin/design.mtt'::
 
-	
 		<h3>Récapitulatif</h3>
 		
-		<h4>Dates</h4>
-		
 		<table class="table table-bordered" style="width:400px;">
+			<tr>
+				<td>
+					Type de contrat
+				</td>
+				<td>
+					::if contract.type==0::
+					à commande fixe
+					::else::
+					à commande variable
+					::end::
+				</td>
+			</tr>
 			<tr>
 				<td>Début</td>
 				<td>::hDate(contract.startDate)::</td>

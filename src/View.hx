@@ -62,7 +62,7 @@ class View extends sugoi.BaseView {
 		var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
 		
 		var out = days[date.getDay()] + " " + date.getDate() + " " + months[date.getMonth()];
-		if ( date.getFullYear() != Date.now().getFullYear()) out += " " + date.getFullYear();
+		/*if ( date.getFullYear() != Date.now().getFullYear())*/ out += " " + date.getFullYear();
 		if ( date.getHours() != 0 || date.getMinutes() != 0) out += " à " + StringTools.lpad(Std.string(date.getHours()), "0", 2) + ":" + StringTools.lpad(Std.string(date.getMinutes()), "0", 2);
 		return out;
 	}

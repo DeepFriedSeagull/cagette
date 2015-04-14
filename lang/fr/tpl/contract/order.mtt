@@ -3,8 +3,6 @@
 	<div class="article">
 		<h2>Commande ::c.name::</h2>
 		
-		
-		
 		::if distribution!=null::
 		Pour la distribution du <b>::hDate(distribution.date)::</b>
 		::end::
@@ -103,7 +101,7 @@
 
 <!-- total x nbre de distributions-->
 ::if distributions!=null::
-	<div class="span4">
+	<div class="col-md-4">
 		<div class="article">
 			<p>
 				<b>::distributions.length:: distributions</b>

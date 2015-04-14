@@ -15,8 +15,7 @@ class Main extends Controller {
 			var e = new event.Event();
 			e.id = "displayHome";
 			App.current.eventDispatcher.dispatch(e);
-			
-			
+						
 			view.amap = app.user.getAmap();
 			
 			//s'inscrire a une distribution
@@ -164,6 +163,12 @@ Called from controller/Main.hx line 117
 	function doDistribution(d:Dispatch) {
 		view.category = 'contractadmin';
 		d.dispatch(new controller.Distribution());
+	}
+	
+	@logged
+	function doMembership(d:Dispatch) {
+		view.category = 'members';
+		d.dispatch(new controller.Membership());
 	}
 	
 	@logged

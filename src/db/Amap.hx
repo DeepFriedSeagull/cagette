@@ -90,9 +90,56 @@ class Amap extends Object
 	}
 	
 	override public function toString() {
-		return name;
+		if (name != '' && name != null) {
+			return name;
+		}else {
+			return 'group#' + id;
+		}
 	}
 	
+	/**
+	 * pour avoir le nom de la periode de cotisation pour une date donnée
+	 */
+	public function getPeriodName(?d:Date):String {
+		if (d == null) d = Date.now();
+		var year = getMembershipYear(d);
+		return getPeriodNameFromYear(year);
+	}
+	
+	/**
+	 * Si la date de renouvellement est en janvier ou février, on note la cotisation avec l'année en cours,
+	 * sinon c'est "à cheval" donc on note la cotis avec l'année la plus ancienne (ex:2014 pour une cotis 2014-2015)
+	 */
+	public function getMembershipYear(?d:Date):Int {
+		if (d == null) d = Date.now();
+		var year = d.getFullYear();
+		var n = membershipRenewalDate;
+		var renewalDate = new Date(year, n.getMonth(), n.getDate(), 0, 0, 0);
+		
+		//if (membershipRenewalDate.getMonth() <= 1) {
+			
+			if (d.getTime() < renewalDate.getTime()) {
+				return year-1;
+			}else {
+				return year;
+			}
+			
+		//}else {
+			//return year - 1;
+		//}
+	}
+	
+	/**
+	 * à partir d'une année de cotis enregistrée, afficher le nom de la periode
+	 * @param	y
+	 */
+	public function getPeriodNameFromYear(y:Int):String {
+		if (membershipRenewalDate.getMonth() <= 1) {
+			return Std.string(y);
+		}else {
+			return Std.string(y) + "-" + Std.string(y+1);
+		}
+	}
 	
 	
 }

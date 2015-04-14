@@ -76,16 +76,6 @@ class Member extends Controller
 		view.members = rb;
 	}
 	
-	function doSetMembership(member:db.User) {
-		var userAmap = db.UserAmap.get(member, app.user.amap,true);
-		if (userAmap == null) throw Error("/member", "Cette personne ne fait pas partie de votre AMAP");
-		
-		userAmap.lastMemberShip = Date.now();
-		userAmap.update();
-		
-		throw Ok("/member/view/" + member.id, "Cette personne a bien été marquée comme cotisante à la date d'aujourd'hui");
-		
-	}
 	
 	@tpl("member/view.mtt")
 	function doView(member:db.User) {
@@ -95,38 +85,8 @@ class Member extends Controller
 		if (userAmap == null) throw Error("/member", "Cette personne ne fait pas partie de votre AMAP");
 		
 		view.userAmap = userAmap; 
-		
-		//form pour le rendre responsable de contrat
-		//var contracts = db.Contract.manager.search($amap == app.user.amap, false);
-		//var cform = new Form("cform");
-		//var data = [];
-		//for (c in contracts) {
-			//data.push({key:Std.string(c.id),value:c.name});
-		//}
-		//
-		//cform.addElement(new Selectbox("contract", "", data));
-		//view.cform = cform;
-		
-		//remove ?
-		//if (checkToken() && args!=null && args.removeContract!=null) {
-			//args.removeContract.lock();
-			//args.removeContract.contact = null;
-			//args.removeContract.update();
-			//
-		//}
-		
-		//view.contact = Lambda.filter(contracts, function(c) return c.contact!=null && c.contact.id == member.id );
-		
-		//check form
-		//if (cform.checkToken()) {
-			//var cid = cform.getElement("contract").value;
-			//var c  = db.Contract.manager.get(Std.parseInt(cid), true);
-			//c.contact = member;
-			//c.update();
-			//view.contact.add(c);
-		//}
-		
 		view.userContracts = member.getOrders();
+		
 	}	
 	
 	@tpl('form.mtt')
