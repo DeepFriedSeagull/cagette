@@ -59,11 +59,13 @@
 						
 						
 						<!--de ::d.distrib._contract._vendor.name::-->
+						<div class="row">
 						::foreach c d.contracts::
-						<table class="product">
+						<div class="col-md-4">
+						<table>
 							<tr>
 								<td>
-									<img src="/img/::c._product.getImage()::"/>	
+									<img src="/img/::c._product.getImage()::" style="margin-right:8px;" />	
 								</td>
 								
 								<td class="name">
@@ -100,8 +102,9 @@
 							</td>
 							</tr>
 						</table>
-							
+						</div>
 						::end::
+						</div>
 					</div>
 				
 					<div class="place">

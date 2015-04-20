@@ -19,7 +19,7 @@
 				</td>
 				<td>
 					<h4>::p.name::</h4>
-					<p>
+					<p ::cond p.desc!=null::>
 						::p.desc::
 					</p>
 					<span style="font-weight:bold;font-size:130%;">::p.price:: €</span>
