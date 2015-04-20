@@ -1,0 +1,116 @@
+::use 'design.mtt'::
+<div class="col-md-9">
+	<div class="article">
+	<h2>::c.name::</h2>
+	<div>
+		Du ::hDate(c.startDate):: au ::hDate(c.endDate)::<br/>
+		Producteur : <b>::c._vendor.name::</b>
+	</div>
+
+	<hr/>
+	
+	<div class="row">
+		::foreach p c.getProducts()::
+		<div class="col-md-4">
+		<table class="product">
+			<tr>
+				<td style="vertical-align:top;">
+					<img src="/img/::p.getImage()::" />	
+				</td>
+				<td>
+					<h4>::p.name::</h4>
+					<p>
+						::p.desc::
+					</p>
+					<span style="font-weight:bold;font-size:130%;">::p.price:: €</span>
+					
+					::if p.vat!=null && p.vat!=0::
+					<span style="color:#999999;font-size:80%;">
+						( dont ::roundTo( p.price-(p.price/(1+p.vat)) ,2)::€ de TVA )
+					</span>
+					::end::
+				</td>
+			</tr>
+		</table>
+		</div>
+		::end::	
+	</div>
+	
+	
+	<table class="table" ::cond userContracts!=null::>
+			<tr>
+				<th>Quantité</th>
+				<th>Produit</th>
+				<th>Prix</th>
+				<th>Contrat</th>
+				<th>Producteur</th>
+			</tr>
+			
+			
+		</table>
+	
+	</div>
+</div>
+<div class="col-md-3">
+	<!--<div class="article">
+	
+			<h2>Producteur</h2>
+			::if c._vendor!=null::
+				
+			<i class="icon-user"></i>
+			<b>::c._vendor.name::</b><br/>
+			<span ::cond c._vendor.email!=null::><i class="icon-envelope"></i> <a href="mailto: ::c._vendor.email::">::c._vendor.email::</a><br/></span>
+			<span ::cond c._vendor.phone!=null::>Téléphone : ::c._vendor.phone::<br/></span>
+						
+			::end::
+	</div>-->
+	
+	
+	<div class="article">
+		<h2>Commander</h2>
+		::if c.isUserOrderAvailable()::
+			Les commandes sont actuellement ouvertes.
+			
+			::if c.type==1::				
+					<ul>
+						::foreach d c.getDistribs(true)::
+						<li><a href="/contract/order/::c.id::?d=::d.id::">Livraison du ::hDate(d.date)::</a></li>
+						::end::
+					</ul>
+			::else::
+				<br/>
+				<a href="/contract/order/::c.id::" class="btn btn-default">Commander</a>
+			::end::
+
+		::else::
+			Les commandes ne sont pas ouvertes ou le coordinateur préfère saisir lui-même les commandes.
+			<br/>
+			<a href="mailto: ::c._contact.email::">Contactez le pour plus d'informations</a>.
+		::end::
+	</div>
+	
+	<div class="article">
+		<h2>Distributions</h2>
+		Les distributions passées ne sont pas affichées.
+		<ul>
+		::foreach d c.getDistribs(true)::
+			<li>::hDate(d.date)::</li>
+		::end::
+		</ul>
+	</div>
+	
+	
+	<div class="article">		
+		<h2>Coordinateur</h2>
+		::if c._contact!=null::
+
+		<b>::c._contact.firstName:: ::c._contact.lastName::</b><br/>
+		<span ::cond c._contact.email!=null::><span class="glyphicon glyphicon-envelope"></span> <a href="mailto: ::c._contact.email::">::c._contact.email::</a><br/></span>
+		<span ::cond c._contact.phone!=null::><span class="glyphicon glyphicon-phone-alt"></span> ::c._contact.phone::<br/></span>
+					
+		::end::
+	</div>
+</div>
+
+
+::end::
