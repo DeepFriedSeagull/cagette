@@ -2,7 +2,7 @@ h1{font-family:'Cantora One',sans-serif!important;color:#583816!important;margin
 h1{font-size:28px!important;}
 h2{font-size:24px!important;}
 h2,h3,h4{font-family:'Cantora One',sans-serif!important;color:#007700!important;font-weight:normal!important;margin-top:4px!important;margin-bottom:8px!important;}
-a{color:#007700;}
+a{color:#007700!important;}
 #footer{text-align:center;background:#F0D277;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;padding:6px;}
 #footer a{color:#333;}
 pre{padding:8px;background:white;}
@@ -16,6 +16,8 @@ span.panel-title{font-family:'Cantora One',sans-serif!important;color:#966125!im
 .white{margin-bottom:16px;background:#FFF;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;position:relative;}
 .block{margin-bottom:32px;background:#F0D277;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;position:relative;padding:8px;}
 .block2{margin-bottom:32px;background:#F0D277;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;position:relative;padding:8px;border:2px solid #C3A04C;}
+table.product{width:100%;}
+table.product td{padding:8px;}
 .product{width:49%;display:inline-block;zoom:1;*display:inline;}
 .product .name{padding-left:8px;}
 i{color:#008800;}
@@ -23,6 +25,6 @@ i{color:#008800;}
 .distribMessage{color:#FFF;font-weight:bold;padding:4px;margin-top:13px;font-size:13px;background-color:#080;}
 .dateBox{display:block;position:absolute;top:-16px;left:-22px;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;background-color:#B2823F;color:#FFF;font-size:11px;line-height:13px;font-weight:bold;text-align:center;vertical-align:middle;width:90px;margin:4px;padding:4px;}
 .dateBox div{margin-top:4px;}
-.dateBox a{color:white;}
-.dateBox a:hover{color:white;}
+.dateBox a{color:#FFFFFF!important;}
+.dateBox a:hover{color:#FFFFFF!important;}
 

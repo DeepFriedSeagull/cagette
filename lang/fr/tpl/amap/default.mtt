@@ -2,31 +2,43 @@
 
 	
 	<div class="col-md-3">
+		
 		<div class="block2">
+			
+			<h2>
+				::user._amap.name::
+			</h2>
+			
 			::raw nl2br(user.getAmap().txtIntro)::
 			<br/>
 			::if user.isAmapManager()::
 			$$edit(Modifier,amap/edit)
 			::end::
-		</div>
 		
+		
+		
+		
+		
+		
+		</div>
 
 	</div>
 	
 	<div class="col-md-9">
-		<div class="article">
+		<div class="article row">
 									
-			<div style="display:inline-block;vertical-align:top;margin-bottom:18px;width:300px;">
+			<div class="col-md-4">
 				<h2>Coordinateur général</h2>
 				$$contact(::user.getAmap()._contact::)
 			</div>
 			
 			::foreach c contracts::
-				<div style="display:inline-block;vertical-align:top;margin-bottom:18px;width:300px;" >
+				<div class="col-md-4" style="margin-bottom:12px;">
 					<h2>::c.name::</h2>
 					::if c._contact!=null::
 						$$contact(::c._contact::)
 					::end::
+					<a href="/contract/view/::c.id::" class="btn btn-default btn-sm">En savoir plus</a>
 				</div>
 			::end::
 			

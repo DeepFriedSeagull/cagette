@@ -20,7 +20,7 @@ h2,h3,h4{
 	margin-bottom: CSS("8px !important");
 }
 a{
-	color:#007700;
+	color:CSS(" #007700 !important");
 }
 
 #footer{
@@ -116,7 +116,14 @@ span.panel-title{
 }
 
 
-
+table.product{
+	td{
+		padding:8px;	
+	}
+	width:100%;
+	//border-bottom: 1px solid #DDD;
+	
+}
 
 .product{
 	width:49%;
@@ -182,10 +189,10 @@ i{
 	}
 	
 	a{
-		color:white;
+		color:CSS(" #FFFFFF !important");
 	}
 	a:hover{
-		color:white;
+		color:CSS(" #FFFFFF !important");
 	}
 }
  

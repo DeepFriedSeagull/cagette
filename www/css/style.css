@@ -19,7 +19,7 @@ h2, h3, h4 {
 	margin-bottom : 8px !important;
 }
 a {
-	color : #007700;
+	color :  #007700 !important;
 }
 #footer {
 	text-align : center;
@@ -108,6 +108,12 @@ span.panel-title {
 	padding : 8px;
 	border : 2px solid #C3A04C;
 }
+table.product {
+	width : 100%;
+}
+table.product td {
+	padding : 8px;
+}
 .product {
 	width : 49%;
 	display : inline-block;
@@ -160,8 +166,8 @@ i {
 	margin-top : 4px;
 }
 .dateBox a {
-	color : white;
+	color :  #FFFFFF !important;
 }
 .dateBox a:hover {
-	color : white;
+	color :  #FFFFFF !important;
 }

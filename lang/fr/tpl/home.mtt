@@ -49,7 +49,7 @@
 							::set e = getDate(d.distrib.end)::
 							
 							<span style="color:#999;">::s.h+":"+s.i:: - ::e.h+":"+e.i::</span>
-							&nbsp;Livraison ::d.distrib._contract.name::
+							&nbsp;Livraison <a href="/contract/view/::d.distrib._contract.id::">::d.distrib._contract.name::</a>
 							
 						</h2>
 						
@@ -102,7 +102,6 @@
 						</table>
 							
 						::end::
-										
 					</div>
 				
 					<div class="place">
@@ -116,6 +115,11 @@
 						<span ::cond d.distrib.distributor1Id!=null || d.distrib.distributor2Id!=null || d.distrib.distributor3Id!=null || d.distrib.distributor4Id!=null::>
 							&nbsp; <span class="glyphicon glyphicon-user"></span> <a href="#" onclick="$('#distributors::d.distrib.id::').toggle();return false;">Distributeurs</a>
 						</span>
+						
+						
+						&nbsp; <span class="glyphicon glyphicon-list-alt"></span> <a href="/contract/view/::d.distrib._contract.id::">Détails du contrat</a>
+						
+						
 						<div id="distributors::d.distrib.id::" style="display:none;margin:8px;">
 							<ul>
 								<li ::cond d.distrib.distributor1Id!=null::><i class="icon-user"></i> ::d.distrib._distributor1.getCoupleName():: </li>

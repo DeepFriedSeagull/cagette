@@ -16,7 +16,9 @@
 					<td>::p.quantity::</td>
 					<td>::p._product.name::</td>
 					<td>::p._product.price*p.quantity:: €</td>
-					<td>::p._product._contract.name::</td>
+					<td>
+						<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
+					</td>
 					<td>::p._product._contract._vendor.name::</td>
 				</tr>
 			::end::

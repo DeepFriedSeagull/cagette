@@ -103,15 +103,12 @@
 	</macro>
 	
 	<macro name="contact(u)">
-		<div class="contact">
-			<i class="icon-user"></i>
-			<b>::u.firstName:: ::u.lastName::</b><br/>
-			<span ::cond u.address1!=null::>::u.address1::<br/></span>
-			<span ::cond u.address2!=null::>::u.address2::<br/></span>
-			<span ::cond u.zipCode!=null::>::u.zipCode:: ::u.city::<br/></span>
-			<span ::cond u.email!=null::><i class="icon-envelope"></i> <a href="mailto: ::u.email::">::u.email::</a><br/></span>
-			<span ::cond u.phone!=null::>Téléphone : ::u.phone::<br/></span>
-		</div>
+		
+		<i class="icon-user"></i>
+		<b>::u.firstName:: ::u.lastName::</b><br/>
+		<span ::cond u.email!=null::><span class="glyphicon glyphicon-envelope"></span> <a href="mailto: ::u.email::">::u.email::</a><br/></span>
+		<span ::cond u.phone!=null::><span class="glyphicon glyphicon-phone-alt"></span>  ::u.phone::<br/></span>
+		
 	</macro>
 
 	

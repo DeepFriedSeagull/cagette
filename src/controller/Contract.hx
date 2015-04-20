@@ -14,6 +14,11 @@ class Contract extends Controller
 		super();
 	}
 	
+	@tpl("contract/view.mtt")
+	public function doView(c:db.Contract) {
+		view.c = c;
+	}
+	
 	/**
 	 * contrats de l'utilisateur en cours
 	 */
