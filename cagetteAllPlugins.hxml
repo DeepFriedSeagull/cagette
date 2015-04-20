@@ -11,7 +11,3 @@
 -main App
 -D debugip=localhost:18080
 -D weblogid=cagette
---next
--cp src/js
--main App
--js www/js/app.js

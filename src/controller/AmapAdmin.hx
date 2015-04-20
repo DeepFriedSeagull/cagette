@@ -196,5 +196,52 @@ class AmapAdmin extends Controller
 		
 	}
 	
+	@tpl('form.mtt')
+	public function doVatRates() {
+		
+		var f = new sugoi.form.Form("vat");
+		var a = app.user.amap;
+		
+		if (a.vatRates == null) {
+			a.lock();
+			var x = new db.Amap();
+			a.vatRates = x.vatRates;
+			a.update();
+		}
+		
+		var i = 1;
+		for (k in a.vatRates.keys()) {
+			f.addElement(new sugoi.form.elements.Input(i+"-k", "Nom "+i, k));
+			f.addElement(new sugoi.form.elements.Input(i + "-v", "Taux "+i, Std.string(a.vatRates.get(k)) ));
+			//f.addElement(new sugoi.form.elements.Html("<hr/>"));
+			i++;
+		}
+		var j = i;
+		
+		for (x in 0...5 - i) {
+			f.addElement(new sugoi.form.elements.Input(i+"-k", "Nom "+i, ""));
+			f.addElement(new sugoi.form.elements.Input(i + "-v", "Taux "+i, ""));
+			//f.addElement(new sugoi.form.elements.Html("<hr/>"));
+			i++;
+		}
+		
+		if (f.isValid()) {
+			var d = f.getData();
+			var vats = new Map<String,Float>();
+			var filter = new sugoi.form.filters.FloatFilter();
+			for (i in 1...5) {
+				vats.set(d.get(i + "-k"), filter.filter( d.get(i + "-v")) );
+			}
+			a.lock();
+			a.vatRates = vats;
+			a.update();
+			throw Ok("/amapadmin", "Taux mis à jour");
+			
+		}
+		view.title = "Editer les taux de TVA";
+		view.form = f;
+		
+	}
+	
 	
 }

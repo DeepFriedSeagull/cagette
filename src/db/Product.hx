@@ -27,7 +27,12 @@ class Product extends Object
 	
 	@:relation(contractId)
 	public var contract : Contract;
+	
+	//prix TTC
 	public var price : SFloat;
+	public var vat : SFloat;
+	
+	public var desc : SNull<SText>;
 	
 	public function new() 
 	{

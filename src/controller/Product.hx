@@ -1,6 +1,6 @@
 package controller;
 import sugoi.form.Form;
-
+using Std;
 class Product extends Controller
 {
 
@@ -14,16 +14,28 @@ class Product extends Controller
 	function doEdit(d:db.Product) {
 		
 		var f = sugoi.form.Form.fromSpod(d);
+		
+		//type (->icon)
 		f.removeElement( f.getElement("type") );
 		var pt = new form.ProductTypeRadioGroup("type", "type",Std.string(d.type));
 		f.addElement( pt );
+		
+		//vat selector
+		f.removeElement( f.getElement('vat') );
+		
+		var data = [];
+		for (k in app.user.amap.vatRates.keys()) {
+			data.push( { key:app.user.amap.vatRates[k].string(), value:k } );
+		}
+		f.addElement( new sugoi.form.elements.Selectbox("vat", "TVA", data, Std.string(d.vat) ) );
+		
+		
+		
 		f.removeElementByName("contractId");
 		f.getElement("price").addFilter(new sugoi.form.filters.FloatFilter());
 			
 		if (f.isValid()) {
-			//trace(app.params);			
 			f.toSpod(d); //update model
-			
 			d.update();
 			throw Ok('/contractAdmin/products/'+d.contract.id,'Le produit a été mis à jour');
 		}

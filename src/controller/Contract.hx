@@ -52,10 +52,10 @@ class Contract extends Controller
 					
 					var x = db.UserAmap.get(currentContact, c.amap, true);
 					if (x == null) throw currentContact+" n'a aucun lien avec "+c.amap.name;
-					//App.log("avant "+x.rights);
+					
 					x.removeRight(ContractAdmin(c.id));
 					x.update();	
-					//App.log("apres "+x.rights);
+					
 				}
 				
 			}

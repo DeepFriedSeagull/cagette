@@ -15,9 +15,9 @@ class Place extends Controller
 		view.place = place;
 		
 		//build adress for google maps
-		var addr = place.name;
+		var addr = "";
 		if (place.address1 != null)
-			addr += ", " + place.address1;
+			addr += place.address1;
 			
 		if (place.address2 != null) {
 			addr += ", " + place.address2;

@@ -38,7 +38,7 @@ class ProductTypeRadioGroup extends RadioGroup
 				var e = Type.createEnumIndex(ProductType, Std.parseInt(row.key));
 				var img = "<img src='/img/"+Std.string(e).toLowerCase().substring(2)+".png' />";
 				
-				s += "<label for=\"" + n+c + "\" class='checkbox inline'>"+radio + " "+img+" </label>";
+				s += "<label for=\"" + n+c + "\" class='checkbox' style='display: inline-block;'>"+radio + " "+img+" </label>";
 				
 				c++;
 			}	

@@ -33,7 +33,7 @@ class User extends Controller
 				//empty pass
 				user = db.User.manager.select( ($email == StringTools.trim(args.name) || $email2 ==StringTools.trim(args.name) ) && $pass == "", true);
 				if (user == null) {
-					throw Error("/user/login", "email ou mot de passe incorrect");	
+					throw Error("/user/login", "Email ou mot de passe incorrect");	
 				}
 			}
 			

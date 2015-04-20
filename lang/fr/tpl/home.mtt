@@ -146,7 +146,7 @@
 		
 	</div>
 	
-	<div class="block" ::cond (aboOk) && contractsWithDistributors.length>0 ::>
+	<div class="block" ::cond contractsWithDistributors.length>0 ::>
 		<b>Inscrivez vous comme distributeur !</b><br/>
 		
 		<ul>

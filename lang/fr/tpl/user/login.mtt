@@ -6,20 +6,16 @@
 		<h1>Connexion</h1>
 		<div class="block">
 			<form action="/user/login" method="post">
-				<table>
-					<tr>
-						<td>Email : </td>
-						<td><input type="text" name="name" value=""/></td>
-					</tr>
-					<tr>
-						<td>Mot de passe : </td>
-						<td><input type="password" name="pass" value=""/></td>
-					</tr>
+				
+						<label>Email : </label>
+						<input type="text" name="name" value="" class="form-control" />
 					
-				</table>
+						<label>Mot de passe : </label>
+						<input type="password" name="pass" value="" class="form-control"/>
+					
 				
 				
-				<input type="submit" value="OK"/>
+						<input type="submit" value="OK" class="btn btn-primary" style="margin-top:12px;" />
 			</form>
 
 			<p>

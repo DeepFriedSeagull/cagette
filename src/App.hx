@@ -100,7 +100,7 @@ class App extends sugoi.BaseApp {
 		out.set("Monthly", "mensuelle");
 		out.set("BiWeekly", "toutes les deux semaines");
 		out.set("TriWeekly", "toutes les 3 semaines");
-		out.set("price", "prix");
+		out.set("price", "prix TTC");
 		out.set("uname", "Nom");
 		out.set("pname", "Produit");
 		out.set("membershipRenewalDate", "Adhésions : Date de renouvellement");
@@ -114,6 +114,8 @@ class App extends sugoi.BaseApp {
 		out.set("AmapAdmin", "Accès à la gestion d'Amap");
 		out.set("Membership", "Accès à la gestion des adhérents");
 		out.set("Messages", "Accès à la messagerie");
+		out.set("vat", "TVA");
+		out.set("desc", "Description");
 		return out;
 	}
 	

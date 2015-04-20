@@ -1,0 +1,41 @@
+::use 'design.mtt'::
+
+<div class="col-md-6">
+	
+	<div class="article">
+		<h2>Cotisations de ::member.getCoupleName()::</h2>
+		<table class="table table-bordered">
+			<tr>
+				<th>Période</th>
+				<th>Date de cotisation</th>
+				<th>Actions</th>
+			</tr>
+			::foreach m memberships::
+			<tr>				
+				<td>::user._amap.getPeriodNameFromYear(m.year)::</td>
+				<td>::hDate(m.date)::</td>
+				<td>
+					$$delete(Effacer,/membership/delete/::member.id::/::m.year::?token=::token::)
+				</td>
+			</tr>
+			::end::		
+			
+		</table>
+		
+	</div>
+</div>
+
+<div class="col-md-6">
+	<div class="article">
+		<h2>Saisir une cotisation</h2>
+		::raw form::
+		
+		
+		
+	</div>	
+	
+</div>
+
+
+
+::end::

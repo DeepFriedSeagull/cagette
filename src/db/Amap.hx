@@ -24,11 +24,14 @@ class Amap extends Object
 	public var membershipRenewalDate : SNull<SDate>;
 	public var membershipPrice : SNull<STinyInt>;
 	
+	public var vatRates : SData<Map<String,Float>>;
+	
 	public var flags:SFlags<AmapFlags>;
 	
 	public function new() 
 	{
 		super();
+		vatRates = ["TVA Alimentaire 5,5%"=>5.5,"TVA 20%"=>20];
 	}
 	
 	
@@ -69,11 +72,7 @@ class Amap extends Object
 	}
 	
 	public function getMembers() {
-		//var uids = db.UserAmap.manager.search($amap == this, false);
-		//return Lambda.map(uids, function(ua) return ua.user);
 		return User.manager.unsafeObjects("Select u.* from User u,UserAmap ua where u.id=ua.userId and ua.amapId="+this.id+" order by u.lastName", false);
-		
-		//return User.manager.search($amapId == id,{orderBy:lastName}, false);
 	}
 	
 	public function getMembersFormElementData():Array<{key:String,value:String}> {
