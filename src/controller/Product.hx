@@ -28,9 +28,7 @@ class Product extends Controller
 			data.push( { key:app.user.amap.vatRates[k].string(), value:k } );
 		}
 		f.addElement( new sugoi.form.elements.Selectbox("vat", "TVA", data, Std.string(d.vat) ) );
-		
-		
-		
+
 		f.removeElementByName("contractId");
 		f.getElement("price").addFilter(new sugoi.form.filters.FloatFilter());
 			

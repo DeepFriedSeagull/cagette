@@ -230,6 +230,7 @@ class AmapAdmin extends Controller
 			var vats = new Map<String,Float>();
 			var filter = new sugoi.form.filters.FloatFilter();
 			for (i in 1...5) {
+				if (d.get(i + "-k") == null) continue;
 				vats.set(d.get(i + "-k"), filter.filter( d.get(i + "-v")) );
 			}
 			a.lock();

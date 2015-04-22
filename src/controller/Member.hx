@@ -363,9 +363,11 @@ class Member extends Controller
 	public function doInsert() {
 		
 		if (!app.user.isContractManager()) return;
-		//if (!app.user.amap.canAddMember()) {
-			//throw Error("/member", "Votre abonnement actuel vous limite à "+Const.ABO_MAX_MEMBERS[app.user.amap.aboType]+" foyers adhérents.<br/>Passez votre abonnement à un niveau supérieur pour pouvoir ajouter plus d'adhérents.");
-		//}
+		
+		var e = new event.Event();
+		e.id = "wantToAddMember";
+		App.current.eventDispatcher.dispatch(e);
+		
 	
 		var m = new db.User();
 		var form = sugoi.form.Form.fromSpod(m);

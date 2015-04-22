@@ -113,6 +113,8 @@ span.panel-title {
 }
 table.product {
 	width : 100%;
+	height : 140px;
+	overflow : auto;
 }
 table.product td {
 	padding : 8px;

@@ -26,7 +26,7 @@
 					
 					::if p.vat!=null && p.vat!=0::
 					<span style="color:#999999;font-size:80%;">
-						( dont ::roundTo( p.price-(p.price/(1+p.vat)) ,2)::€ de TVA )
+						( dont ::roundTo( p.price-(p.price/(1+(p.vat/100))) ,2)::€ de TVA )
 					</span>
 					::end::
 				</td>
