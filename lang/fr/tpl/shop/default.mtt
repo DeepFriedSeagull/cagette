@@ -1,0 +1,66 @@
+::use 'design.mtt'::
+<div class="col-md-9">
+	<div class="article">
+	<h2>Boutique</h2>
+	
+	<div class="row">
+		::foreach p products::
+		<div class="col-md-4">
+		<table class="product">
+			<tr>
+				<td style="vertical-align:top;">
+					<img src="/img/::p.getImage()::" />	
+				</td>
+				<td>
+					<h4>::p.name::</h4>
+					<span style="font-weight:bold;font-size:130%;">::p.price:: €</span>
+					
+					::if p.vat!=null && p.vat!=0::
+					<span style="color:#999999;font-size:80%;">
+						( dont ::roundTo( p.price-(p.price/(1+p.vat)) ,2)::€ de TVA )
+					</span>
+					::end::
+					<div>
+						<a class="btn btn-default btn-xs">Commander</a>
+						<a class="btn btn-default btn-xs">Infos</a>	
+					</div>
+					
+				</td>
+			</tr>
+		</table>
+		</div>
+		::end::	
+	</div>
+	
+	
+	
+	
+	</div>
+</div>
+<div class="col-md-3">
+	
+	
+	<div class="article">
+		<span class="glyphicon glyphicon-shopping-cart"></span>
+		Panier
+	</div>
+	
+	<div class="article">
+		
+		Fruits
+		Légumes
+		Produits de la mer
+		Viande
+		produits laitiers
+		Epicerie sucrée
+		Epicerie salée
+		Pains
+		Boissons
+		Autre
+		
+	</div>
+		
+</div>
+
+
+::end::

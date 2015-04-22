@@ -172,6 +172,12 @@ Called from controller/Main.hx line 117
 	}
 	
 	@logged
+	function doShop(d:Dispatch) {
+		view.category = 'shop';
+		d.dispatch(new controller.Shop());
+	}
+	
+	@logged
 	function doProduct(d:Dispatch) {
 		view.category = 'contractadmin';
 		d.dispatch(new controller.Product());

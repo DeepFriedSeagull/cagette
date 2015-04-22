@@ -253,7 +253,7 @@ class User extends Object{
 	 * @param	email
 	 * @return
 	 */
-	public static function getSimilar(firstName:String, lastName:String, email:String,firstName2:String, lastName2:String, email2:String):List<db.User> {
+	public static function getSimilar(firstName:String, lastName:String, email:String,?firstName2:String, ?lastName2:String, ?email2:String):List<db.User> {
 		var out = new Array();
 		out = Lambda.array(User.manager.search($firstName.like(firstName) && $lastName.like(lastName), false));
 		out = out.concat(Lambda.array(User.manager.search($email.like(email), false)));

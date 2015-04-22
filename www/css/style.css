@@ -21,6 +21,9 @@ h2, h3, h4 {
 a {
 	color :  #007700 !important;
 }
+a.btn {
+	color :  #333333 !important;
+}
 #footer {
 	text-align : center;
 	background : #F0D277;
@@ -113,6 +116,10 @@ table.product {
 }
 table.product td {
 	padding : 8px;
+}
+table.product .desc {
+	font-size : 90%;
+	color : #666;
 }
 .product {
 	width : 49%;

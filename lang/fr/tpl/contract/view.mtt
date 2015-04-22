@@ -19,7 +19,7 @@
 				</td>
 				<td>
 					<h4>::p.name::</h4>
-					<p ::cond p.desc!=null::>
+					<p ::cond p.desc!=null:: class="desc">
 						::p.desc::
 					</p>
 					<span style="font-weight:bold;font-size:130%;">::p.price:: €</span>
@@ -37,17 +37,7 @@
 	</div>
 	
 	
-	<table class="table" ::cond userContracts!=null::>
-			<tr>
-				<th>Quantité</th>
-				<th>Produit</th>
-				<th>Prix</th>
-				<th>Contrat</th>
-				<th>Producteur</th>
-			</tr>
-			
-			
-		</table>
+	
 	
 	</div>
 </div>

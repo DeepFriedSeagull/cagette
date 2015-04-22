@@ -4,6 +4,7 @@ import sys.db.Types;
 
 enum AmapFlags {
 	HasMembership; //gestion des adhésions
+	ShopMode; //mode boutique
 }
 
 /**
