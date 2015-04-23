@@ -15,7 +15,7 @@ class Main extends Controller {
 			var e = new event.Event();
 			e.id = "displayHome";
 			App.current.eventDispatcher.dispatch(e);
-						
+
 			view.amap = app.user.getAmap();
 			
 			//s'inscrire a une distribution
