@@ -100,10 +100,10 @@
 					
 					::if distribution!=null::
 					$$export(/contractAdmin/orders/::c.id::?csv=1&d=::distribution.id::)
-					<a href="/contractAdmin/ordersByProduct/::c.id::?d=::distribution.id::" class="btn btn-default btn-sm">Grouper par produits</a>
+					<a href="/contractAdmin/ordersByProduct/::c.id::?d=::distribution.id::" class="btn btn-default btn-sm">Récapitulatif par produits</a>
 					::else::
 					$$export(/contractAdmin/orders/::c.id::?csv=1)
-					<a href="/contractAdmin/ordersByProduct/::c.id::" class="btn btn-default btn-sm">Grouper par produits</a>
+					<a href="/contractAdmin/ordersByProduct/::c.id::" class="btn btn-default btn-sm">Récapitulatif par produits</a>
 					::end::
 					
 					

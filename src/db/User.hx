@@ -166,36 +166,41 @@ class User extends Object{
 		return firstName+" "+lastName;
 	}
 	
-	/*public function sendWelcomeMail() {
-		var mail = new MandrillMail();
-		mail.setRecipient(email,getName(),id);
-		mail.setSender(App.App.config.get("webmaster_email"),App.App.config.get("webmaster_name"));
-		mail.setHtmlBody("mail/welcome.mtt", {amap:amap} );
-		mail.send();
-		
-	}*/
-	
 	public function setPass(p:String) {
-		this.pass = haxe.crypto.Md5.encode( App.App.config.get('key') + StringTools.trim(p));
+		this.pass = haxe.crypto.Md5.encode( App.config.get('key') + StringTools.trim(p));
 		return this.pass;
 	}
 	
 	/**
 	 * Renvoie les commandes actuelles du user
+	 * @param	_amap		force une amap
 	 * @param	lock=false
-	 * @return
 	 */
-	public function getOrders(?lock = false):List<UserContract> {
-		
-		var out =  UserContract.manager.search(($userId == id || $userId2 == id) && $amap==App.current.user.amap, lock);
-		//TODO : faire ce tri directement en SQL
-		for ( uc in Lambda.array(out).copy() ) {
-			if (uc.product.contract.endDate.getTime() < Date.now().getTime()) {
-				out.remove(uc);
-			}
-		}
+	public function getOrders(?_amap:db.Amap,?lock = false):List<UserContract> {
+		var a = _amap == null ? getAmap() : _amap;
+		var c = a.getActiveContracts(true);
+		var cids = Lambda.map(c,function(m) return m.id);
+		var pids = Lambda.map(db.Product.manager.search($contractId in cids,false), function(x) return x.id);
+		var out =  UserContract.manager.search(($userId == id || $userId2 == id) && $productId in pids, lock);		
 		return out;
 		
+	}
+	
+	/**
+	 * renvoie les commandes à partir d'une liste de contrats
+	 */
+	public function getOrdersFromContracts(c:List<db.Contract>):List<db.UserContract> {
+		var cids = Lambda.map(c,function(m) return m.id);
+		var pids = Lambda.map(db.Product.manager.search($contractId in cids,false), function(x) return x.id);
+		return UserContract.manager.search(($userId == id || $userId2 == id) && $productId in pids, false);		
+	}
+	
+	/**
+	 * renvoie les commandes de contrat variables à partir d'une distribution
+	 */
+	public function getOrdersFromDistrib(d:db.Distribution):List<db.UserContract> {
+		var pids = Lambda.map(db.Product.manager.search($contractId == d.contract.id, false), function(x) return x.id);		
+		return UserContract.manager.search(($userId == id || $userId2 == id) && $distributionId==d.id && $productId in pids , false);	
 	}
 	
 	public function get_amap():Amap {
@@ -232,7 +237,11 @@ class User extends Object{
 	}
 	
 	
-	
+	/**
+	 * Renvoie la liste des contrats dans lequel l'adherent a des commandes
+	 * @param	lock=false
+	 * @return
+	 */
 	public function getContracts(?lock=false):Array<Contract> {
 		var out = [];
 		var ucs = getOrders(lock);

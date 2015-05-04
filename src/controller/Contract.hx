@@ -25,8 +25,39 @@ class Contract extends Controller
 	@tpl("contract/default.mtt")
 	function doDefault() {
 		
-		var userContracts = app.user.getOrders();
-		view.userContracts = userContracts;
+		var out = new Array< {amap:db.Amap, constOrders:Array<db.UserContract> , varOrders:Map<String,Array<db.UserContract>> } >();
+		for ( a in app.user.getAmaps()) {
+			
+			var row = { amap:a, constOrders:[], varOrders:new Map() };
+			
+			//commandes fixes
+			var contracts = db.Contract.manager.search($type == db.Contract.TYPE_CONSTORDERS && $amap == a && $endDate > Date.now(), false);
+			var orders = app.user.getOrdersFromContracts(contracts);
+			row.constOrders = Lambda.array(orders);
+			
+			//commandes variables groupées par date de distrib
+			var contracts = db.Contract.manager.search($type == db.Contract.TYPE_VARORDER && $amap == a && $endDate > Date.now(), false);
+			var distribs = new Map<String,Array<db.UserContract>>();
+			for (c in contracts) {
+				var ds = c.getDistribs();
+				for (d in ds) {
+					var k = d.date.toString().substr(0, 10);
+					var orders = app.user.getOrdersFromDistrib(d);
+					if (orders.length > 0) {
+						if (!distribs.exists(k)) {
+							distribs.set(k, Lambda.array(orders));
+						}else {
+							var z = distribs.get(k).concat(Lambda.array(orders));
+							distribs.set(k, z);
+						}	
+					}
+				}
+			}
+			row.varOrders = distribs;
+			
+			out.push(row);
+		}
+		view.orders = out;
 	}
 
 	@tpl("form.mtt")

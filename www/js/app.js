@@ -84,6 +84,12 @@ Cart.prototype = {
 		c.append("<div class='total'>TOTAL : " + total1 + "€</div>");
 	}
 	,submit: function() {
+		var req = new haxe_Http("/shop/submit");
+		req.onData = function(d) {
+			window.location.href = "/shop/validate";
+		};
+		req.addParameter("data",JSON.stringify(this.order));
+		req.request(true);
 	}
 	,remove: function(pid) {
 		var _g = 0;
@@ -110,7 +116,7 @@ Cart.prototype = {
 				var id = p.id;
 				_g1.products.h[id] = p;
 			}
-			haxe_Log.trace(_g1.products.toString(),{ fileName : "Cart.hx", lineNumber : 92, className : "Cart", methodName : "init"});
+			haxe_Log.trace(_g1.products.toString(),{ fileName : "Cart.hx", lineNumber : 101, className : "Cart", methodName : "init"});
 		};
 		req.request();
 	}

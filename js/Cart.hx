@@ -57,8 +57,17 @@ class Cart
 	}
 	
 	public function submit() {
+		var req = new haxe.Http("/shop/submit");
+		req.onData = function(d) {
+			js.Browser.location.href = "/shop/validate";
+			
+		}
+		req.addParameter("data", haxe.Json.stringify(order));
+		req.request(true);
 		
 	}
+	
+	
 	
 	public function remove(pid:Int ) {
 		for ( p in order.products.copy()) {

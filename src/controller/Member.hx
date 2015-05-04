@@ -85,7 +85,35 @@ class Member extends Controller
 		if (userAmap == null) throw Error("/member", "Cette personne ne fait pas partie de votre AMAP");
 		
 		view.userAmap = userAmap; 
-		view.userContracts = member.getOrders();
+		
+		//orders
+		var row = { constOrders:[], varOrders:new Map() };
+			
+		//commandes fixes
+		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_CONSTORDERS && $amap == app.user.amap && $endDate > Date.now(), false);
+		var orders = member.getOrdersFromContracts(contracts);
+		row.constOrders = Lambda.array(orders);
+		
+		//commandes variables groupées par date de distrib
+		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_VARORDER && $amap == app.user.amap && $endDate > Date.now(), false);
+		var distribs = new Map<String,Array<db.UserContract>>();
+		for (c in contracts) {
+			var ds = c.getDistribs();
+			for (d in ds) {
+				var k = d.date.toString().substr(0, 10);
+				var orders = member.getOrdersFromDistrib(d);
+				if (orders.length > 0) {
+					if (!distribs.exists(k)) {
+						distribs.set(k, Lambda.array(orders));
+					}else {
+						var z = distribs.get(k).concat(Lambda.array(orders));
+						distribs.set(k, z);
+					}	
+				}
+			}
+		}
+		row.varOrders = distribs;
+		view.userContracts =row;
 		
 	}	
 	

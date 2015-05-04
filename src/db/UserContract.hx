@@ -50,6 +50,8 @@ class UserContract extends Object
 		//for( p in produ
 	}
 	
+	
+	
 	/**
 	 * 
 	 * @param	distrib

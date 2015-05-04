@@ -6,7 +6,11 @@ class View extends sugoi.BaseView {
 		super();
 		this.Std = Std;
 		this.Date = Date;
-		this.Web = neko.Web;		
+		this.Web = neko.Web;
+	}
+	
+	public function count(i) {
+		return Lambda.count(i);
 	}
 	
 	/**

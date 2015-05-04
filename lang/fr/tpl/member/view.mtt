@@ -1,6 +1,6 @@
 ::use 'design.mtt'::
 
-<div class="col-md-4">
+<div class="col-md-3">
 	<h2>Coordonnées</h2>
 	<div class="article">
 		
@@ -39,17 +39,61 @@
 	</div>
 </div>
 
-<div class="col-md-4">
-	<h2>Commandes</h2>
+<div class="col-md-5">
+	<h2>Commandes en cours</h2>
 	<div class="article">
-		
-		<ul ::cond userContracts!=null::>
-			::foreach p userContracts::
-				<li>
-					<b>::p._product.name::</b> (::p._product._contract.name::)
-				</li>
+		::set o = userContracts::
+		::if o.constOrders.length>0::
+			<h4>Commandes fixes</h4>		
+			<table class="table table-bordered table-condensed" >
+				<tr>
+					<th>Qté</th>
+					<th>Produit</th>
+					<th>Prix total</th>
+					<th>Contrat</th>
+					<th>Producteur</th>
+				</tr>
+				::foreach p o.constOrders::
+					<tr>
+						<td>::p.quantity::</td>
+						<td>::p._product.name::</td>
+						<td>::p._product.price*p.quantity:: €</td>
+						<td>
+							<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
+						</td>
+						<td>::p._product._contract._vendor.name::</td>
+					</tr>
+				::end::			
+			</table>
 			::end::
-		</ul>		
+			
+			::if count(o.varOrders)>0::
+				::foreach d o.varOrders.keys()::
+					<h4>Commande du ::d::</h4>
+					<table class="table table-bordered table-condensed" >
+						<tr>
+							<th>Qté</th>
+							<th>Produit</th>
+							<th>Prix total</th>
+							<th>Contrat</th>
+							<th>Producteur</th>
+						</tr>
+						::foreach p o.varOrders.get(d)::
+							<tr>
+								<td>::p.quantity::</td>
+								<td>::p._product.name::</td>
+								<td>::p._product.price*p.quantity:: €</td>
+								<td>
+									<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
+								</td>
+								<td>::p._product._contract._vendor.name::</td>
+							</tr>
+						::end::			
+					</table>
+				::end::
+			::end::	
+		
+		
 	</div>
 </div>
 

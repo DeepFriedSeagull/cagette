@@ -1,36 +1,78 @@
 ::use 'design.mtt'::
 <div class="col-md-8">
-	<div class="article">
-	<h2>Mes contrats</h2>
-
-	<table class="table" ::cond userContracts!=null::>
-			<tr>
-				<th>Quantité</th>
-				<th>Produit</th>
-				<th>Prix</th>
-				<th>Contrat</th>
-				<th>Producteur</th>
-			</tr>
-			::foreach p userContracts::
+	<h2>Toutes mes commandes en cours</h2>
+	
+	::foreach o orders::
+	<div class="panel panel-warning">
+		
+		<div class="panel-heading">
+			<b>::o.amap.name::</b>
+		</div>
+		
+		<div class="panel-body">
+			::if o.constOrders.length>0::
+			<h4>Commandes fixes</h4>		
+			<table class="table table-bordered table-condensed" >
 				<tr>
-					<td>::p.quantity::</td>
-					<td>::p._product.name::</td>
-					<td>::p._product.price*p.quantity:: €</td>
-					<td>
-						<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
-					</td>
-					<td>::p._product._contract._vendor.name::</td>
+					<th>Qté</th>
+					<th>Produit</th>
+					<th>Prix total</th>
+					<th>Contrat</th>
+					<th>Producteur</th>
 				</tr>
+				::foreach p o.constOrders::
+					<tr>
+						<td>::p.quantity::</td>
+						<td>::p._product.name::</td>
+						<td>::p._product.price*p.quantity:: €</td>
+						<td>
+							<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
+						</td>
+						<td>::p._product._contract._vendor.name::</td>
+					</tr>
+				::end::			
+			</table>
 			::end::
 			
-		</table>
+			::if count(o.varOrders)>0::
+				::foreach d o.varOrders.keys()::
+					<h4>Commande du ::d::</h4>
+					<table class="table table-bordered table-condensed" >
+						<tr>
+							<th>Qté</th>
+							<th>Produit</th>
+							<th>Prix total</th>
+							<th>Contrat</th>
+							<th>Producteur</th>
+						</tr>
+						::foreach p o.varOrders.get(d)::
+							<tr>
+								<td>::p.quantity::</td>
+								<td>::p._product.name::</td>
+								<td>::p._product.price*p.quantity:: €</td>
+								<td>
+									<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
+								</td>
+								<td>::p._product._contract._vendor.name::</td>
+							</tr>
+						::end::			
+					</table>
+				::end::
+			::end::	
+		</div>
+		
+	</div>	
+	::end::	
 	
-	</div>
 </div>
 <div class="col-md-4">
+	<h3>Mon profil</h3>
 	<div class="article">
-	$$contact(::user::)
-	$$edit(Modifier,/account/edit)
+		
+		<p>
+			$$contact(::user::)	
+		</p>
+		$$edit(Modifier,/account/edit)
 	</div>
 </div>
 
