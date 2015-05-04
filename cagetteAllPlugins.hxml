@@ -4,6 +4,7 @@
 -lib sugoi
 -lib hxevents
 -lib cagette-hosted
+-cp common
 -cp src
 -neko www/index.n
 -D spod_macro
@@ -11,3 +12,10 @@
 -main App
 -D debugip=localhost:18080
 -D weblogid=cagette
+--next
+-dce no
+-cp common
+-cp js
+-lib sugoi
+-main App
+-js www/js/app.js

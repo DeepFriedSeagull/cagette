@@ -2,7 +2,7 @@ package form;
 import db.Product;
 import sugoi.form.elements.RadioGroup;
 import db.Product;
-
+import Common;
 /**
  * list des types de produits avec image
  * @author 

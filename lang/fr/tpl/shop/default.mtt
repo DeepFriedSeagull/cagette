@@ -3,26 +3,34 @@
 	<div class="article">
 	<h2>Boutique</h2>
 	
+	<script language="javascript">
+	var cart;
+	$(function(){
+
+		cart = _.getCart();
+		cart.init();
+	});
+
+	</script>
+	
+	
 	<div class="row">
 		::foreach p products::
-		<div class="col-md-4">
+		<div class="col-md-4" id="product::p.id::">
 		<table class="product">
 			<tr>
 				<td style="vertical-align:top;">
-					<img src="/img/::p.getImage()::" />	
+					<img src="/img/::getProductImage(p.type)::" />	
 				</td>
 				<td>
-					<h4>::p.name::</h4>
-					<span style="font-weight:bold;font-size:130%;">::p.price:: €</span>
-					
-					::if p.vat!=null && p.vat!=0::
-					<span style="color:#999999;font-size:80%;">
-						( dont ::roundTo( p.price-(p.price/(1+p.vat)) ,2)::€ de TVA )
-					</span>
-					::end::
+					<h4>
+						<a onclick="_.overlay('/shop/productInfo/::p.id::')">::p.name::</a>
+					</h4>
+					<span class="price">::p.price:: €</span>
+										
 					<div>
-						<a class="btn btn-default btn-xs">Commander</a>
-						<a class="btn btn-default btn-xs">Infos</a>	
+						<a class="btn btn-default btn-xs" onclick="cart.add(::p.id::)">Commander</a>
+						<a class="btn btn-default btn-xs" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	
 					</div>
 					
 				</td>
@@ -40,9 +48,18 @@
 <div class="col-md-3">
 	
 	
-	<div class="article">
-		<span class="glyphicon glyphicon-shopping-cart"></span>
-		Panier
+	<div class="cartDiv">
+		
+		<h2>
+			<span class="glyphicon glyphicon-shopping-cart"></span>
+			Commande
+		</h2>
+		<div id="cart">
+			
+		</div>
+		
+		<a onClick="cart.submit();" class="btn btn-default">Valider</a>
+		
 	</div>
 	
 	<div class="article">
@@ -61,6 +78,7 @@
 	</div>
 		
 </div>
+
 
 
 ::end::

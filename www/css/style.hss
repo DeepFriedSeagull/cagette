@@ -91,6 +91,18 @@ span.panel-title{
 	padding:8px;	
 }
 
+.cartDiv{
+	margin-bottom:16px;
+	background:#007700;
+	border-radius:8px;
+	position: relative;
+	padding:8px;
+	color:white;
+	h2{
+		color:CSS("white !important");
+	}
+}
+
 .white{
 	margin-bottom:16px;
 	background:#FFF;
@@ -124,7 +136,7 @@ table.product{
 		padding:8px;	
 	}
 	width:100%;
-	height:140px;
+	height:115px;
 	overflow:auto;
 	//border:1px solid #000000 ;
 	
@@ -135,6 +147,7 @@ table.product{
 	
 }
 
+//in shop page
 .product{
 	width:49%;
 	display: inline-block;
@@ -145,7 +158,61 @@ table.product{
 	.name{
 		padding-left:8px;
 	}
+	
 }
+.price{
+		font-weight:bold;
+		font-size:130%;
+	}
+.vat{
+	color:#999999;
+	//font-size:80%;
+}
+
+.overlay{
+	position:absolute;
+	width:100%;
+	height:100%;
+	top: 0;
+	left: 0;
+}
+.overlay.background{
+	background:#000;
+	opacity:0.5;
+	width:100%;
+	height:100%;
+}
+.overlayContent{
+	width:50%;
+	margin:auto;
+	margin-top:150px;
+	
+	.article{
+		padding:24px;
+	}
+	
+}
+
+
+//in shop page
+#cart{
+	margin-bottom:12px;
+	div.order{
+		margin-bottom:8px;
+		
+		a{
+			margin-right:8px;
+		}
+	}
+	div.total{
+		font-size:120%;
+		//font-weight:bold;
+		margin-bottom:12px;
+		margin-top:12px;
+		border-top:1px solid #FFF;
+	}
+}
+
 
 i{
 	color:#008800;

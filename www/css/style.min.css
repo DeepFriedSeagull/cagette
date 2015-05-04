@@ -14,14 +14,26 @@ body{background:#FFE28B url("/img/bg.gif");}
 .homeBlock .content{margin:8px 8px 8px 90px;}
 span.panel-title{font-family:'Cantora One',sans-serif!important;color:#966125!important;font-size:20px!important;font-weight:normal!important;}
 .article{margin-bottom:16px;background:#FFF;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;position:relative;padding:8px;}
+.cartDiv{margin-bottom:16px;background:#007700;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;position:relative;padding:8px;color:white;}
+.cartDiv h2{color:white!important;}
 .white{margin-bottom:16px;background:#FFF;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;position:relative;}
 .block{margin-bottom:32px;background:#F0D277;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;position:relative;padding:8px;}
 .block2{margin-bottom:32px;background:#F0D277;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;position:relative;padding:8px;border:2px solid #C3A04C;}
-table.product{width:100%;height:140px;overflow:auto;}
+table.product{width:100%;height:115px;overflow:auto;}
 table.product td{padding:8px;}
 table.product .desc{font-size:90%;color:#666;}
 .product{width:49%;display:inline-block;zoom:1;*display:inline;}
 .product .name{padding-left:8px;}
+.price{font-weight:bold;font-size:130%;}
+.vat{color:#999999;}
+.overlay{position:absolute;width:100%;height:100%;top:0;left:0;}
+.overlay.background{background:#000;opacity:0.5;filter:alpha(opacity=50);zoom:1;width:100%;height:100%;}
+.overlayContent{width:50%;margin:auto;margin-top:150px;}
+.overlayContent .article{padding:24px;}
+#cart{margin-bottom:12px;}
+#cart div.order{margin-bottom:8px;}
+#cart div.order a{margin-right:8px;}
+#cart div.total{font-size:120%;margin-bottom:12px;margin-top:12px;border-top:1px solid #FFF;}
 i{color:#008800;}
 .place{color:#666;font-weight:bold;margin-top:13px;padding:8px;font-size:13px;background-color:#EEE;border-top:1px solid #CCC;}
 .distribMessage{color:#FFF;font-weight:bold;padding:4px;margin-top:13px;font-size:13px;background-color:#080;}

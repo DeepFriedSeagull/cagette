@@ -303,7 +303,7 @@ class ContractAdmin extends Controller
 	@tpl("contractadmin/selectDistrib.mtt")
 	function doSelectDistrib(c:db.Contract) {
 		view.c = c;
-		view.distributions = c.getDistribs();
+		view.distributions = c.getDistribs(false);
 	}
 	
 	/**

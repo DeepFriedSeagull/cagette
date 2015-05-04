@@ -15,6 +15,7 @@
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
+    <class path="common" />
     <class path="src" />
   </classpaths>
   <!-- Build options -->
@@ -24,7 +25,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="App" />
     <option enabledebug="False" />
-    <option additional="-D debugip=localhost:18080&#xA;-D weblogid=cagette&#xA;#--next&#xA;#-cp src/js&#xA;#-main App&#xA;#-js www/js/app.js" />
+    <option additional="-D debugip=localhost:18080&#xA;-D weblogid=cagette&#xA;--next&#xA;-dce no&#xA;-cp common&#xA;-cp js&#xA;-lib sugoi&#xA;-main App&#xA;-js www/js/app.js" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

@@ -80,6 +80,7 @@ class Contract extends Controller
 	@tpl("form.mtt")
 	function doInsert(?type:Int) {
 		if (!app.user.isAmapManager()) throw Error('/', 'Action interdite');
+		if (type == null) throw Redirect('/contract/insertChoose');
 		
 		view.title = if (type == db.Contract.TYPE_CONSTORDERS)"Créer un contrat à commande fixe"else"Créer un contrat à commande variable";
 		

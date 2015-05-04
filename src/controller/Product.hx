@@ -55,6 +55,17 @@ class Product extends Controller
 		f.removeElementByName("contractId");
 		f.getElement("price").addFilter(new sugoi.form.filters.FloatFilter());
 		
+		
+		//vat selector
+		f.removeElement( f.getElement('vat') );
+		
+		var data = [];
+		for (k in app.user.amap.vatRates.keys()) {
+			data.push( { key:app.user.amap.vatRates[k].string(), value:k } );
+		}
+		f.addElement( new sugoi.form.elements.Selectbox("vat", "TVA", data, Std.string(d.vat) ) );
+		
+		
 		if (f.isValid()) {
 			f.toSpod(d); //update model
 			d.contract = contract;

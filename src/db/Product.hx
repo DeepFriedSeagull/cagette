@@ -1,24 +1,11 @@
 package db;
 import sys.db.Object;
 import sys.db.Types;
+import Common;
+
 /**
  * Product
  */
-enum ProductType {
-	CTVegetable;
-	CTCheese;
-	CTChicken;
-	CTFruit;
-	CTBread;
-	CTMilk;
-	CTEggs;
-	CTHoney;
-	CTKiwi;
-	CTJuice;
-	CTApple;
-}
- 
- 
 class Product extends Object
 {
 	public var id : SId;
@@ -52,6 +39,21 @@ class Product extends Object
 			return "produit";
 		}
 		
+	}
+	
+	public function infos():ProductInfo {
+		return {
+			id : id,
+			name : name,
+			type : Type.createEnumIndex(ProductType, type),
+			contractId : contract.id,
+			price : contract.percentageValue!=null ? price*(contract.percentageValue/100+1) : price, //prix total incluant com de contrat
+			vat : vat,
+			vatValue: (vat != 0 && vat != null) ? (  this.price - (this.price / (vat/100+1))  )  : null,
+			contractTax : contract.percentageValue,
+			contractTaxName : contract.percentageName,
+			desc : desc
+		}
 	}
 	
 }

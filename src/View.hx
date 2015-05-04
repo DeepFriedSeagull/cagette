@@ -1,4 +1,5 @@
 using Std;
+import Common;
 
 class View extends sugoi.BaseView {
 	public function new() {
@@ -28,10 +29,6 @@ class View extends sugoi.BaseView {
 	 * @param	r
 	 */
 	public function roundTo(n:Float, r:Int):Float {
-		//if (n.string().indexOf(".") == -1) return n;
-		//var s =  n.string().split(",");
-		//
-		//return (s[0] + "." + s[1].substr(0, r)).parseFloat();
 		return Math.round(n * Math.pow(10,r)) / Math.pow(10,r) ;
 	}
 	
@@ -81,5 +78,10 @@ class View extends sugoi.BaseView {
 			h: StringTools.lpad(Std.string(date.getHours()),"0",2),
 			i: StringTools.lpad(Std.string(date.getMinutes()),"0",2)
 		};
+	}
+	
+	public function getProductImage(e):String {
+		
+		return Std.string(e).substr(2).toLowerCase()+".png";
 	}
 }

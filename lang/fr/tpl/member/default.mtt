@@ -102,10 +102,9 @@
 				::else::
 					::set ssearch=search::
 				::end::
-				  
 				<input type="text" class="form-control" name="search" value="::ssearch::" />
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Rechercher</button>
+					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Rechercher</button>
 				</span>
 				
 			  </div>

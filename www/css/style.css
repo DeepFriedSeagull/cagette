@@ -84,6 +84,19 @@ span.panel-title {
 	position : relative;
 	padding : 8px;
 }
+.cartDiv {
+	margin-bottom : 16px;
+	background : #007700;
+	border-radius : 8px;
+	-moz-border-radius : 8px;
+	-webkit-border-radius : 8px;
+	position : relative;
+	padding : 8px;
+	color : white;
+}
+.cartDiv h2 {
+	color : white !important;
+}
 .white {
 	margin-bottom : 16px;
 	background : #FFF;
@@ -113,7 +126,7 @@ span.panel-title {
 }
 table.product {
 	width : 100%;
-	height : 140px;
+	height : 115px;
 	overflow : auto;
 }
 table.product td {
@@ -131,6 +144,51 @@ table.product .desc {
 }
 .product .name {
 	padding-left : 8px;
+}
+.price {
+	font-weight : bold;
+	font-size : 130%;
+}
+.vat {
+	color : #999999;
+}
+.overlay {
+	position : absolute;
+	width : 100%;
+	height : 100%;
+	top : 0;
+	left : 0;
+}
+.overlay.background {
+	background : #000;
+	opacity : 0.5;
+	filter : alpha(opacity=50);
+	zoom : 1;
+	width : 100%;
+	height : 100%;
+}
+.overlayContent {
+	width : 50%;
+	margin : auto;
+	margin-top : 150px;
+}
+.overlayContent .article {
+	padding : 24px;
+}
+#cart {
+	margin-bottom : 12px;
+}
+#cart div.order {
+	margin-bottom : 8px;
+}
+#cart div.order a {
+	margin-right : 8px;
+}
+#cart div.total {
+	font-size : 120%;
+	margin-bottom : 12px;
+	margin-top : 12px;
+	border-top : 1px solid #FFF;
 }
 i {
 	color : #008800;
