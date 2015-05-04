@@ -1,0 +1,58 @@
+::use 'contractadmin/design.mtt'::
+	
+		<h3>Commandes par produit</h3>
+		
+		::if distribution!=null::
+		Distribution du <b>::hDate(distribution.date)::</b>
+		::end::
+		
+		<table class="table table-bordered table-hover"  style="width:100%;">
+			<tr>
+				<th>Quantités</th>
+				<th>Produit</th>
+				<th>Prix unitaire TTC</th>
+				<th>Total</th>
+			</tr>
+
+				::foreach m orders::
+				
+								
+				<tr>
+				
+					<td>
+						::m.quantity::
+					</td>
+					<td>
+						::m.pname::
+					</td>
+					<td>
+						::m.price:: €
+					</td>
+					<td>
+						::formatNum(m.quantity*m.price)::&nbsp;€
+					</td>
+					
+					
+				</tr>
+				::end::
+				
+							
+				<tr style="background:#DDD;">
+					
+					<th colspan="3">Total</th>
+					<th>::formatNum(totalPrice)::€</th>
+	
+				</tr>
+				
+
+				</table>
+				
+				::if distribution!=null::
+				$$export(/contractAdmin/ordersByProduct/::c.id::?csv=1&d=::distribution.id::)
+				::else::
+				$$export(/contractAdmin/ordersByProduct/::c.id::?csv=1)
+				::end::
+				
+				
+		
+::end::

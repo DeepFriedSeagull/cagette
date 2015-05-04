@@ -135,6 +135,50 @@ class ContractAdmin extends Controller
 		view.totalPrice = totalPrice;
 	}
 	
+	/**
+	 * Commandes groupées par produit.
+	 */
+	@tpl("contractadmin/ordersByProduct.mtt")
+	function doOrdersByProduct(contract:db.Contract,args:{?d:db.Distribution}) {
+		if (!app.user.canManageContract(contract)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
+		if (contract.type == db.Contract.TYPE_VARORDER && args.d == null ) { 
+			throw Redirect("/contractAdmin/selectDistrib/" + contract.id); 
+		}
+		
+		if (contract.type == db.Contract.TYPE_VARORDER ) view.distribution = args.d;
+		view.c = contract;
+		
+		var pids = db.Product.manager.search($contract == contract, false);
+		var pids = Lambda.map(pids, function(x) return x.id);
+		
+		var orders : List<Dynamic>;
+		if (contract.type == db.Contract.TYPE_VARORDER ) {
+			orders = sys.db.Manager.cnx.request("select SUM(quantity) as quantity, p.name as pname ,p.price as price from UserContract up, Product p where up.productId=p.id and p.contractId="+contract.id+" and up.distributionId="+args.d.id+" group by p.id order by pname asc;").results();	
+		}else {
+			orders = sys.db.Manager.cnx.request("select SUM(quantity) as quantity, p.name as pname ,p.price as price from UserContract up, Product p where up.productId=p.id and p.contractId="+contract.id+" group by p.id order by pname asc;").results();
+		}
+		
+		var totalPrice = 0;
+		for ( o in orders) {
+			totalPrice += o.quantity * o.price;
+		}
+		
+		if (app.params.exists("csv")) {
+			var data = new Array<Dynamic>();
+			
+			for (o in orders) {
+				data.push({"quantity":o.quantity,"pname":o.pname,"price":view.formatNum(o.price),"total":o.quantity*o.price});				
+			}
+
+			setCsvData(data, ["quantity", "pname", "price", "total"],"Export-"+contract.name+"-par produits");
+			return;
+		}
+		
+		
+		view.orders = orders;
+		view.totalPrice = totalPrice;
+	}
+	
 	@tpl("contractadmin/distributions.mtt")
 	function doDistributions(contract:db.Contract) {
 		if (!app.user.canManageContract(contract)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");

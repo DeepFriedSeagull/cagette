@@ -18,7 +18,7 @@
 			
 			::if users!=null:: 
 			Adhérent : 
-			<select name="user">
+			<select name="user" class="form-control">
 				::foreach uu users::
 				<option value="::uu.key::">::uu.value::</option>
 				::end::			
@@ -27,7 +27,7 @@
 			::if distribution==null::
 			<br/>
 			Optionnel : commande alternée avec 
-			<select name="user2">
+			<select name="user2" class="form-control">
 				<option value="0">Personne</option>
 				::foreach uu users::
 				<option value="::uu.key::">::uu.value::</option>
@@ -36,6 +36,9 @@
 			::end::
 			
 			::end::
+			
+			<br/>
+			<br/>
 			
 			<table class="table table-bordered">
 				<tr>
@@ -64,7 +67,7 @@
 						::end::
 						
 						::set total = total+(q*uo.product.price)::
-						<input type="text" class="" name="product::uo.product.id::" id="product::uo.product.id::" value="::q::" />
+						<input type="text" class="form-control" name="product::uo.product.id::" id="product::uo.product.id::" value="::q::" />
 						
 						::if uo.order!=null::
 							<br/>
