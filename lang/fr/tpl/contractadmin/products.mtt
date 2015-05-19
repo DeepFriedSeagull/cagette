@@ -21,5 +21,7 @@
 	$$insert(Nouveau produit,/product/insert/::c.id::)
 	<a href="/product/import/::c.id::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list-alt"></span> Import Excel/CSV</a>	
 	
+	<a ::cond c.type==1:: href="/product/categorize/::c.id::" class="btn btn-default btn-sm">Catégories</a>	
+	
 
 ::end::

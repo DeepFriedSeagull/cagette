@@ -18,6 +18,10 @@ class App {
 		return new Cart();
 	}
 	
+	public function getTagger(cid:Int ) {
+		return new Tagger(cid);
+	}
+	
 	
 	public static function roundTo(n:Float, r:Int):Float {
 		return Math.round(n * Math.pow(10,r)) / Math.pow(10,r) ;

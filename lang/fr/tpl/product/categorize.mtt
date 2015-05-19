@@ -1,0 +1,53 @@
+::use 'contractadmin/design.mtt'::
+	
+		
+	<h3>Catégories</h3>
+	
+	<p>
+		Afin de mieux organiser vos produits dans le "mode boutique", vous pouvez les associer à des catégories.<br/>
+		<b>Pour ajouter des catégories</b> : selectionnez les produits en cochant les cases et choisissez une catégorie dans la liste en bas de la page. Cliquez ensuite sur "Ajouter".<br />
+		<b>Pour supprimer une catégorie :</b> cliquez simplement dessus.
+	</p>
+
+	
+	<script language="javascript">
+	var tagger;
+	$(function(){
+
+		tagger = _.getTagger(::c.id::);
+		tagger.init();
+	});
+	</script>
+	
+	<div id="tagger">
+		<!-- filled by ajax -->
+	</div>
+	
+	<form class="form-inline">
+		
+		<a onClick="$('#tagger input').attr('checked',true)" class='btn btn-default'>Tout cocher</a>
+		
+		<select name="tag" id="tag" class="form-control">
+    
+			::foreach cg user._amap.getCategoryGroups()::
+			<optgroup label="::cg.name::">
+				::foreach cat cg.getCategories()::
+				<option value="::cat.id::">::cat.name::</option>	
+				::end::
+			</optgroup>
+			::end::	
+			
+		</select>
+		
+		<a onClick="tagger.add()" class='btn btn-default'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter la catégorie</a>	
+		<a onClick="tagger.submit()" class='btn btn-success'>Enregistrer les modifications</a>	
+		
+	</form>
+	
+	<div ::cond user.isAmapManager()::>
+		<hr />
+		<a  href="/amapadmin/categories/" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Gérer les catégories</a>	
+	</div>
+	
+	
+::end::

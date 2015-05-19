@@ -1,18 +1,20 @@
 ::use 'design.mtt'::
 <div class="col-md-9">
 	<div class="article">
-	<h2>Validez votre commande</h2>
+	<h2>Choisissez vos dates de livraison</h2>
 	
 	<p>
 		Les produits que vous avez sélectionnés peuvent potentielement être livrés à des dates differentes,
 		si c'est le cas choisissez à quel dates vous souhaitez récupérer vos produits.
 	</p>
 	
-	::foreach o out::
+	::raw form::
+	
+	<!--::foreach o out::
 		products : 
 		<ul>
 			::foreach p o.products::
-			<li>::p::</li>
+			<li>::p.q:: x ::p.p::</li>
 			::end::
 		</ul>
 		distribs : 
@@ -22,9 +24,9 @@
 			::end::
 		</ul>
 		<hr/>
-	::end::
+	::end::-->
 	
-	<a href="/shop/validate?token=::token::" class="btn btn-default btn-lg">Valider la commande</a>
+	<!--<a href="/shop/validate?token=::token::" class="btn btn-default btn-lg">Valider la commande</a>-->
 	
 	</div>
 </div>

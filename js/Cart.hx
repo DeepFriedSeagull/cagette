@@ -67,7 +67,17 @@ class Cart
 		
 	}
 	
-	
+	public function filter(cat:Int) {
+		for (p in products) {
+			if (cat==0 || Lambda.has(p.categories, cat)) {
+				App.j("#product" + p.id).show(); 
+			}else {
+				App.j("#product" + p.id).hide(); 
+			}
+		}
+		
+		
+	}
 	
 	public function remove(pid:Int ) {
 		for ( p in order.products.copy()) {
@@ -85,8 +95,7 @@ class Cart
 	public function init() {
 		var req = new haxe.Http("/shop/products");
 		req.onData = function(data) {
-			//broken in haxe 3.2rc , "Reflect is not defined"
-			
+			//broken in haxe 3.2rc , "Reflect is not defined"			
 			//var pr : Array<ProductInfo> = haxe.Unserializer.run(data);
 			//trace(pr);
 			////for (p in products) {

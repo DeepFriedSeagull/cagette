@@ -79,7 +79,7 @@ class Contract extends Object
 		return Product.manager.search($contract==this,false);
 	}
 	
-	
+		
 	
 	public function getUsers() {
 		var pids = getProducts().map(function(x) return x.id);
@@ -95,9 +95,9 @@ class Contract extends Object
 		return Lambda.array(out);
 	}
 	
-	public function getDistribs(excludeOld = true):List<Distribution> {
+	public function getDistribs(excludeOld = true,?limit=5):List<Distribution> {
 		if (excludeOld) {
-			return Distribution.manager.search($end > DateTools.delta(Date.now(), -1000 * 60 * 60 * 24) && $contract == this, { orderBy:date } );
+			return Distribution.manager.search($end > DateTools.delta(Date.now(), -1000 * 60 * 60 * 24) && $contract == this, { orderBy:date,limit:limit } );
 		}else{
 			return Distribution.manager.search( $contract == this, { orderBy:date } );
 		}

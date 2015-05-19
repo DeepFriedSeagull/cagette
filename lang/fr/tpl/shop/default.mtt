@@ -1,7 +1,7 @@
 ::use 'design.mtt'::
 <div class="col-md-9">
 	<div class="article">
-	<h2>Boutique</h2>
+	<h2>Produits</h2>
 	
 	<script language="javascript">
 	var cart;
@@ -63,17 +63,17 @@
 	</div>
 	
 	<div class="article">
+		<span class="tag" onclick="cart.filter(0);" style="cursor:pointer;">Tout</span><br/>
 		
-		Fruits
-		Légumes
-		Produits de la mer
-		Viande
-		produits laitiers
-		Epicerie sucrée
-		Epicerie salée
-		Pains
-		Boissons
-		Autre
+		::foreach g user._amap.getCategoryGroups()::
+			<div>
+				<h4>::g.name::</h4>
+				
+				::foreach c g.getCategories()::
+					<span class="tag" onclick="cart.filter(::c.id::);" style="background-color: ::c.getColor()::;cursor:pointer;">::c.name::</span><br/>
+				::end::
+			</div>
+		::end::
 		
 	</div>
 		

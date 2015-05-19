@@ -4,7 +4,7 @@ import sys.db.Types;
 
 enum AmapFlags {
 	HasMembership; //gestion des adhésions
-	//ShopMode; //mode boutique
+	ShopMode; //mode boutique
 }
 
 /**
@@ -32,12 +32,21 @@ class Amap extends Object
 	public function new() 
 	{
 		super();
-		vatRates = ["TVA Alimentaire 5,5%"=>5.5,"TVA 20%"=>20];
+		vatRates = ["TVA Alimentaire 5,5%" => 5.5, "TVA 20%" => 20];
+		
 	}
 	
 	
 	public function hasMembership():Bool {
 		return flags != null && flags.has(HasMembership);
+	}
+	
+	public function hasShopMode() {
+		return flags.has(ShopMode);
+	}
+	
+	public function getCategoryGroups() {
+		return db.CategoryGroup.get(this);
 	}
 	
 	//public function canAddMember():Bool {

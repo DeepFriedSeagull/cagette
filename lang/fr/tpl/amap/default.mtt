@@ -34,11 +34,11 @@
 			
 			::foreach c contracts::
 				<div class="col-md-4" style="margin-bottom:12px;">
-					<h2>::c.name::</h2>
+					<h2><a href="/contract/view/::c.id::">::c.name::</a></h2>
 					::if c._contact!=null::
 						$$contact(::c._contact::)
 					::end::
-					<a href="/contract/view/::c.id::" class="btn btn-default btn-sm">En savoir plus</a>
+					<a href="/contract/view/::c.id::" class="btn btn-default btn-sm">Infos contrat</a>
 				</div>
 			::end::
 			

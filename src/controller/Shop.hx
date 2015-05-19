@@ -47,16 +47,93 @@ class Shop extends sugoi.BaseController
 		
 	}
 	
+	
 	/**
 	 * valider la commande et selectionner les distributions
 	 */
 	@tpl('shop/validate.mtt')
 	public function doValidate() {
+		//pêche aux datas
 		var order : Order = app.session.data.order;
 		var pids = Lambda.map(order.products, function(p) return p.productId);
 		var products = db.Product.manager.search($id in pids, false);
 		var cids = Lambda.map(products, function(p) return p.contract.id);
-		var distribs = db.Distribution.manager.search($contractId in cids, false);
+		var distribs = db.Distribution.manager.search($contractId in cids, { orderBy:date, limit:5 }, false);
+		
+		//on créé un formulaire
+		var form = new sugoi.form.Form("validate");
+		form.submitButtonLabel = "Valider la commande";
+		for (cid in cids) {
+			//liste des produits dans un bloc HTML
+			var html = "<ul>";
+			for ( p in products) {
+				if (p.contract.id == cid) {
+					for (o in order.products) {
+						if(o.productId==p.id) html += "<li>" + o.quantity +" x " + p.name+ "</li>";
+					}
+					
+					
+				}
+			}
+			html += "</ul>";
+			form.addElement(new sugoi.form.elements.Html(html,"Produits"));
+			
+			var data = new Array<{key:String,value:String}>();
+			for (d in distribs) {
+				if (d.contract.id == cid) data.push( { key:Std.string(d.id), value:view.hDate(d.date)+" - "+d.place.name } );				
+			}
+			form.addElement(new sugoi.form.elements.RadioGroup("distrib"+cid,"Livraisons",data,data[0].key));
+		}
+		
+		
+		if (form.isValid()) {
+			
+			//collecte quelle distrib choisie pour quel contrat
+			var cd = new Map<Int,Int>();  //contract id -> distrib id
+			for (e in form.elements) {
+				if (e.name == null) continue;
+				if (e.name.substr(0, 7) == "distrib") {
+					cd.set(Std.parseInt(e.name.substr(7)), Std.parseInt(e.value));
+				}
+			}
+			
+			//créé les commandes
+			for (o in order.products) {
+				
+				var cmd = new db.UserContract();
+				cmd.user = app.user;
+				var p = db.Product.manager.get(o.productId, false);
+				cmd.product = p;
+				cmd.amap = app.user.amap;
+				var d = cd.get(p.contract.id);
+				if (d == null) throw "pas trouvé la distribution du produit " + o.productId+" , contrat "+p.contract.name;
+				cmd.distributionId = d;
+				cmd.insert();
+			}
+			
+			
+			
+			app.session.data.order = null;
+			throw Ok("/contract", "Votre commande a bien été enregistrée");
+		}
+		
+		
+		view.form = form;
+	}
+	
+	
+	/**
+	 * valider la commande et selectionner les distributions
+	 */
+	@tpl('shop/validate.mtt')
+	public function ___doValidate() {
+		
+		//pêche aux datas
+		var order : Order = app.session.data.order;
+		var pids = Lambda.map(order.products, function(p) return p.productId);
+		var products = db.Product.manager.search($id in pids, false);
+		var cids = Lambda.map(products, function(p) return p.contract.id);
+		var distribs = db.Distribution.manager.search($contractId in cids,{orderBy:date,limit:5}, false);
 		
 		//grouper distribs par date
 		var dbd = new Map<String,Array<db.Distribution>>();
@@ -69,24 +146,41 @@ class Shop extends sugoi.BaseController
 				v.push(d);
 				dbd.set(k, v);
 			}
-			
 		}
+		
 		//faire un couple produits - dsitributions possibles
-		var out = new Array<{products:Array<db.Product>,distribs : Array<db.Distribution>}>();
+		var out = new Array<{products:Array<{q:Int,p:db.Product}>,distribs : Array<db.Distribution>}>();
 		for (k in dbd.keys()) {
 			var ps = [];
 			for (p in products) {
 				//trouve les dsitributions qui correspondent au contrat de ce produit
 				var find = Lambda.filter(dbd.get(k), function(d) return d.contract.id == p.contract.id);
 				if (find.length > 0) {
-					ps.push(p);
+					//retrouve la quantité
+					var f = Lambda.find(order.products, function(x) return x.productId == p.id);				
+					ps.push({q:f.quantity,p:p});
 				}
 			}
 			out.push({products:ps,distribs:dbd.get(k)});
 		}
 		
+		//on créé un formulaire
+		var form = new sugoi.form.Form("validate");
+		for (o in out) {
+			//liste des produits dans un bloc HTML
+			var html = "<ul>";
+			for ( p in o.products) html += "<li>" + p.q +" x " + p.p.name+ "</li>";
+			html += "</ul>";
+			form.addElement(new sugoi.form.elements.Html(html));
+			
+			var data = new Array<{key:String,value:String}>();
+			for (d in o.distribs) {
+				data.push({key:d.date.toString().substr(0,10),value:d.toString()});
+			}
+			form.addElement(new sugoi.form.elements.RadioGroup("distrib","Livraisons",data,data[0].key));
+		}
 		
-		
+		view.form = form;
 		view.out = out;
 		
 	}

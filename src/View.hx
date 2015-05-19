@@ -36,6 +36,26 @@ class View extends sugoi.BaseView {
 		return Math.round(n * Math.pow(10,r)) / Math.pow(10,r) ;
 	}
 	
+	
+	public function color(id:Int) {
+		if (id == null) throw "color cant be null";
+		//try{
+			return intToHex(db.CategoryGroup.COLORS[id]);
+		//}catch (e:Dynamic) return "#000000";
+	}
+	
+	/**
+	 * convert a RVB color from Int to Hexa
+	 * @param	c
+	 * @param	leadingZeros=6
+	 */
+	public function intToHex(c:Int, ?leadingZeros=6) {
+		var h = StringTools.hex(c);
+		while (h.length<leadingZeros)
+			h="0"+h;
+		return "#"+h;
+	}
+	
 	public function formatNum(n:Float):String {
 		//arrondi a 2 apres virgule
 		var out  = Std.string(roundTo(n, 2));		

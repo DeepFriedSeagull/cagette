@@ -1,0 +1,54 @@
+::use 'amapadmin/design.mtt'::
+
+<h2>Categories</h2>
+
+<p>
+	Les catégories permettent de classer vos produits par catégories, par exemple "légumes, viande, boulangerie...etc"<br/>
+	Il est possible de créer plusieurs groupes de catégories afin de pouvoir classer les produits comme on veut.
+</p>
+<p ::cond groups.length==0 ::>
+	Vous n'avez actuellement aucune catégorie définie.
+	Souhaitez-vous créer la liste de catégories de produits par défaut ?
+	<a href="/amapadmin/categories/generate" class="btn btn-default">Créer la liste de catégories par défaut</a>
+</p>
+
+::foreach g groups::
+<table class="table table-bordered">
+	<tr>
+		<th>
+			Groupe "::g.name::"
+		</th>
+		<th>
+			<a href="/amapadmin/categories/editGroup/::g.id::" class="btn btn-default btn-xs">Modifier groupe</a>
+			<a href="/amapadmin/categories/deleteGroup/::g.id::?token=::token::" class="btn btn-default btn-xs" $$confirm()>Effacer groupe</a>
+		</th>
+	</tr>
+			
+	
+		::foreach c g.getCategories()::
+		<tr>
+			
+			<td>
+				<span class="tag" style="background: ::c.getColor()::;">::c.name::</span>
+			</td>
+			<td>
+				<a href="/amapadmin/categories/edit/::c.id::" class="btn btn-default btn-xs">Modifier</a>
+				<a href="/amapadmin/categories/delete/::c.id::?token=::token::" class="btn btn-default btn-xs" $$confirm() >Effacer</a>
+			</td>
+		</tr>
+		
+		::end::
+		<tr>
+			<td>
+				<a href="/amapadmin/categories/insert/::g.id::" class="btn btn-default btn-xs">Ajouter une catégorie dans ce groupe</a>
+			</td>
+			<td>
+				
+			</td>
+			
+		</tr>
+</table>
+::end::
+
+<a href="/amapadmin/categories/insertGroup" class="btn btn-default">Ajouter un groupe</a>
+::end::

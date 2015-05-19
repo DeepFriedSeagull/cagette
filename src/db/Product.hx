@@ -52,9 +52,15 @@ class Product extends Object
 			vatValue: (vat != 0 && vat != null) ? (  this.price - (this.price / (vat/100+1))  )  : null,
 			contractTax : contract.percentageValue,
 			contractTaxName : contract.percentageName,
-			desc : desc
+			desc : desc,
+			categories : Lambda.array(Lambda.map(getCategories(), function(c) return c.id))
 		}
 	}
+	
+	public function getCategories() {
+		return Lambda.map(db.ProductCategory.manager.search($productId == id, false), function(x) return x.category);
+	}
+	
 	
 }
 

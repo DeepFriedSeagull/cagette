@@ -1,5 +1,6 @@
 package controller;
 import sugoi.form.Form;
+import Common;
 using Std;
 class Product extends Controller
 {
@@ -140,6 +141,74 @@ class Product extends Controller
 		}
 		
 		view.step = step;
+	}
+	
+	@tpl("product/categorize.mtt")
+	public function doCategorize(contract:db.Contract) {
+		
+		if (db.CategoryGroup.get(app.user.amap).length == 0) throw Error("/contractAdmin", "Vous devez d'abord définir des catégories avant de pouvoir catégoriser vos produits");
+		
+		//var form = new sugoi.form.Form("cat");
+		//
+		//for ( g in db.CategoryGroup.get(app.user.amap)) {
+			//var data = [];
+			//for ( c in g.getCategories()) {
+				//data.push({key:Std.string(c.id),value:c.name});
+			//}
+			//form.addElement(new sugoi.form.elements.Selectbox("cats"+g.id,g.name,data));
+		//}
+		//
+		//view.form = form;
+		view.c = contract;
+		
+	}
+	
+	/**
+	 * init du Tagger
+	 * @param	contract
+	 */	
+	public function doCategorizeInit(contract:db.Contract) {
+		var data : TaggerInfos = {
+			products:[],
+			categories:[]
+		}
+		
+		for (p in contract.getProducts()) {
+			
+			data.products.push({product:p.infos(),categories:Lambda.array(Lambda.map(p.getCategories(),function(x) return x.id))});
+		}
+		
+		for (cg in db.CategoryGroup.get(app.user.amap)) {
+			
+			var x = { id:cg.id, categoryGroupName:cg.name, color:App.current.view.intToHex(db.CategoryGroup.COLORS[cg.color]),tags:[] };
+			
+			for (t in cg.getCategories()) {
+				x.tags.push({id:t.id,name:t.name});
+			}
+			data.categories.push(x);
+			
+		}
+		
+		Sys.print(haxe.Json.stringify(data));
+	}
+	
+	public function doCategorizeSubmit(contract:db.Contract) {
+		var data : TaggerInfos = haxe.Json.parse(app.params.get("data"));
+		
+		db.ProductCategory.manager.unsafeDelete("delete from ProductCategory where productId in (" + Lambda.map(contract.getProducts(), function(t) return t.id).join(",")+")");
+		
+		for (p in data.products) {
+			for (t in p.categories) {
+				var x = new db.ProductCategory();
+				x.categoryId = t;
+				x.productId = p.product.id;
+				x.insert();
+				
+			}
+		}
+		
+		Sys.print("Modifications enregistrées");
+		
 	}
 	
 }

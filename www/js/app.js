@@ -23,6 +23,9 @@ App.prototype = {
 	getCart: function() {
 		return new Cart();
 	}
+	,getTagger: function(cid) {
+		return new Tagger(cid);
+	}
 	,overlay: function(url) {
 		js.JQuery("body").append("<div class='overlay background'></div>");
 		var r = new haxe_Http(url);
@@ -91,6 +94,13 @@ Cart.prototype = {
 		req.addParameter("data",JSON.stringify(this.order));
 		req.request(true);
 	}
+	,filter: function(cat) {
+		var $it0 = this.products.iterator();
+		while( $it0.hasNext() ) {
+			var p = $it0.next();
+			if(cat == 0 || Lambda.has(p.categories,cat)) js.JQuery("#product" + p.id).show(); else js.JQuery("#product" + p.id).hide();
+		}
+	}
 	,remove: function(pid) {
 		var _g = 0;
 		var _g1 = this.order.products.slice();
@@ -116,7 +126,7 @@ Cart.prototype = {
 				var id = p.id;
 				_g1.products.h[id] = p;
 			}
-			haxe_Log.trace(_g1.products.toString(),{ fileName : "Cart.hx", lineNumber : 101, className : "Cart", methodName : "init"});
+			haxe_Log.trace(_g1.products.toString(),{ fileName : "Cart.hx", lineNumber : 110, className : "Cart", methodName : "init"});
 		};
 		req.request();
 	}
@@ -648,6 +658,86 @@ _$Map_Map_$Impl_$.fromObjectMap = function(map) {
 	return map;
 };
 Math.__name__ = ["Math"];
+var Reflect = function() { };
+$hxClasses["Reflect"] = Reflect;
+Reflect.__name__ = ["Reflect"];
+Reflect.hasField = function(o,field) {
+	return Object.prototype.hasOwnProperty.call(o,field);
+};
+Reflect.field = function(o,field) {
+	try {
+		return o[field];
+	} catch( e ) {
+		haxe_CallStack.lastException = e;
+		if (e instanceof js__$Boot_HaxeError) e = e.val;
+		return null;
+	}
+};
+Reflect.setField = function(o,field,value) {
+	o[field] = value;
+};
+Reflect.getProperty = function(o,field) {
+	var tmp;
+	if(o == null) return null; else if(o.__properties__ && (tmp = o.__properties__["get_" + field])) return o[tmp](); else return o[field];
+};
+Reflect.setProperty = function(o,field,value) {
+	var tmp;
+	if(o.__properties__ && (tmp = o.__properties__["set_" + field])) o[tmp](value); else o[field] = value;
+};
+Reflect.callMethod = function(o,func,args) {
+	return func.apply(o,args);
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) a.push(f);
+		}
+	}
+	return a;
+};
+Reflect.isFunction = function(f) {
+	return typeof(f) == "function" && !(f.__name__ || f.__ename__);
+};
+Reflect.compare = function(a,b) {
+	if(a == b) return 0; else if(a > b) return 1; else return -1;
+};
+Reflect.compareMethods = function(f1,f2) {
+	if(f1 == f2) return true;
+	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) return false;
+	return f1.scope == f2.scope && f1.method == f2.method && f1.method != null;
+};
+Reflect.isObject = function(v) {
+	if(v == null) return false;
+	var t = typeof(v);
+	return t == "string" || t == "object" && v.__enum__ == null || t == "function" && (v.__name__ || v.__ename__) != null;
+};
+Reflect.isEnumValue = function(v) {
+	return v != null && v.__enum__ != null;
+};
+Reflect.deleteField = function(o,field) {
+	if(!Object.prototype.hasOwnProperty.call(o,field)) return false;
+	delete(o[field]);
+	return true;
+};
+Reflect.copy = function(o) {
+	var o2 = { };
+	var _g = 0;
+	var _g1 = Reflect.fields(o);
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		Reflect.setField(o2,f,Reflect.field(o,f));
+	}
+	return o2;
+};
+Reflect.makeVarArgs = function(f) {
+	return function() {
+		var a = Array.prototype.slice.call(arguments);
+		return f(a);
+	};
+};
 var Std = function() { };
 $hxClasses["Std"] = Std;
 Std.__name__ = ["Std"];
@@ -771,6 +861,167 @@ StringTools.fastCodeAt = function(s,index) {
 };
 StringTools.isEof = function(c) {
 	return c != c;
+};
+var Tagger = function(cid) {
+	this.contractId = cid;
+};
+$hxClasses["Tagger"] = Tagger;
+Tagger.__name__ = ["Tagger"];
+Tagger.prototype = {
+	contractId: null
+	,data: null
+	,init: function() {
+		var _g = this;
+		var req = new haxe_Http("/product/categorizeInit/" + this.contractId);
+		req.onData = function(_data) {
+			_g.data = JSON.parse(_data);
+			_g.render();
+		};
+		req.request();
+	}
+	,render: function() {
+		var _g = this;
+		var html = new StringBuf();
+		html.b += "<table class='table'>";
+		var _g1 = 0;
+		var _g11 = this.data.products;
+		while(_g1 < _g11.length) {
+			var p = _g11[_g1];
+			++_g1;
+			html.b += Std.string("<tr class='p" + p.product.id + "'>");
+			html.b += Std.string("<td><input type='checkbox' name='p" + p.product.id + "' /></td>");
+			html.b += Std.string("<td>" + p.product.name + "</td>");
+			var tags = [];
+			var _g2 = 0;
+			var _g3 = p.categories;
+			while(_g2 < _g3.length) {
+				var c = _g3[_g2];
+				++_g2;
+				var name = "";
+				var color = "";
+				var _g4 = 0;
+				var _g5 = this.data.categories;
+				while(_g4 < _g5.length) {
+					var gc = _g5[_g4];
+					++_g4;
+					var _g6 = 0;
+					var _g7 = gc.tags;
+					while(_g6 < _g7.length) {
+						var t = _g7[_g6];
+						++_g6;
+						if(c == t.id) {
+							name = t.name;
+							color = gc.color;
+						}
+					}
+				}
+				tags.push("<span class='tag t" + c + "' style='background-color:" + color + ";cursor:pointer;'>" + name + "</span>");
+			}
+			html.add("<td class='tags'>" + tags.join(" ") + "</td>");
+			html.b += "</tr>";
+		}
+		html.b += "</table>";
+		js.JQuery("#tagger").html(html.b);
+		js.JQuery("#tagger .tag").click(function(e) {
+			var tid = Std.parseInt((function($this) {
+				var $r;
+				var _this = e.currentTarget.getAttribute("class").split(" ")[1];
+				$r = HxOverrides.substr(_this,1,null);
+				return $r;
+			}(this)));
+			haxe_Log.trace("tag " + tid,{ fileName : "Tagger.hx", lineNumber : 64, className : "Tagger", methodName : "render"});
+			var pid = Std.parseInt((function($this) {
+				var $r;
+				var _this1 = e.currentTarget.parentElement.parentElement.getAttribute("class");
+				$r = HxOverrides.substr(_this1,1,null);
+				return $r;
+			}(this)));
+			haxe_Log.trace("product " + pid,{ fileName : "Tagger.hx", lineNumber : 68, className : "Tagger", methodName : "render"});
+			e.currentTarget.remove();
+			_g.remove(tid,pid);
+		});
+	}
+	,add: function() {
+		var tagId = Std.parseInt(js.JQuery("#tag").val());
+		if(tagId == 0) js_Browser.alert("Impossible de trouver la catégorie selectionnée");
+		var pids = [];
+		var $it0 = (function($this) {
+			var $r;
+			var _this = js.JQuery("#tagger input:checked");
+			$r = (_this.iterator)();
+			return $r;
+		}(this));
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			pids.push(Std.parseInt((function($this) {
+				var $r;
+				var _this1 = e.attr("name");
+				$r = HxOverrides.substr(_this1,1,null);
+				return $r;
+			}(this))));
+		}
+		if(pids.length == 0) js_Browser.alert("Sélectionnez un produit afin de pouvoir lui attribuer une catégorie");
+		var _g = 0;
+		while(_g < pids.length) {
+			var p = pids[_g];
+			++_g;
+			this.addTag(tagId,p);
+		}
+		this.render();
+	}
+	,remove: function(tagId,productId) {
+		var _g = 0;
+		var _g1 = this.data.products;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			if(p.product.id == productId) {
+				var _g2 = 0;
+				var _g3 = p.categories;
+				while(_g2 < _g3.length) {
+					var t = _g3[_g2];
+					++_g2;
+					if(t == tagId) HxOverrides.remove(p.categories,t);
+				}
+			}
+		}
+	}
+	,addTag: function(tagId,productId) {
+		var _g = 0;
+		var _g1 = this.data.products;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			if(p.product.id == productId) {
+				var _g2 = 0;
+				var _g3 = p.categories;
+				while(_g2 < _g3.length) {
+					var t = _g3[_g2];
+					++_g2;
+					if(t == tagId) return;
+				}
+			}
+		}
+		var _g4 = 0;
+		var _g11 = this.data.products;
+		while(_g4 < _g11.length) {
+			var p1 = _g11[_g4];
+			++_g4;
+			if(p1.product.id == productId) {
+				p1.categories.push(tagId);
+				break;
+			}
+		}
+	}
+	,submit: function() {
+		var req = new haxe_Http("/product/categorizeSubmit/" + this.contractId);
+		req.addParameter("data",JSON.stringify(this.data));
+		req.onData = function(_data) {
+			js_Browser.alert(_data);
+		};
+		req.request(true);
+	}
+	,__class__: Tagger
 };
 var ValueType = $hxClasses["ValueType"] = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
 ValueType.TNull = ["TNull",0];
@@ -1629,6 +1880,7 @@ haxe_ds_WeakMap.prototype = {
 var js__$Boot_HaxeError = function(val) {
 	Error.call(this);
 	this.val = val;
+	this.message = String(val);
 	if(Error.captureStackTrace) Error.captureStackTrace(this,js__$Boot_HaxeError);
 };
 $hxClasses["js._Boot.HaxeError"] = js__$Boot_HaxeError;
@@ -1804,7 +2056,7 @@ js_Boot.__isNativeObj = function(o) {
 	return js_Boot.__nativeClassName(o) != null;
 };
 js_Boot.__resolveNativeClass = function(name) {
-	if(typeof window != "undefined") return window[name]; else return global[name];
+	return (Function("return typeof " + name + " != \"undefined\" ? " + name + " : null"))();
 };
 var js_Browser = function() { };
 $hxClasses["js.Browser"] = js_Browser;

@@ -276,3 +276,13 @@ i{
 .logo{
 	
 }
+
+span.tag{
+	color:white;
+	font-size:80%;
+	font-weight:bold;
+	padding:4px;
+	background-color:#666666;
+	border-radius:4px;
+	line-height: 30px;
+}

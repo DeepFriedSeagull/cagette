@@ -83,7 +83,7 @@
 		<h2>Distributions</h2>
 		Les distributions passées ne sont pas affichées.
 		<ul>
-		::foreach d c.getDistribs(true)::
+		::foreach d c.getDistribs(true,100)::
 			<li>::hDate(d.date)::</li>
 		::end::
 		</ul>

@@ -5,9 +5,7 @@
 		
 			
 			<table class="table">
-				::foreach d c.getDistribs(false)::
-					
-				
+				::foreach d c.getDistribs(false,null)::
 				
 					::if d.date!=null && d.date.getTime() < Date.now().getTime()::
 						::set style = "opacity:0.5;"::

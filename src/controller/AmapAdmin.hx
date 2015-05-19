@@ -244,5 +244,9 @@ class AmapAdmin extends Controller
 		
 	}
 	
+	function doCategories(d:haxe.web.Dispatch) {
+		d.dispatch(new controller.Categories());
+	}	
+	
 	
 }

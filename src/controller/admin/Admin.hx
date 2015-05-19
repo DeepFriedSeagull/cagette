@@ -39,7 +39,7 @@ class Admin extends Controller {
 		d.dispatch(new controller.admin.Plugins());
 	}
 	
-		
+	
 
 	
 	@tpl("admin/errors.mtt")
@@ -53,9 +53,8 @@ class Admin extends Controller {
 		if( args.user!=null ) sql += " AND uid="+args.user;
 		if( args.like!=null && args.like != "" ) sql += " AND error like "+sys.db.Manager.cnx.quote("%"+args.like+"%");
 		if (args.empty) {
-					sys.db.Manager.cnx.request("truncate table Error");
-				}
-
+			sys.db.Manager.cnx.request("truncate table Error");
+		}
 
 		var errorsStats = sys.db.Manager.cnx.request("select count(id) as c,date as d,DATE_FORMAT(date,'%d-%b') as day from Error where date > NOW()- INTERVAL 1 MONTH "+sql+" group by day order by d").results();
 		view.errorsStats = errorsStats;

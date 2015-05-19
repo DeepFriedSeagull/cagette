@@ -116,6 +116,7 @@ class App extends sugoi.BaseApp {
 		out.set("Messages", "Accès à la messagerie");
 		out.set("vat", "TVA");
 		out.set("desc", "Description");
+		out.set("ShopMode", "Mode boutique");
 		return out;
 	}
 	

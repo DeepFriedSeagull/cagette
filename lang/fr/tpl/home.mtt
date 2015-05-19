@@ -5,13 +5,17 @@
 		<div class="homeBlock" ::cond ( openContracts!=null && openContracts.length>0 )::>
 			<img src="/img/order.png" width="64" height="64" style="float:right;" />
 			<h2>Commandes ouvertes</h2>
+			::if amap.hasShopMode()::
+				<a href="/shop" class="btn btn-default">Voir les produits</a>
+			::else::
+			
 			<ul>
 				::foreach c openContracts::
 					::if c.type==1::
 						<li>
 							::c.name::
 							<ul>
-								::foreach d c.getDistribs(true)::
+								::foreach d c.getDistribs(true,null)::
 								<li><a href="/contract/order/::c.id::?d=::d.id::">Livraison du ::hDate(d.date)::</a></li>
 								::end::
 							</ul>
@@ -20,7 +24,9 @@
 						<li><a href="/contract/order/::c.id::">::c.name::</a></li>	
 					::end::
 				::end::	
-			</ul>
+			</ul>			
+			::end::
+			
 		</div>
 	
 	
