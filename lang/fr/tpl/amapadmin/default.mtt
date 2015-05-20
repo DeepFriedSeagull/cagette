@@ -1,6 +1,6 @@
 ::use 'amapadmin/design.mtt'::
 
-	<h3>Mon AMAP</h3>		
+	<h3>Mon ::wAmap()::</h3>		
 	
 	<p>
 		<strong>::membersNum::</strong> foyers adhérents.<br/>

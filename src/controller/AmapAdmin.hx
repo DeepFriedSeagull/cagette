@@ -1,7 +1,7 @@
 package controller;
 import db.UserAmap;
 import sugoi.form.Form;
-import Types;
+import Common;
 
 
 class AmapAdmin extends Controller

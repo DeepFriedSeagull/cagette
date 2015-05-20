@@ -1,6 +1,7 @@
 package controller.admin;
 import haxe.web.Dispatch;
-import Types;
+import Common;
+
 class Admin extends Controller {
 	
 	public function new() {

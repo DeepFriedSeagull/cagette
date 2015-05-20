@@ -1,5 +1,5 @@
 package event;
-import Types;
+import Common;
 /**
  * ...
  * @author fbarbut<francois.barbut@gmail.com>

@@ -3,8 +3,8 @@ import sys.db.Object;
 import sys.db.Types;
 import db.UserAmap;
 enum UserFlags {
-	HasEmailNotif;
-	//Pipo;
+	HasEmailNotif4h;
+	HasEmailNotif24h;
 	//Lol;
 }
 
@@ -63,7 +63,9 @@ class User extends Object{
 	public function isAmapManager() {
 		//if (isAdmin()) return true;
 		//if (getAmap().contact == null) throw "Cette AMAP n'a pas de responsable général.";
-		return getUserAmap(getAmap()).hasRight(Right.AmapAdmin);
+		var ua = getUserAmap(getAmap());
+		if (ua == null) return false;
+		return ua.hasRight(Right.AmapAdmin);
 	}
 	
 	function getUserAmap(amap:db.Amap):db.UserAmap {
@@ -78,6 +80,7 @@ class User extends Object{
 	public function isContractManager(?contract:db.Contract ) {
 		if (isAdmin()) return true;
 		var ua = getUserAmap(getAmap());
+		if (ua == null) return false;
 		if (ua.rights == null) return false;
 		if (ua.hasRight(Right.ContractAdmin())) return true;
 		
@@ -100,18 +103,21 @@ class User extends Object{
 	
 	public function canAccessMessages():Bool {
 		var ua = getUserAmap(getAmap());
+		if (ua == null) return false;
 		if (ua.hasRight(Right.Messages)) return true;
 		return false;
 	}
 	
 	public function canAccessMembership():Bool {
 		var ua = getUserAmap(getAmap());
+		if (ua == null) return false;
 		if (ua.hasRight(Right.Membership)) return true;
 		return false;
 	}
 	
 	public function canManageContract(c:db.Contract):Bool {
 		var ua = getUserAmap(getAmap());
+		if (ua == null) return false;
 		if (ua.hasRight(Right.ContractAdmin())) return true;
 		if (ua.hasRight(Right.ContractAdmin(c.id))) return true;		
 		return false;

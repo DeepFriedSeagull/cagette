@@ -64,6 +64,7 @@ class Contract extends Controller
 	function doEdit(c:db.Contract) {
 		
 		if (!app.user.isContractManager(c)) throw Error('/', 'Action interdite');
+		
 		var currentContact = c.contact;
 		var form = Form.fromSpod(c);
 		form.removeElement( form.getElement("amapId") );
@@ -71,8 +72,14 @@ class Contract extends Controller
 		form.getElement("userId").required = true;
 		
 		if (form.checkToken()) {
+			
 			form.toSpod(c);
 			c.amap = app.user.amap;
+			
+			if (c.hasPercentageOnOrders() && c.percentageValue==null) throw Error("/contract/edit/"+c.id, "Si vous souhaitez ajouter des frais au pourcentage de la commande, spécifiez le pourcentage et son libellé.");
+			
+			
+			
 			c.update();
 			
 			//update rights

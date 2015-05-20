@@ -30,7 +30,8 @@ class Cron extends Controller
 	public function doMinute() {
 		if (!canRun()) return;
 		
-		alerts();
+		alerts(4,db.User.UserFlags.HasEmailNotif4h); //4h avant
+		alerts(24,db.User.UserFlags.HasEmailNotif24h); //24h avant
 	}
 	
 	public function doHour() {
@@ -38,11 +39,11 @@ class Cron extends Controller
 	}
 	
 	
-	function alerts() {
+	function alerts(hour:Int,flag:db.User.UserFlags) {
 		
 		//trouve les distrib qui se font dans 4h
-		var d = DateTools.delta(Date.now(), 1000 * 60 * 60 * 4); //dans 4h
-		var h = DateTools.delta(Date.now(), 1000 * 60 * 60 * 5); //dans 5h
+		var d = DateTools.delta(Date.now(), 1000 * 60 * 60 * hour); //dans 4h
+		var h = DateTools.delta(Date.now(), 1000 * 60 * 60 * (hour+1) ); //dans 5h
 		//distribs ayent lieu de dans 4h à dans 5h
 		var distribs = db.Distribution.manager.search( $date >= d && $date <=h , false);
 		//var distribs = db.Distribution.manager.search( $date > h , false); //TEST
@@ -63,7 +64,7 @@ class Cron extends Controller
 		}
 		
 		//on vérifie dans le cache du jour que ces distrib n'ont pas deja été traitées lors d'un cron précédent
-		var cacheId = Date.now().toString().substr(0, 10);
+		var cacheId = Date.now().toString().substr(0, 10)+Std.string(flag);
 		var dist :Array<Int> = db.Cache.get(cacheId);
 		if (dist != null) {
 			for (d in Lambda.array(distribs)) {
@@ -123,15 +124,16 @@ class Cron extends Controller
 			//trace( u.user.getName() + " a " + u.products + " a la distrib  " + u.distrib );
 			
 			//que ceux qui ont coché la case
-			if (u.user.flags.has(db.User.UserFlags.HasEmailNotif) ) {
+			if (u.user.flags.has(flag) ) {
 				
 				if (u.user.email != null) {
 					var m = new sugoi.mail.MandrillApiMail();
-					m.setSubject( "AMAP : Distribution à " + u.distrib.date.getHours() + ":" + u.distrib.date.getMinutes() );
+					var group = u.distrib.contract.amap.name;
+					m.setSubject( group+" : Distribution à " + u.distrib.date.getHours() + ":" + u.distrib.date.getMinutes() );
 					m.setSender("noreply@cagette.net", "Cagette.net");
 					m.addRecipient(u.user.email, u.user.getName(), u.user.id);
 					if(u.user.email2!=null) m.addRecipient(u.user.email2);
-					var text = "N'oubliez pas la distribution à <b>" + u.distrib.date.getHours() + ":" + u.distrib.date.getMinutes() + "</b><br>";
+					var text = "N'oubliez pas la distribution : <b>" + view.hDate(u.distrib.date) + "</b><br>";
 					text += "Vos produits à récupérer :<br><ul>";
 					for ( p in u.products) {
 						text += "<li>"+p.quantity+" x "+p.product.name+"</li>";
@@ -143,16 +145,12 @@ class Cron extends Controller
 					}
 					
 					m.setHtmlBody("mail/message.mtt", { text:text } );
-					App.log("<hr/>"+m.htmlBody+"<hr/>");
+					//App.log("<hr/>"+m.htmlBody+"<hr/>");
 					m.send();
 					
 				}
-				
 			}
-			
 		}
-		
-		
 	}
 	
 }

@@ -46,3 +46,11 @@ typedef TaggerInfos = {
 	products:Array<{product:ProductInfo,categories:Array<Int>}>,
 	categories : Array<{id:Int,categoryGroupName:String,color:String,tags:Array<{id:Int,name:String}>}>, //groupe de categories + tags
 }
+
+/**
+ * Links in navbars for plugin
+ */
+typedef Link = {
+	var link:String;
+	var name:String;
+}

@@ -1,5 +1,5 @@
 package event;
-import Types;
+import Common;
 /**
  * Event pour les envois d'emails ou SMS
  * @author fbarbut<francois.barbut@gmail.com>

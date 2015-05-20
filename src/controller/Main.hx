@@ -91,8 +91,7 @@ class Main extends Controller {
 		sys.db.Admin.handler();
 	}
 	
-	@tpl('cgu.mtt')
-	function doCgu() {}
+	
 	
 	//login and stuff
 	function doUser(d:Dispatch) {

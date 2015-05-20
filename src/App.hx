@@ -85,7 +85,8 @@ class App extends sugoi.BaseApp {
 		out.set("vendor", "Producteur");
 		out.set("text", "Texte");
 		out.set("flags", "Options");
-		out.set("HasEmailNotif", "Recevoir des notifications par email 4h avant les distributions");
+		out.set("4h", "Recevoir des notifications par email 4h avant les distributions");
+		out.set("24h", "Recevoir des notifications par email 24h avant les distributions");
 		out.set("HasMembership", "Gestion des adhésions");
 		out.set("DayOfWeek", "Jour de la semaine");
 		out.set("Monday", "Lundi");
@@ -117,6 +118,7 @@ class App extends sugoi.BaseApp {
 		out.set("vat", "TVA");
 		out.set("desc", "Description");
 		out.set("ShopMode", "Mode boutique");
+		out.set("IsAmap", "Votre groupe est une AMAP");
 		return out;
 	}
 	

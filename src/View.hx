@@ -108,4 +108,14 @@ class View extends sugoi.BaseView {
 		
 		return Std.string(e).substr(2).toLowerCase()+".png";
 	}
+	
+	
+	/**
+	 * wording : amap/groupe
+	 */
+	public function wAmap() {
+		return App.current.user.amap.flags.has(db.Amap.AmapFlags.IsAmap)?"AMAP":"groupe";
+	}
+	
+	
 }

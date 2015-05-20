@@ -35,7 +35,7 @@
     <library name="sugoi" />
     <library name="hxevents" />
     <library name="cagette-hosted" />
-    <library name="" />
+    <library name="hscript" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>

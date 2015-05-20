@@ -5,6 +5,7 @@ import sys.db.Types;
 enum AmapFlags {
 	HasMembership; //gestion des adhésions
 	ShopMode; //mode boutique
+	IsAmap; //Amap / groupement d'achat
 }
 
 /**
@@ -48,6 +49,7 @@ class Amap extends Object
 	public function getCategoryGroups() {
 		return db.CategoryGroup.get(this);
 	}
+	
 	
 	//public function canAddMember():Bool {
 	//	return isAboOk(true);

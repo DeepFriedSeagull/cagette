@@ -28,6 +28,10 @@ class Distribution extends Controller
 	
 	function doDelete(d:db.Distribution) {
 		
+		if (!app.user.canManageContract(d.contract)) throw "action non autorisée";
+		
+		if (db.UserContract.manager.search($distributionId == d.id, false).length > 0) throw Error("/contractAdmin/distributions/" + d.contract.id, "Effacement impossible : Des commandes sont enregistrées pour cette distribution.");
+		
 		d.lock();
 		var cid = d.contract.id;
 		d.delete();
@@ -39,6 +43,8 @@ class Distribution extends Controller
 	
 	@tpl('form.mtt')
 	function doEdit(d:db.Distribution) {
+		
+		if (!app.user.canManageContract(d.contract)) throw "action non autorisée";
 		
 		var form = sugoi.form.Form.fromSpod(d);
 		form.removeElement(form.getElement("contractId"));

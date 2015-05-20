@@ -3,7 +3,7 @@
 	<div class="article">
 		<h2>Planning des distributions : ::contract.name::</h2>
 		
-		::set distribs = contract.getDistribs(true)::
+		::set distribs = contract.getDistribs(true,null)::
 		<div style="overflow-x:scroll;">
 		<table class="table">
 			<tr>
