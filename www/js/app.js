@@ -95,10 +95,13 @@ Cart.prototype = {
 		req.request(true);
 	}
 	,filter: function(cat) {
+		js.JQuery(".tag").removeClass("active").children().remove("span");
+		var bt = js.JQuery("#tag" + cat);
+		bt.addClass("active").prepend("<span class ='glyphicon glyphicon-ok'></span> ");
 		var $it0 = this.products.iterator();
 		while( $it0.hasNext() ) {
 			var p = $it0.next();
-			if(cat == 0 || Lambda.has(p.categories,cat)) js.JQuery("#product" + p.id).show(); else js.JQuery("#product" + p.id).hide();
+			if(cat == 0 || Lambda.has(p.categories,cat)) js.JQuery("#product" + p.id).fadeIn(300); else js.JQuery("#product" + p.id).fadeOut(300);
 		}
 	}
 	,remove: function(pid) {
@@ -126,7 +129,7 @@ Cart.prototype = {
 				var id = p.id;
 				_g1.products.h[id] = p;
 			}
-			haxe_Log.trace(_g1.products.toString(),{ fileName : "Cart.hx", lineNumber : 110, className : "Cart", methodName : "init"});
+			haxe_Log.trace(_g1.products.toString(),{ fileName : "Cart.hx", lineNumber : 119, className : "Cart", methodName : "init"});
 		};
 		req.request();
 	}

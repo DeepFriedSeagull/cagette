@@ -34,6 +34,7 @@ class Shop extends sugoi.BaseController
 	@tpl('shop/productInfo.mtt')
 	public function doProductInfo(p:db.Product) {
 		view.p = p.infos();
+		view.product = p;
 		view.vendor = p.contract.vendor;
 	}
 	
@@ -57,8 +58,12 @@ class Shop extends sugoi.BaseController
 		var order : Order = app.session.data.order;
 		var pids = Lambda.map(order.products, function(p) return p.productId);
 		var products = db.Product.manager.search($id in pids, false);
-		var cids = Lambda.map(products, function(p) return p.contract.id);
-		var distribs = db.Distribution.manager.search($contractId in cids, { orderBy:date, limit:5 }, false);
+		var _cids = Lambda.map(products, function(p) return p.contract.id);
+		var distribs = db.Distribution.manager.search($contractId in _cids, { orderBy:date, limit:5 }, false);
+		
+		//dedups cids
+		var cids = new Map<Int,Int>();
+		for (c in _cids) cids.set(c, c);
 		
 		//on créé un formulaire
 		var form = new sugoi.form.Form("validate");
@@ -71,18 +76,23 @@ class Shop extends sugoi.BaseController
 					for (o in order.products) {
 						if(o.productId==p.id) html += "<li>" + o.quantity +" x " + p.name+ "</li>";
 					}
-					
-					
 				}
 			}
 			html += "</ul>";
 			form.addElement(new sugoi.form.elements.Html(html,"Produits"));
 			
+			//liste des distributions possibles en radio group
 			var data = new Array<{key:String,value:String}>();
 			for (d in distribs) {
 				if (d.contract.id == cid) data.push( { key:Std.string(d.id), value:view.hDate(d.date)+" - "+d.place.name } );				
 			}
-			form.addElement(new sugoi.form.elements.RadioGroup("distrib"+cid,"Livraisons",data,data[0].key));
+			if (data.length > 0) {
+				form.addElement(new sugoi.form.elements.RadioGroup("distrib"+cid,"Livraisons",data,data[0].key));	
+			}else {
+				form.addElement(new sugoi.form.elements.Html("Aucune livraison n'est prévue pour l'instant.","Livraisons"));
+			}
+			form.addElement(new sugoi.form.elements.Html("<hr/>"));
+			
 		}
 		
 		
@@ -97,6 +107,8 @@ class Shop extends sugoi.BaseController
 				}
 			}
 			
+			var errors = [];
+			
 			//créé les commandes
 			for (o in order.products) {
 				
@@ -106,12 +118,15 @@ class Shop extends sugoi.BaseController
 				cmd.product = p;
 				cmd.amap = app.user.amap;
 				var d = cd.get(p.contract.id);
-				if (d == null) throw "pas trouvé la distribution du produit " + o.productId+" , contrat "+p.contract.name;
+				if (d == null) {
+					//throw "pas trouvé la distribution du produit " + o.productId+" , contrat "+p.contract.name;
+					errors.push("Le produit \""+p.name+"\" n'ayant pas de livraison associée, il a été retiré de votre commande");
+				}
 				cmd.distributionId = d;
 				cmd.insert();
 			}
 			
-			
+			if(errors.length>0) app.session.addMessage(errors.join("<br/>"),true);
 			
 			app.session.data.order = null;
 			throw Ok("/contract", "Votre commande a bien été enregistrée");

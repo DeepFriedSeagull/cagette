@@ -11,24 +11,22 @@
 	
 	<div class="row">
 		::foreach p c.getProducts()::
-		<div class="col-md-4">
+		<div class="col-md-4" id="product::p.id::">
 		<table class="product">
 			<tr>
 				<td style="vertical-align:top;">
 					<img src="/img/::p.getImage()::" />	
 				</td>
 				<td>
-					<h4>::p.name::</h4>
-					<p ::cond p.desc!=null:: class="desc">
-						::p.desc::
-					</p>
-					<span style="font-weight:bold;font-size:130%;">::p.price:: €</span>
+					<h4>
+						<a onclick="_.overlay('/shop/productInfo/::p.id::')" href="#">::p.name::</a>
+					</h4>
+					<span class="price">::p.price:: €</span>
+										
+					<div>
+						<a class="btn btn-default btn-xs" href="#" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	
+					</div>
 					
-					::if p.vat!=null && p.vat!=0::
-					<span style="color:#999999;font-size:80%;">
-						( dont ::roundTo( p.price-(p.price/(1+(p.vat/100))) ,2)::€ de TVA )
-					</span>
-					::end::
 				</td>
 			</tr>
 		</table>
@@ -59,14 +57,17 @@
 	<div class="article">
 		<h2>Commander</h2>
 		::if c.isUserOrderAvailable()::
-			Les commandes sont actuellement ouvertes.
 			
 			::if c.type==1::				
-					<ul>
-						::foreach d c.getDistribs(true)::
-						<li><a href="/contract/order/::c.id::?d=::d.id::">Livraison du ::hDate(d.date)::</a></li>
-						::end::
-					</ul>
+				<div style="overflow:auto;max-height:300px;">
+					::foreach d c.getDistribs(true,null)::
+					<div style="margin-bottom:8px;">
+						Livraison du ::dDate(d.date)::<br/>
+						
+						<a href="/contract/order/::c.id::?d=::d.id::" class="btn btn-default btn-xs">Commander</a><br/>
+					</div>
+					::end::
+				</div>
 			::else::
 				<br/>
 				<a href="/contract/order/::c.id::" class="btn btn-default">Commander</a>
@@ -77,18 +78,25 @@
 			<br/>
 			<a href="mailto: ::c._contact.email::">Contactez le pour plus d'informations</a>.
 		::end::
+		
+		<a style="font-size:12px;" href='/contract'>Vous pouvez consulter vos commandes en cours sur votre page "mon compte"</a>
+		
 	</div>
 	
+	::if c.type==0::	
 	<div class="article">
 		<h2>Distributions</h2>
-		Les distributions passées ne sont pas affichées.
-		<ul>
+		
+		<ul style="overflow:auto;max-height:300px;">
 		::foreach d c.getDistribs(true,100)::
 			<li>::hDate(d.date)::</li>
 		::end::
 		</ul>
+		
+		Les distributions passées ne sont pas affichées.
+		
 	</div>
-	
+	::end::
 	
 	<div class="article">		
 		<h2>Coordinateur</h2>

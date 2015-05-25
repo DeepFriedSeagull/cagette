@@ -88,11 +88,20 @@ class View extends sugoi.BaseView {
 		return out;
 	}
 	
+	public function dDate(date:Date):String {
+		if (date == null) return "aucune date";
+		
+		var days = ["Dimanche","Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+		var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
+		
+		return days[date.getDay()] + " " + date.getDate() + " " + months[date.getMonth()];
+	}
+	
 	public function getDate(date:Date) {
 		if (date == null) throw "date is null";
 		
-		var days = ["DIMANCHE","LUNDI", "MARDI", "MERCREDI", "JEUDI", "VENDREDI", "SAMEDI"];
-		var months = ["JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOUT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DECEMBRE"];
+		var days = ["Dimanche","Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+		var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
 		
 		return {
 			dow: days[date.getDay()],

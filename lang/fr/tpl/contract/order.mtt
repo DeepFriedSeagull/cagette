@@ -31,7 +31,7 @@
 					<img src="/img/::uo.product.getImage()::" style="width:32px;height:32px;" />
 				</td>
 				<td>
-					::uo.product.name::	
+					<a href="#" onclick="_.overlay('/shop/productInfo/::uo.product.id::')">::uo.product.name::	</a>
 				</td>
 				<td>
 					::uo.product.price:: &euro;

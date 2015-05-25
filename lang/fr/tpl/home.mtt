@@ -11,18 +11,7 @@
 			
 			<ul>
 				::foreach c openContracts::
-					::if c.type==1::
-						<li>
-							::c.name::
-							<ul>
-								::foreach d c.getDistribs(true,null)::
-								<li><a href="/contract/order/::c.id::?d=::d.id::">Livraison du ::hDate(d.date)::</a></li>
-								::end::
-							</ul>
-						</li>
-					::else::
-						<li><a href="/contract/order/::c.id::">::c.name::</a></li>	
-					::end::
+					<li><a href="/contract/view/::c.id::">::c.name::</a>					</li>
 				::end::	
 			</ul>			
 			::end::

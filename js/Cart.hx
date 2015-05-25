@@ -68,11 +68,20 @@ class Cart
 	}
 	
 	public function filter(cat:Int) {
+		
+		//icone sur bouton
+		App.j(".tag").removeClass("active").children().remove("span");//clean
+		
+		var bt = App.j("#tag" + cat);
+		bt.addClass("active").prepend("<span class ='glyphicon glyphicon-ok'></span> ");
+		
+		
+		//affiche/masque produits
 		for (p in products) {
 			if (cat==0 || Lambda.has(p.categories, cat)) {
-				App.j("#product" + p.id).show(); 
+				App.j("#product" + p.id).fadeIn(300); 
 			}else {
-				App.j("#product" + p.id).hide(); 
+				App.j("#product" + p.id).fadeOut(300); 
 			}
 		}
 		

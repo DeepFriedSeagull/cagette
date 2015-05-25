@@ -60,17 +60,20 @@
 		
 		<a onClick="cart.submit();" class="btn btn-default">Valider</a>
 		
+		<a class="infos" href='/contract'>Vous pouvez consulter vos commandes en cours sur votre page "mon compte"</a>
+
+		
 	</div>
 	
 	<div class="article">
-		<span class="tag" onclick="cart.filter(0);" style="cursor:pointer;">Tout</span><br/>
+		<span class="tag active" id="tag0" onclick="cart.filter(0);" style="cursor:pointer;"><span class="glyphicon glyphicon-ok"></span> Tout</span><br/>
 		
 		::foreach g user._amap.getCategoryGroups()::
 			<div>
 				<h4>::g.name::</h4>
 				
 				::foreach c g.getCategories()::
-					<span class="tag" onclick="cart.filter(::c.id::);" style="background-color: ::c.getColor()::;cursor:pointer;">::c.name::</span><br/>
+					<span class="tag" id="tag::c.id::" onclick="cart.filter(::c.id::);" style="background-color: ::c.getColor()::;cursor:pointer;">::c.name::</span><br/>
 				::end::
 			</div>
 		::end::

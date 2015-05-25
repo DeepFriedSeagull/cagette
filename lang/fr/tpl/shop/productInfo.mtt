@@ -7,7 +7,7 @@
 		<div class="col-md-9">
 			<h2>::p.name::</h2>
 			
-			<p>
+			<p ::cond p.desc!=null::>
 				::p.desc::
 			</p>
 			
@@ -37,9 +37,14 @@
 			
 		</div>
 		
-		<div class="col-md-6">
+		::set cats = product.getCategories()::
+		<div class="col-md-6" ::cond cats.length != 0:: >
 			<h3>Catégories</h3>
-			<p></p>
+			<div>
+				::foreach c cats::
+					<span class="tag" style="background-color: ::c.getColor()::;">::c.name::</span>
+				::end::
+			</div>
 		</div>
 			
 </div>
