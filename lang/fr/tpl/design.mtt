@@ -11,9 +11,11 @@
 		<!-- JQUERY -->
 		<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 		
-		<!-- BOOTSTRAP -->		
+		<!-- BOOTSTRAP	
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->	
+		<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+		<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 		
 		<!-- bootstrap datepicker -->
 		<script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
@@ -103,6 +105,7 @@
 					<a href="http://www.cagette.net" target="_blank">Cagette.net</a> • 
 					<a href="http://aide.cagette.net" target="_blank">Documentation</a> •
 					<a href="https://groups.google.com/forum/?hl=fr#!forum/cagette" target="_blank">Forum</a> •
+					<a href="https://cagette.uservoice.com" target="_blank">Suggérer une amélioration</a> •
 					<a href="https://www.facebook.com/cagette/" target="_blank"><img src="/img/facebook-16.png" align="middle" /> Cagette sur Facebook</a>
 				</div>
 			</div>

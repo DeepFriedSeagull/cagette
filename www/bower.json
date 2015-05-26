@@ -1,0 +1,21 @@
+{
+  "name": "cagette",
+  "version": "1.0.0",
+  "homepage": "http://www.cagette.net",
+  "authors": [
+    "Bubar <francois.barbut@gmail.com>"
+  ],
+  "description": "Cagette.net le logiciel des AMAP et groupements d'achat",
+  "license": "GNU GPL",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "eonasdan-bootstrap-datetimepicker": "~4.7.14",
+    "bootstrap": "~3.3.4"
+  }
+}
