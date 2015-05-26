@@ -69,7 +69,18 @@ class Vendor extends Controller
 		}
 		
 		view.form = form;
+	}
 	
+	public function doDelete(v:db.Vendor) {
+		if (!app.user.isAmapManager()) throw "action interdite";
+		if (checkToken()) {
+					
+			if (db.Contract.manager.search($vendorId == v.id).length > 0) throw Error('/contractAdmin', 'Vous ne pouvez pas supprimer ce producteur car des contrats (en cours ou anciens) sont liés à ce producteur.');
+			
+			v.lock();
+			v.delete();
+			throw Ok("/contractAdmin", "Producteur supprimé");
+		}
 		
 	}
 	

@@ -22,14 +22,18 @@ class ContractAdmin extends Controller
 	 * liste les contrats dont on a la responsabilité
 	 */
 	@tpl("contractadmin/default.mtt")
-	function doDefault() {
+	function doDefault(?args:{old:Bool}) {
 		
-		var contracts = db.Contract.getActiveContracts(app.user.amap, true, false);
-		
-		
-		if (!app.user.isAmapManager()) {
-			for ( c in Lambda.array(contracts).copy()) {
+		var contracts;
+		if (args != null && args.old) {
+			contracts = db.Contract.manager.search($amap == app.user.amap && $endDate < Date.now() ,{orderBy:-startDate},false);	
+		}else {
+			contracts = db.Contract.getActiveContracts(app.user.amap, true, false);	
+		}
 				
+		//filtre si pas d'accès
+		if (!app.user.isAmapManager()) {
+			for ( c in Lambda.array(contracts).copy()) {				
 				if(!app.user.canManageContract(c)) contracts.remove(c);				
 			}
 		}

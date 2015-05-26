@@ -71,4 +71,18 @@ class Place extends Controller
 		view.title = "Enregistrer un nouveau lieu";
 	}
 	
+	public function doDelete(p:db.Place) {
+		if (!app.user.isAmapManager()) throw "action interdite";
+		if (checkToken()) {
+			
+			
+			if (db.Distribution.manager.search($placeId == p.id).length > 0) throw Error('/contractAdmin', 'Vous ne pouvez pas supprimer ce lieu car des livraisons (futures ou passées) ont lieu à cette endroit.');
+			
+			p.lock();
+			p.delete();
+			throw Ok("/contractAdmin", "Lieu supprimé");
+		}
+		
+	}
+	
 }

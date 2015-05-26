@@ -4,8 +4,15 @@
 	<div style="margin:32px auto 32px auto;width:400px;">
 		
 		<div class="block" style="text-align:center;">
-			
-			<h3>Choisissez l'AMAP avec laquelle vous souhaitez vous connecter :</h3>
+			<h2>Bonjour 
+			::if whichUser()==0::
+				::user.firstName::
+			::else::
+				::user.firstName2::
+			::end::
+			 !
+			</h2>
+			<p>Choisissez le groupe auquel vous souhaitez vous connecter&nbsp;:</p>
 			
 			
 			::foreach a amaps::

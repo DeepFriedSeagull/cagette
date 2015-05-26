@@ -40,13 +40,14 @@ class User extends Controller
 			user.ldate = Date.now();
 			user.update();
 			App.current.session.setUser(user);
+			App.current.session.data.whichUser = (args.name == user.email) ? 0 : 1; //qui est connecté, monsieur ou madame ?
 			
 			//sugoi.db.Session.clean();
 			
 			if (user.getAmap() == null) {
-				throw Ok("/user/choose/", "Bonjour " + user.firstName+" !");
+				throw Redirect("/user/choose/");
 			}else {				
-				throw Ok("/", "Bonjour " + user.firstName+" !");
+				throw Ok("/", "Bonjour " + (args.name == user.email ? user.firstName : user.firstName2)+" !");
 			}
 			
 		}

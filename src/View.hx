@@ -118,12 +118,24 @@ class View extends sugoi.BaseView {
 		return Std.string(e).substr(2).toLowerCase()+".png";
 	}
 	
-	
+	/**
+	 * renvoie 0 si c'est user.firstName qui est connecté,
+	 * renvoie 1 si c'est user.firstName2 qui est connecté
+	 * @return
+	 */
+	public function whichUser():Int {
+		return App.current.session.data.whichUser == null?0:App.current.session.data.whichUser;
+	}
+		
 	/**
 	 * wording : amap/groupe
 	 */
 	public function wAmap() {
 		return App.current.user.amap.flags.has(db.Amap.AmapFlags.IsAmap)?"AMAP":"groupe";
+	}
+	
+	public function wVendors() {
+		return App.current.user.amap.flags.has(db.Amap.AmapFlags.IsAmap)?"Producteurs":"Fournisseurs";
 	}
 	
 	
