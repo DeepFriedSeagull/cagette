@@ -19,7 +19,7 @@
 			
 		::else::
 			<div class="alert alert-danger">
-				Ce contrat est un <b>contrat à commandes variables</b>, vous devez donc d'abord créer une ou des distributions pour pouvoir y relier
+				Ce contrat est un <b>contrat à commandes variables</b>, vous devez donc d'abord créer une ou des livraison pour pouvoir y relier
 				des commandes.<br/>
 				
 				<a href="/contractAdmin/distributions/::c.id::" class="btn btn-default">Gérer les distributions</a>

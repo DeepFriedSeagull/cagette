@@ -7,7 +7,7 @@
 		::end::
 		
 		::if distribution!=null::
-		Pour la distribution du <b>::hDate(distribution.date)::</b>
+		Pour la livraisons du <b>::hDate(distribution.date)::</b>
 		::end::
 		
 		<form name="order" id="order" method="POST" action="">

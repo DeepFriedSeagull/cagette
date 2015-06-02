@@ -1,7 +1,7 @@
 ::use 'contractadmin/design.mtt'::
 
 	
-		<h2>Distributions</h2>
+		<h2>Livraisons</h2>
 		
 			
 			<table class="table">
@@ -40,10 +40,10 @@
 				
 				::end::
 			</table>				
-			$$insert(Nouvelle distribution,/distribution/insert/::c.id::)
-			$$insert(Distributions récurrentes,/distribution/insertCycle/::c.id::) 
+			$$insert(Nouvelle livraison,/distribution/insert/::c.id::)
+			$$insert(Livraisons récurrentes,/distribution/insertCycle/::c.id::) 
 			<a href="/contractAdmin/distributionp/::c.id::" class="btn btn-default btn-sm">
-				<span class="glyphicon glyphicon-user"></span> Participations aux distributions
+				<span class="glyphicon glyphicon-user"></span> Participations aux livraisons
 			</a>
 
 	

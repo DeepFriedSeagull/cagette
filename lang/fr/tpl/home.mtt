@@ -11,7 +11,7 @@
 			
 			<ul>
 				::foreach c openContracts::
-					<li><a href="/contract/view/::c.id::">::c.name::</a>					</li>
+					<li><a href="/contract/view/::c.id::">::c.name::</a></li>
 				::end::	
 			</ul>			
 			::end::
@@ -111,7 +111,7 @@
 						<span class="glyphicon glyphicon-map-marker"></span>&nbsp;<a href="/place/view/::d.distrib._place.id::">Carte</a>
 						
 						<span ::cond d.distrib.distributor1Id!=null || d.distrib.distributor2Id!=null || d.distrib.distributor3Id!=null || d.distrib.distributor4Id!=null::>
-							&nbsp; <span class="glyphicon glyphicon-user"></span> <a href="#" onclick="$('#distributors::d.distrib.id::').toggle();return false;">Distributeurs</a>
+							&nbsp; <span class="glyphicon glyphicon-user"></span> <a href="#" onclick="$('#distributors::d.distrib.id::').toggle();return false;">Permanence</a>
 						</span>
 						
 						
@@ -149,7 +149,9 @@
 	</div>
 	
 	<div class="block" ::cond contractsWithDistributors.length>0 ::>
-		<b>Inscrivez vous comme distributeur !</b><br/>
+		<h3>Permanences</h3>
+		
+		<p>N'oubliez pas de vous inscrire pour aider lors des livraisons</p>
 		
 		<ul>
 		::foreach c contractsWithDistributors::

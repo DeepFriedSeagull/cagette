@@ -4,7 +4,7 @@
 		<h2>Commande ::c.name::</h2>
 		
 		::if distribution!=null::
-		Pour la distribution du <b>::hDate(distribution.date)::</b>
+		Pour la livraison du <b>::hDate(distribution.date)::</b>
 		::end::
 		<hr/>
 		<p>

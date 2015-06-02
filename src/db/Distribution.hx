@@ -69,4 +69,18 @@ class Distribution extends Object
 			return "Distribution du " + date.toString()+" de "+contract.name;
 	}
 	
+	public function getOrders() {
+	
+		var pids = db.Product.manager.search($contract == this.contract, false);
+		var pids = Lambda.map(pids, function(x) return x.id);
+		var sql = "select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,u.firstName2 , u.lastName2, u.phone, u.email, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId=" + contract.id;
+		if (contract.type == db.Contract.TYPE_VARORDER) {
+			sql += " and up.distributionId=" + this.id;	
+		}
+		
+		sql += " order by uname asc";
+		return sys.db.Manager.cnx.request(sql).results();
+		
+	}
+	
 }

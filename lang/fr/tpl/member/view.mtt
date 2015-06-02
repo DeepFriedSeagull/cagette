@@ -44,7 +44,7 @@
 	<div class="article">
 		::set o = userContracts::
 		::if o.constOrders.length>0::
-			<h4>Commandes fixes</h4>		
+			<h4>Contrats AMAP</h4>		
 			<table class="table table-bordered table-condensed" >
 				<tr>
 					<th>Qté</th>

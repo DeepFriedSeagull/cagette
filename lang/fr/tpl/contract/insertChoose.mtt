@@ -7,28 +7,41 @@
 
 	<div class="col-md-6">
 		<div class="article">
-		<a href="/contract/insert/0" class="btn btn-default btn-lg">Créer un contrat <b>à commande fixe</b></a>
+			
+		<div style="text-align:center;margin-bottom:12px;">
+			<a href="/contract/insert/0" class="btn btn-default btn-lg">Créer un contrat <b>AMAP</b></a>	
+		</div>
+		
 		
 		<p>
-			C'est le contrat typique des AMAP avec un engagement à l'année ou à la saison. 
-			Les produits sont toujours les même à chaque distribution.<br/>
+			C'est un contrat avec un engagement à l'année ou à la saison. 
+			Les produits sont toujours les même à chaque livraison.
+		</p>
+		<p>
+			
 			<i>Exemple : Imaginons un contrat maraîcher qui dure une année.
-			Jean prend un panier à 10€ pour toute l'année, et Brigitte prend un panier à 20€ pour toute l'année.</i>
+			Jean prend un panier à 10€ pour chaque livraison de l'année, et Brigitte prend un panier à 15€ pour chaque livraison de l'année.</i>
 		</p>
 		</div>
 	</div>
 	
 	
 	
-	<div class="col-md-6"><div class="article">
-	<a href="/contract/insert/1" class="btn btn-default btn-lg">Créer un contrat à <b>commande variable</b></a>
+	<div class="col-md-6">
+		<div class="article">
+			<div style="text-align:center;margin-bottom:12px;">
+				
+				<a href="/contract/insert/1" class="btn btn-default btn-lg">Créer un contrat à <b>commande variable</b></a>
+			</div>
 	
-	<p>
-		C'est un contrat dans lequel les adhérents peuvent changer leur commande à chaque distribution.
-		A chaque distribution correspond une commande différente.<br/>
-		<i>Exemple : Jean prend un panier à 10€ pour la première distribution, puis rien la deuxième distribution, puis un panier à 20€ ...etc</i>
-	</p>
-	</div>
+			<p>
+				C'est un contrat dans lequel les adhérents peuvent changer leur commande à chaque livraison.
+				A chaque livraison correspond une commande différente.
+			</p>
+			<p>
+				<i>Exemple : Jean prend un panier à 10€ pour la première livraison, puis rien la deuxième livraison, puis un panier à 20€ ...etc</i>
+			</p>
+		</div>
 	</div>
 
 

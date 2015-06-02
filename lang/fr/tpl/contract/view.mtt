@@ -85,7 +85,7 @@
 	
 	::if c.type==0::	
 	<div class="article">
-		<h2>Distributions</h2>
+		<h2>Livraisons</h2>
 		
 		<ul style="overflow:auto;max-height:300px;">
 		::foreach d c.getDistribs(true,100)::
@@ -93,7 +93,7 @@
 		::end::
 		</ul>
 		
-		Les distributions passées ne sont pas affichées.
+		Les livraisons passées ne sont pas affichées.
 		
 	</div>
 	::end::

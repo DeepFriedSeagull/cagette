@@ -1,7 +1,7 @@
 ::use 'design.mtt'::
 <div id="content" class="col-md-12">
 	<div class="article">
-		<h2>Planning des distributions : ::contract.name::</h2>
+		<h2>Planning des livraisons : ::contract.name::</h2>
 		
 		::set distribs = contract.getDistribs(true,10)::
 		<div style="overflow-x:scroll;">
@@ -9,7 +9,8 @@
 			<tr>
 				<td style="color:#666;">
 					
-					Inscrivez-vous en cochant les cases
+					Inscrivez-vous en cochant les cases correspondant aux dates qui vous conviennent.<br/>
+					Les permanences consistent à aider à la distribution de produits lors d'une livraison.
 					
 				</td>
 				::foreach d distribs::
@@ -103,8 +104,15 @@
 			
 		</table>
 		</div>
+				
+		<div style="text-align:right">
+			<a href="/" class="btn btn-default btn-lg">Valider</a>	
+		</div>		
 		
 	</div>
+				
+				
+				
 </div>
 
 

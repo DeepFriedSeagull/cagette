@@ -1,19 +1,17 @@
 ::use 'contractadmin/design.mtt'::
 
 	
-		<span class="title" style="margin-bottom: 18px;display: block;">::c.name:: - ::c._vendor.name::</span>
-			
-			<b>Participations aux distributions</b>
+			<h2>Participations aux livraisons</h2>
 			
 			<div>
-				Cette page permet de voir si les adhérents ont suffisamment participé aux distributions.
+				Cette page permet de voir si les adhérents ont suffisamment effectué de permanences.
 			</div>
 			
 			<div style="margin:16px 0 16px 0;text-align:center;">
 				
-				<strong>::distribs:: distributions à ::distributorNum:: distributeur(s),<br/>
+				<strong>::distribs:: livraisons nécéssitant ::distributorNum:: personne(s),<br/>
 				::users:: souscripteurs à ce contrat<br/>
-				= ::num:: distributions à faire par foyer.</strong>	
+				= ::num:: permanences à faire par foyer.</strong>	
 				
 				
 			</div>
@@ -22,8 +20,8 @@
 				<tr>
 					<th>Adhérent</th>
 					<th>
-						Nbre de distributions<br />
-						faites ou prévues
+						Nbre de permanences<br />
+						effectuées ou prévues
 					</th>
 				</tr>
 				::foreach p participations::

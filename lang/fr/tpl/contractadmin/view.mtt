@@ -9,7 +9,7 @@
 				</td>
 				<td>
 					::if contract.type==0::
-					à commande fixe
+					Contrat AMAP
 					::else::
 					à commande variable
 					::end::

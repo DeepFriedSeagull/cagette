@@ -35,7 +35,7 @@
 <body>
 	
 	::set date = getDate(distrib.date)::
-	<h2>Distribution du ::date.dow:: ::date.d:: ::date.m::</h2>
+	<h2>Livraison du ::date.dow:: ::date.d:: ::date.m::</h2>
 	
 	
 	
@@ -52,7 +52,7 @@
 		::if v.phone!=null :: ::v.phone:: ::end::
 	</p>
 	<p>	
-		<b>Distributeurs : </b>
+		<b>De permanence : </b>
 		::if distrib._distributor1!=null:: ::distrib._distributor1.getName()::,::end::
 		::if distrib._distributor2!=null:: ::distrib._distributor2.getName()::,::end::
 		::if distrib._distributor3!=null:: ::distrib._distributor3.getName()::,::end::

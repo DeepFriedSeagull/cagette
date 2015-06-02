@@ -18,11 +18,7 @@ class Distribution extends Controller
 		view.distrib = d;
 		var contract = d.contract;
 		view.contract = d.contract;
-		
-		var pids = db.Product.manager.search($contract == d.contract, false);
-		var pids = Lambda.map(pids, function(x) return x.id);
-		
-		view.contracts = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,u.firstName2 , u.lastName2, u.phone, u.email, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" order by uname asc;").results();
+		view.contracts = d.getOrders();
 		
 	}
 	

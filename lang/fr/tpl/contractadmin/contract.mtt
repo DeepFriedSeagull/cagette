@@ -5,7 +5,7 @@
 	<div class="block">
 		<ul>
 			<li><a href="/contractAdmin/products/::c.id::">Produits</a></li>
-			<li><a href="/contractAdmin/distributions/::c.id::">Distributions</a></li>
+			<li><a href="/contractAdmin/distributions/::c.id::">Livraisons</a></li>
 			<li><a href="/contractAdmin/orders/::c.id::">Commandes</a></li>
 		</ul>
 	</div>
@@ -33,7 +33,7 @@
 		</div>
 		
 		<div class="span4">
-			<b>Distributions</b>
+			<b>Livraisons</b>
 			<table class="table">
 				::foreach d c.getDistribs()::
 				<tr>
@@ -42,7 +42,7 @@
 				</tr>
 				::end::
 			</table>				
-			$$insert(Nouvelle distribution,/distribution/insert)
+			$$insert(Nouvelle livraison,/distribution/insert)
 		</div>
 		</div>
 		<hr/>

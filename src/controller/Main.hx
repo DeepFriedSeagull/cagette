@@ -217,27 +217,5 @@ Called from controller/Main.hx line 117
 		d.dispatch(new controller.admin.Admin());
 	}
 	
-	@tpl('form.mtt')
-	function doContact() {
-		var form = new sugoi.form.Form("contact");
-		form.addElement(new sugoi.form.elements.Input("email", "votre email", true));
-		form.addElement(new sugoi.form.elements.TextArea("message", "Votre message", "Bonjour...", true,null,"style='width:300px;height:200px;'"));
-		view.title = "Formulaire de contact";
-		view.form = form;
-		
-		if (form.checkToken()) {
-			var mail = new sugoi.mail.MandrillApiMail();
-			mail.setSender(form.getValueOf("email"));
-			mail.setSubject("Coucou de Cagette.net");
-			mail.setRecipient(App.App.config.get("webmaster_email"), "bibi");
-			mail.setHtmlBody("mail/message.mtt", { text:form.getValueOf('message').split("\n").join("<br/>") } );
-			mail.send();
-			
-			throw Ok("/", "Merci, nous allons vous répondre très bientôt.");
-		}
-		
-		
-		
-	}
 	
 }
