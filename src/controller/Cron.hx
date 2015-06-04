@@ -26,7 +26,6 @@ class Cron extends Controller
 		}
 	}
 	
-	@tpl("form.mtt")
 	public function doMinute() {
 		if (!canRun()) return;
 		
@@ -36,6 +35,36 @@ class Cron extends Controller
 	
 	public function doHour() {
 		
+	}
+	
+	
+	public function doDaily() {
+		if (!canRun()) return;
+		
+		//ERRORS MONITORING
+		var n = Date.now();
+		var yest24h = new Date(n.getFullYear(), n.getMonth(), n.getDate(), 0, 0, 0);
+		var yest0h = DateTools.delta(yest24h, -1000 * 60 * 60 * 24);
+		
+		//trace(yest0h, yest24h);				
+		
+		var errors = sugoi.db.Error.manager.search( $date < yest24h && $date > yest0h  );		
+		var report = new StringBuf();
+		report.add("<h1>" + App.config.NAME + " : ERRORS</h1>");
+		
+		
+		for (e in errors) {
+			report.add("<div><pre>"+e.error + " at URL " + e.url + " ( user : " + (e.user!=null?e.user.toString():"none") + ", IP : " + e.ip + ")</pre></div></hr>");
+		}
+		
+		//Sys.print(report.toString());
+		
+		var mail = new sugoi.mail.MandrillApiMail();
+		mail.setSender(App.config.get("webmaster_email"));
+		mail.setRecipient(App.config.get("webmaster_email"));
+		mail.setSubject(App.config.NAME+" ERRORS");
+		mail.setHtmlBody("mail/message.mtt",{text:report.toString()});
+		mail.send();
 	}
 	
 	

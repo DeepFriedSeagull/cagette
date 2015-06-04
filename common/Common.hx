@@ -28,14 +28,17 @@ enum ProductType {
 	CTVegetable;
 	CTCheese;
 	CTChicken;
-	CTFruit;
-	CTBread;
-	CTMilk;
+	CTUnknown;
+	CTWine;
+	CTMeat;
 	CTEggs;
 	CTHoney;
-	CTKiwi;
+	CTFish;
 	CTJuice;
 	CTApple;
+	CTBread;
+	CTYahourt;
+	
 }
 
 /**

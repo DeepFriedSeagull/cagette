@@ -3,7 +3,7 @@
 		<h3>Commandes par produit</h3>
 		
 		::if distribution!=null::
-		Distribution du <b>::hDate(distribution.date)::</b>
+		Livraison du <b>::hDate(distribution.date)::</b>
 		::end::
 		
 		<table class="table table-bordered table-hover"  style="width:100%;">

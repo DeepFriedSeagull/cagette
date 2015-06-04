@@ -76,7 +76,7 @@ class Place extends Controller
 		if (checkToken()) {
 			
 			
-			if (db.Distribution.manager.search($placeId == p.id).length > 0) throw Error('/contractAdmin', 'Vous ne pouvez pas supprimer ce lieu car des livraisons (futures ou passées) ont lieu à cette endroit.');
+			if (db.Distribution.manager.search($placeId == p.id).length > 0) throw Error('/contractAdmin', 'Vous ne pouvez pas supprimer ce lieu car des livraisons (futures ou passées) ont lieu à cet endroit.');
 			
 			p.lock();
 			p.delete();

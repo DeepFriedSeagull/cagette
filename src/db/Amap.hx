@@ -33,6 +33,7 @@ class Amap extends Object
 	public function new() 
 	{
 		super();
+		flags = cast 0;
 		vatRates = ["TVA Alimentaire 5,5%" => 5.5, "TVA 20%" => 20];
 		
 	}
