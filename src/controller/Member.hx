@@ -117,6 +117,16 @@ class Member extends Controller
 		
 	}	
 	
+	@admin
+	function doLoginas(user:db.User, amap:db.Amap) {
+	
+		if (!app.user.isAdmin()) return;
+		
+		App.current.session.setUser(user);
+		App.current.session.data.amapId = amap.id;
+		throw Redirect("/member/view/" + user.id );
+	}
+	
 	@tpl('form.mtt')
 	function doEdit(member:db.User) {
 		
@@ -396,7 +406,6 @@ class Member extends Controller
 		e.id = "wantToAddMember";
 		App.current.eventDispatcher.dispatch(e);
 		
-	
 		var m = new db.User();
 		var form = sugoi.form.Form.fromSpod(m);
 		form.removeElement(form.getElement("lang"));
@@ -404,6 +413,8 @@ class Member extends Controller
 		form.removeElement(form.getElement("pass"));	
 		form.removeElement(form.getElement("ldate") );
 		form.addElement(new sugoi.form.elements.Checkbox("warnAmapManager", "Envoyer un mail au responsable de l'AMAP", true));
+		form.getElement("email").addValidator(new EmailValidator());
+		form.getElement("email2").addValidator(new EmailValidator());
 		
 		if (form.isValid()) {
 			
@@ -444,8 +455,6 @@ class Member extends Controller
 				u.lang = "fr";
 				u.lastName = u.lastName.toUpperCase();
 				if (u.lastName2 != null) u.lastName2 = u.lastName2.toUpperCase();
-				u.insert();
-				
 				
 				//insert userAmap
 				var ua = new db.UserAmap();

@@ -7,7 +7,7 @@
 		::end::
 		
 		::if distribution!=null::
-		Pour la livraisons du <b>::hDate(distribution.date)::</b>
+		Pour la livraison du <b>::hDate(distribution.date)::</b>
 		::end::
 		
 		<form name="order" id="order" method="POST" action="">
@@ -42,10 +42,11 @@
 			
 			<table class="table table-bordered">
 				<tr>
-					<td></td>
+					<th></th>
 					<th>Produit</th>
 					<th>Prix</th>
 					<th>Quantité</th>
+					<th></th>
 				</tr>
 				::set total = 0::
 				::foreach uo userOrders::

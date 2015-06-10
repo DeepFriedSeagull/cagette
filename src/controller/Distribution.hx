@@ -135,10 +135,10 @@ class Distribution extends Controller
 	public function doPlanning(contract:db.Contract) {
 	
 		view.contract = contract;
-				
+
 		var doodle = new Map<Int,{user:db.User,planning:Map<Int,Bool>}>();
 		
-		for ( d in contract.getDistribs() ) {
+		for ( d in contract.getDistribs(20) ) {
 			for (u in [d.distributor1, d.distributor2, d.distributor3, d.distributor4]) {
 				if (u != null) {
 					

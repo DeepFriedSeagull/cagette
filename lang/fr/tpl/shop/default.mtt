@@ -26,7 +26,7 @@
 					<h4>
 						<a onclick="_.overlay('/shop/productInfo/::p.id::')" href="#">::p.name::</a>
 					</h4>
-					<span class="price">::roundTo(p.price,2):: €</span>
+					<span class="price">::formatNum(p.price):: €</span>
 										
 					<div>
 						<a class="btn btn-default btn-xs" onclick="cart.add(::p.id::)">Commander</a>

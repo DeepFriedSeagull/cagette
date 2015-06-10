@@ -11,7 +11,7 @@
 				::p.desc::
 			</p>
 			
-			<span class="price">::p.price:: € TTC</span>
+			<span class="price">::formatNum(p.price):: € TTC</span>
 			
 			::if (p.vat!=null && p.vat!=0) ||  p.contractTax!=0::
 			<div class="vat">

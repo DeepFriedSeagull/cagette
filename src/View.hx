@@ -135,8 +135,11 @@ class View extends sugoi.BaseView {
 	}
 	
 	public function wVendors() {
-		return App.current.user.amap.flags.has(db.Amap.AmapFlags.IsAmap)?"Producteurs":"Fournisseurs";
+		return App.current.user.amap.flags.has(db.Amap.AmapFlags.IsAmap)?"Paysans":"Fournisseurs";
 	}
 	
+	public function wVendor() {
+		return App.current.user.amap.flags.has(db.Amap.AmapFlags.IsAmap)?"Paysan":"Fournisseur";
+	}
 	
 }

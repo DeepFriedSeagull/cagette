@@ -46,27 +46,23 @@ class Cron extends Controller
 		var yest24h = new Date(n.getFullYear(), n.getMonth(), n.getDate(), 0, 0, 0);
 		var yest0h = DateTools.delta(yest24h, -1000 * 60 * 60 * 24);
 		
-		//trace(yest0h, yest24h);				
-		
 		var errors = sugoi.db.Error.manager.search( $date < yest24h && $date > yest0h  );		
-		var report = new StringBuf();
-		report.add("<h1>" + App.config.NAME + " : ERRORS</h1>");
-		
-		
-		for (e in errors) {
-			report.add("<div><pre>"+e.error + " at URL " + e.url + " ( user : " + (e.user!=null?e.user.toString():"none") + ", IP : " + e.ip + ")</pre></div></hr>");
+		if (errors.length > 0) {
+			var report = new StringBuf();
+			report.add("<h1>" + App.config.NAME + " : ERRORS</h1>");
+			for (e in errors) {
+				report.add("<div><pre>"+e.error + " at URL " + e.url + " ( user : " + (e.user!=null?e.user.toString():"none") + ", IP : " + e.ip + ")</pre></div></hr>");
+			}
+			
+			var mail = new sugoi.mail.MandrillApiMail();
+			mail.setSender(App.config.get("webmaster_email"));
+			mail.setRecipient(App.config.get("webmaster_email"));
+			mail.setSubject(App.config.NAME+" ERRORS");
+			mail.setHtmlBody("mail/message.mtt",{text:report.toString()});
+			mail.send();	
 		}
 		
-		//Sys.print(report.toString());
-		
-		var mail = new sugoi.mail.MandrillApiMail();
-		mail.setSender(App.config.get("webmaster_email"));
-		mail.setRecipient(App.config.get("webmaster_email"));
-		mail.setSubject(App.config.NAME+" ERRORS");
-		mail.setHtmlBody("mail/message.mtt",{text:report.toString()});
-		mail.send();
 	}
-	
 	
 	function alerts(hour:Int,flag:db.User.UserFlags) {
 		

@@ -1,6 +1,6 @@
 ::use 'design.mtt'::
 
-<div class="col-md-3">
+<div class="col-md-4">
 	<h2>Coordonnées</h2>
 	<div class="article">
 		
@@ -10,12 +10,12 @@
 			
 		::end::</div>
 		
-		::member.address1::<br/>
-		::if member.address2!=null::
-			::member.address2::
-		::end::<br/>
-		::member.zipCode:: ::member.city::<br/>
+		$$nullSafe(::member.address1::)<br/>
+		$$nullSafe(::member.address2::)<br/>
+		$$nullSafe(::member.zipCode::) 
+		$$nullSafe(::member.city::)<br/>
 		<br/>
+		
 		::if member.phone!=null::
 			Tel : ::member.phone::<br/>
 		::end::
@@ -36,10 +36,14 @@
 		<!--$$edit(Modifier,/db/Member/edit/::member.id::)-->
 		$$edit(Modifier,/member/edit/::member.id::)<br/>
 		$$delete(Supprimer,/member/delete/::member.id::)
+		
+		::if isAdmin::
+		<a href="/member/loginas/::member.id::/::userAmap._amap.id::" class="btn btn-default btn-sm">Se connecter sur ce compte</a>
+		::end::
 	</div>
 </div>
 
-<div class="col-md-5">
+<div class="col-md-8">
 	<h2>Commandes en cours</h2>
 	<div class="article">
 		::set o = userContracts::
@@ -51,7 +55,7 @@
 					<th>Produit</th>
 					<th>Prix total</th>
 					<th>Contrat</th>
-					<th>Producteur</th>
+					<th>::wVendor()::</th>
 				</tr>
 				::foreach p o.constOrders::
 					<tr>
@@ -70,25 +74,55 @@
 			::if count(o.varOrders)>0::
 				::foreach d o.varOrders.keys()::
 					<h4>Commande du ::d::</h4>
+					
 					<table class="table table-bordered table-condensed" >
 						<tr>
 							<th>Qté</th>
 							<th>Produit</th>
-							<th>Prix total</th>
+							<th><a href="#" data-toggle="tooltip" data-placement="top" title="Prix unitaire TTC">P.U</a></th>
+							<th>Sous-total</th>
+							<th>Frais</th>
+							<th>Total</th>
 							<th>Contrat</th>
-							<th>Producteur</th>
+							
 						</tr>
+						::set total = 0::
 						::foreach p o.varOrders.get(d)::
 							<tr>
+								::set price = p._product.price*p.quantity::
 								<td>::p.quantity::</td>
 								<td>::p._product.name::</td>
-								<td>::p._product.price*p.quantity:: €</td>
+								<td>::p._product.price::  €</td>
+								<td>::price:: €</td>
+								<td>
+									<!-- frais -->
+									::if p._product._contract.percentageValue!=null::
+									<a href="#" data-toggle="tooltip" data-placement="top" title="::p._product._contract.percentageName:: : ::p._product._contract.percentageValue:: %">
+										::formatNum(price/100*p._product._contract.percentageValue):: €
+									</a>
+									::end::
+								</td>
+								<td>
+									<!-- total -->
+									::if p._product._contract.percentageValue!=null::
+										::formatNum(price + (price/100*p._product._contract.percentageValue)):: €
+										::set total = total + price + (price/100*p._product._contract.percentageValue)::
+									::else::
+										::formatNum(price):: €
+										::set total = total + price::
+									::end::
+								</td>
 								<td>
 									<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
 								</td>
-								<td>::p._product._contract._vendor.name::</td>
+							
 							</tr>
 						::end::			
+						<tr>
+							<td colspan="4"></td>
+							<td>TOTAL</td>
+							<td><b>::formatNum(total):: €</b></td>
+						</tr>
 					</table>
 				::end::
 			::end::	

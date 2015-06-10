@@ -4,6 +4,7 @@ h2{font-size:24px!important;}
 h2,h3,h4{font-family:'Cantora One',sans-serif!important;color:#007700!important;font-weight:normal!important;margin-top:4px!important;margin-bottom:8px!important;}
 a{color:#007700!important;}
 a.btn{color:#333333!important;}
+th{background-color:#fcf8e3!important;}
 #footer{text-align:center;background:#F0D277;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;padding:6px;}
 #footer a{color:#333;}
 pre{padding:8px;background:white;}

@@ -24,6 +24,9 @@ a {
 a.btn {
 	color :  #333333 !important;
 }
+th {
+	background-color :  #fcf8e3 !important;
+}
 #footer {
 	text-align : center;
 	background : #F0D277;

@@ -3,16 +3,17 @@
 	<div class="article">
 		<h2>Planning des livraisons : ::contract.name::</h2>
 		
-		::set distribs = contract.getDistribs(true,10)::
+		<p>
+			Inscrivez-vous en cochant les cases correspondant aux dates qui vous conviennent.<br/>
+			Les permanences consistent à aider à la distribution de produits lors d'une livraison.
+		</p>
+		
+		
+		::set distribs = contract.getDistribs(true,20)::
 		<div style="overflow-x:scroll;">
-		<table class="table">
+		<table class="table table-bordered">
 			<tr>
-				<td style="color:#666;">
-					
-					Inscrivez-vous en cochant les cases correspondant aux dates qui vous conviennent.<br/>
-					Les permanences consistent à aider à la distribution de produits lors d'une livraison.
-					
-				</td>
+				<td></td>
 				::foreach d distribs::
 				::set date = getDate(d.date)::
 				<th style="font-size:12px;line-height:14px;text-align:center;background-color:#DED;">::date.dow::<br/>
@@ -24,7 +25,7 @@
 			
 			<!-- current user -->
 			<tr>
-				<td>
+				<td style="white-space: nowrap;">
 					<b>::user.getCoupleName()::</b>
 				</td>
 				<script>
@@ -67,7 +68,7 @@
 								::if !d.hasEnoughDistributors()::
 									<img src="/img/tick_no.png" onclick="reg('::d.id::',this)" />
 								::else::
-									complet
+									<span style="color: #AAA;font-size: 80%;">complet</span>
 								::end::
 							::end::
 						::else::

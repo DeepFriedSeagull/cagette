@@ -18,7 +18,7 @@
 					<th>Produit</th>
 					<th>Prix total</th>
 					<th>Contrat</th>
-					<th>Producteur</th>
+					<th>::wVendor()::</th>
 				</tr>
 				::foreach p o.constOrders::
 					<tr>
@@ -41,21 +41,49 @@
 						<tr>
 							<th>Qté</th>
 							<th>Produit</th>
-							<th>Prix total</th>
+							<th><a href="#" data-toggle="tooltip" data-placement="top" title="Prix unitaire TTC">P.U</a></th>
+							<th>Sous-total</th>
+							<th>Frais</th>
+							<th>Total</th>
 							<th>Contrat</th>
-							<th>Producteur</th>
 						</tr>
+						::set total = 0::
 						::foreach p o.varOrders.get(d)::
 							<tr>
+								::set price = p._product.price*p.quantity::
 								<td>::p.quantity::</td>
 								<td>::p._product.name::</td>
-								<td>::p._product.price*p.quantity:: €</td>
+								<td>::p._product.price::  €</td>
+								<td>::price:: €</td>
+								<td>
+									<!-- frais -->
+									::if p._product._contract.percentageValue!=null::
+									<a href="#" data-toggle="tooltip" data-placement="top" title="::p._product._contract.percentageName:: : ::p._product._contract.percentageValue:: %">
+										::formatNum(price/100*p._product._contract.percentageValue):: €
+									</a>
+									::end::
+								</td>
+								<td>
+									<!-- total -->
+									::if p._product._contract.percentageValue!=null::
+										::formatNum(price + (price/100*p._product._contract.percentageValue)):: €
+										::set total = total + price + (price/100*p._product._contract.percentageValue)::
+									::else::
+										::formatNum(price):: €
+										::set total = total + price::
+									::end::
+								</td>
 								<td>
 									<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
 								</td>
-								<td>::p._product._contract._vendor.name::</td>
+							
 							</tr>
-						::end::			
+						::end::	
+						<tr>
+							<td colspan="4"></td>
+							<td>TOTAL</td>
+							<td><b>::formatNum(total):: €</b></td>
+						</tr>
 					</table>
 				::end::
 			::end::	

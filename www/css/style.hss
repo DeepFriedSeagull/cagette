@@ -26,6 +26,11 @@ a.btn{
 	color:CSS(" #333333 !important");
 }
 
+th{
+	background-color:CSS(" #fcf8e3 !important");
+}
+
+
 #footer{
 	text-align:center;
 	//font-size:11px;
