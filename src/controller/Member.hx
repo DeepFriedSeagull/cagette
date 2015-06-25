@@ -130,7 +130,7 @@ class Member extends Controller
 	@tpl('form.mtt')
 	function doEdit(member:db.User) {
 		
-		if (member.isAdmin()) throw Error("/","Vous ne pouvez pas modifier le compte d'un administrateur");
+		if (member.isAdmin() && !app.user.isAdmin()) throw Error("/","Vous ne pouvez pas modifier le compte d'un administrateur");
 		
 		var form = sugoi.form.Form.fromSpod(member);
 		
@@ -156,7 +156,8 @@ class Member extends Controller
 	function doDelete(user:db.User) {
 		
 		if (!app.user.isContractManager()) throw "Vous ne pouvez pas faire ça.";
-		if (user.id == app.user.id) throw "Vous ne pouvez pas vous effacer vous même.";
+		if (user.id == app.user.id) throw Error("/member/view/"+user.id,"Vous ne pouvez pas vous effacer vous même.");
+		if ( user.getOrders(app.user.amap).length > 0) throw throw Error("/member/view/"+user.id,"Vous ne pouvez pas effacer ce compte car il a des commandes en cours.");
 		
 		var ua = db.UserAmap.get(user, app.user.amap, true);
 		if (ua != null) {
@@ -455,6 +456,7 @@ class Member extends Controller
 				u.lang = "fr";
 				u.lastName = u.lastName.toUpperCase();
 				if (u.lastName2 != null) u.lastName2 = u.lastName2.toUpperCase();
+				u.insert();
 				
 				//insert userAmap
 				var ua = new db.UserAmap();

@@ -81,7 +81,7 @@ class Contract extends Object
 	
 		
 	
-	public function getUsers() {
+	public function getUsers():Array<db.User> {
 		var pids = getProducts().map(function(x) return x.id);
 		var ucs = UserContract.manager.search($productId in pids, false);
 		var ucs = Lambda.map(ucs, function(a) return a.user);
@@ -93,6 +93,12 @@ class Contract extends Object
 		}
 		
 		return Lambda.array(out);
+	}
+	
+	public function getOrders():Array<db.UserContract> {
+		var pids = getProducts().map(function(x) return x.id);
+		var ucs = UserContract.manager.search($productId in pids,{orderBy:userId}, false);
+		return Lambda.array(ucs);
 	}
 	
 	public function getDistribs(excludeOld = true,?limit=5):List<Distribution> {

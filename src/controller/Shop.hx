@@ -56,6 +56,11 @@ class Shop extends sugoi.BaseController
 	public function doValidate() {
 		//pêche aux datas
 		var order : Order = app.session.data.order;
+		
+		if (order == null || order.products == null || order.products.length == 0) {
+			throw Error("/shop", "Vous devez réaliser votre commande avant de valider.");
+		}
+		
 		var pids = Lambda.map(order.products, function(p) return p.productId);
 		var products = db.Product.manager.search($id in pids, false);
 		var _cids = Lambda.map(products, function(p) return p.contract.id);
@@ -123,6 +128,7 @@ class Shop extends sugoi.BaseController
 					errors.push("Le produit \""+p.name+"\" n'ayant pas de livraison associée, il a été retiré de votre commande");
 				}
 				cmd.distributionId = d;
+				cmd.quantity = o.quantity;
 				cmd.insert();
 			}
 			

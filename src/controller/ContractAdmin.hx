@@ -111,28 +111,30 @@ class ContractAdmin extends Controller
 		var pids = db.Product.manager.search($contract == contract, false);
 		var pids = Lambda.map(pids, function(x) return x.id);
 		
-		var orders : List<Dynamic>;
-		if (contract.type == db.Contract.TYPE_VARORDER ) {
-			orders = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,p.price as price, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" and up.distributionId="+args.d.id+" order by uname asc;").results();	
-		}else {
-			orders = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,p.price as price, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" order by uname asc;").results();
-		}
+		//var orders : List<Dynamic>;
+		//if (contract.type == db.Contract.TYPE_VARORDER ) {
+			//orders = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,p.price as price, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" and up.distributionId="+args.d.id+" order by uname asc;").results();	
+		//}else {
+			//orders = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,p.price as price, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" order by uname asc;").results();
+		//}
+		var orders = contract.getOrders();
+		
 		
 		var totalPrice = 0;
 		for ( o in orders) {
 			totalPrice += o.quantity * o.price;
 		}
 		
-		if (app.params.exists("csv")) {
-			var data = new Array<Dynamic>();
-			
-			for (o in orders) {
-				data.push({"firstName":o.firstName,"uname":o.uname,"pname":o.pname,"price":view.formatNum(o.price),"quantity":o.quantity,"paid":o.paid});				
-			}
-
-			setCsvData(data, ["firstName", "uname", "pname", "price", "quantity", "paid"],"Export-"+contract.name+"-Cagette");
-			return;
-		}
+		//if (app.params.exists("csv")) {
+			//var data = new Array<Dynamic>();
+			//
+			//for (o in orders) {
+				//data.push({"firstName":o.firstName,"uname":o.uname,"pname":o.pname,"price":view.formatNum(o.price),"quantity":o.quantity,"paid":o.paid});				
+			//}
+//
+			//setCsvData(data, ["firstName", "uname", "pname", "price", "quantity", "paid"],"Export-"+contract.name+"-Cagette");
+			//return;
+		//}
 		
 		
 		view.orders = orders;

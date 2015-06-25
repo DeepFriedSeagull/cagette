@@ -13,40 +13,73 @@
 			<a href="/contractAdmin/edit/::c.id::" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvelle commande</a>	
 			::end::
 		</div>
-		
-		<table class="table table-bordered table-hover"  style="width:100%;">
+		::set total = 0::
+		<table class="table table-bordered table-hover table-condensed"  style="width:100%;">
 				::set name = ""::
 
 				::foreach m orders::
 				
 				::if m.firstName+" "+m.uname != name::
-					<tr style="background:#F4E3B2;">
-						<th colspan="4">
+					<tr style="background-color:#666;">
+						<td colspan="6" style="font-size:120%;color:#e7e7e7;">
 							::m.uname:: ::m.firstName:: 
 							
-							::if distribution!=null::
-							$$edit(modifier,/contractAdmin/edit/::c.id::/::m.uid::?d=::distribution.id::) 
-							::else::
-							$$edit(modifier,/contractAdmin/edit/::c.id::/::m.uid::) 
-							::end::
 							
 							::set name =  m.firstName+" "+m.uname ::		
-						</th>
+						</td>
+						<td>
+							::if distribution!=null::
+							<a href="/contractAdmin/edit/::c.id::/::m.uid::?d=::distribution.id::" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+							::else::
+							<a href="/contractAdmin/edit/::c.id::/::m.uid::" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+							::end::
+							
+							
+						</td>
 					
-					</tr>		
+					</tr>
+					<tr>
+						<th>Qté</th>
+						<th>Produit</th>
+						<th><a href="#" data-toggle="tooltip" data-placement="top" title="Prix unitaire TTC">P.U</a></th>
+						<th>Sous-total</th>
+						<th>Frais</th>
+						<th>Total</th>
+						<th>Payé</th>
+					</tr>
 				::end::
 				
 				<tr>
 				
 					<td>
-						
-						
+						::m.quantity:
 					</td>
 					<td>
-						::m.quantity:: x ::m.pname::
+						::m.pname::
+					</td>
+					<td>
+						::formatNum(m.price)::&nbsp;&euro;
 					</td>
 					<td>
 						::formatNum(m.quantity*m.price)::&nbsp;€
+					</td>
+					<td>
+						<!-- frais -->
+						::if c.percentageValue!=null::
+						<a href="#" data-toggle="tooltip" data-placement="top" title="::c.percentageName:: : ::c.percentageValue:: %">
+							::formatNum(m.price/100*c.percentageValue):: €
+						</a>
+						::end::
+					</td>
+					<td>
+						<!-- total -->
+						::if c.percentageValue!=null::
+							::formatNum(m.price + (m.price/100*c.percentageValue)):: €
+							::set total = total + m/price + (m.price/100*c.percentageValue)::
+						::else::
+							::formatNum(m.price):: €
+							::set total = total + m.price::
+						::end::
 					</td>
 					<td>
 						::if m.paid==true::

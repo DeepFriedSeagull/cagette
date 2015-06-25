@@ -1,6 +1,7 @@
 package db;
 import sys.db.Object;
 import sys.db.Types;
+import Common;
 /**
  * Commande récurrente d'un produit
  */
@@ -67,6 +68,41 @@ class UserContract extends Object
 	
 	override public function toString() {
 		return quantity + "x" + product.name;
+	}
+	
+	/**
+	 * Prepare un dataset simple pret pour affichage ou export csv.
+	 * Penser à classer par user !
+	 */
+	public static function prepare(orders:List<db.UserContract>) {
+		var out = new Array<UserOrder>();
+		
+		for (o in orders) {
+		
+			var x : UserOrder = cast {};
+			x.userId = o.user.id;
+			x.userName = o.user.getCoupleName();
+			x.productId = o.product.id;
+			x.productName = o.product.name;
+			x.quantity = o.quantity;
+			x.subTotal = o.quantity * o.product.price;
+			var c = o.product.contract;
+			if (c.hasPercentageOnOrders()) {
+				x.fees = c.percentageValue * x.subTotal;
+				x.percentageName = c.percentageName;
+				x.percentageValue = c.percentageValue;
+				x.total = x.subTotal + x.fees;
+			}else {
+				x.total = x.subTotal;
+			}
+			x.paid = o.paid;
+			
+			out.push(x);
+			
+		}
+		
+		
+		return out;
 	}
 	
 }

@@ -78,17 +78,10 @@
 </div>
 
 <div class="col-md-3">
-	<!--<div class="article">
-		<b>Importation</b>
-		<p>
-		Pour éviter de rentrer à la main tous vos adhérents, vous pouvez importer une grande quantité d'adhérents à partir d'un tableur comme Excel ou Libre Office.
-		<br/>
-		<a href="/member/import" class="btn btn-small">Importer</a>
-		</p>
-	</div>-->
+	
 	
 	<div class="block">
-		<b>Sélections</b>
+		<h3>Sélections</h3>
 		<ul>
 			<li><a href="/member/">Tous les amapiens</a></li>
 			<li><a href="/member/?select=nocontract">Sans contrats</a></li>
@@ -109,6 +102,16 @@
 				
 			  </div>
 		 </form>
+	</div>
+	
+	
+	<div class="block">
+		<h3>Importation</h3>
+		<p>
+		Pour éviter de rentrer à la main tous vos adhérents, vous pouvez importer une grande quantité d'adhérents à partir d'un tableur comme Excel ou Libre Office.
+		<br/>
+		<a href="/member/import" class="btn btn-default btn-sm">Importer</a>
+		</p>
 	</div>
 	
 </div>

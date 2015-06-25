@@ -57,3 +57,5 @@ typedef Link = {
 	var link:String;
 	var name:String;
 }
+
+typedef UserOrder = {userId:Int,userName:String,productId:Int,productName:String,quantity:Int,subTotal:Float,fees:Float,percentageName:String,percentageValue:Float,total:Float,paid:Bool}
