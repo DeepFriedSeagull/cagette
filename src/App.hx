@@ -119,6 +119,7 @@ class App extends sugoi.BaseApp {
 		out.set("desc", "Description");
 		out.set("ShopMode", "Mode boutique");
 		out.set("IsAmap", "Votre groupe est une AMAP");
+		out.set("ref", "Référence");
 		return out;
 	}
 	

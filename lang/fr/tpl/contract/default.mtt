@@ -3,13 +3,9 @@
 	<h2>Toutes mes commandes en cours</h2>
 	
 	::foreach o orders::
-	<div class="panel panel-warning">
+	<div class="article">
 		
-		<div class="panel-heading">
-			<b>::o.amap.name::</b>
-		</div>
 		
-		<div class="panel-body">
 			::if o.constOrders.length>0::
 			<h4>Contrats AMAP</h4>		
 			<table class="table table-bordered table-condensed" >
@@ -36,7 +32,7 @@
 			
 			::if count(o.varOrders)>0::
 				::foreach d o.varOrders.keys()::
-					<h4>Commande du ::d::</h4>
+					<h4>Commande du ::hDate(Date.fromString(d))::</h4>
 					<table class="table table-bordered table-condensed" >
 						<tr>
 							<th>Qté</th>
@@ -45,7 +41,7 @@
 							<th>Sous-total</th>
 							<th>Frais</th>
 							<th>Total</th>
-							<th>Contrat</th>
+							<!--<th>Contrat</th>-->
 						</tr>
 						::set total = 0::
 						::foreach p o.varOrders.get(d)::
@@ -73,9 +69,9 @@
 										::set total = total + price::
 									::end::
 								</td>
-								<td>
+								<!--<td>
 									<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
-								</td>
+								</td>-->
 							
 							</tr>
 						::end::	
@@ -87,7 +83,7 @@
 					</table>
 				::end::
 			::end::	
-		</div>
+	
 		
 	</div>	
 	::end::	

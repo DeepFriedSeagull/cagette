@@ -170,8 +170,12 @@ class Cron extends Controller
 					}
 					
 					m.setHtmlBody("mail/message.mtt", { text:text } );
-					//App.log("<hr/>"+m.htmlBody+"<hr/>");
-					m.send();
+					try {
+						m.send();	
+					}catch (e:Dynamic) {
+						App.current.logError(e);
+					}
+					
 					
 				}
 			}

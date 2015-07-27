@@ -159,9 +159,9 @@ class ContractAdmin extends Controller
 		
 		var orders : List<Dynamic>;
 		if (contract.type == db.Contract.TYPE_VARORDER ) {
-			orders = sys.db.Manager.cnx.request("select SUM(quantity) as quantity, p.name as pname ,p.price as price from UserContract up, Product p where up.productId=p.id and p.contractId="+contract.id+" and up.distributionId="+args.d.id+" group by p.id order by pname asc;").results();	
+			orders = sys.db.Manager.cnx.request("select SUM(quantity) as quantity, p.name as pname ,p.price as price,p.ref as ref from UserContract up, Product p where up.productId=p.id and p.contractId="+contract.id+" and up.distributionId="+args.d.id+" group by p.id order by pname asc;").results();	
 		}else {
-			orders = sys.db.Manager.cnx.request("select SUM(quantity) as quantity, p.name as pname ,p.price as price from UserContract up, Product p where up.productId=p.id and p.contractId="+contract.id+" group by p.id order by pname asc;").results();
+			orders = sys.db.Manager.cnx.request("select SUM(quantity) as quantity, p.name as pname ,p.price as price, p.ref as ref from UserContract up, Product p where up.productId=p.id and p.contractId="+contract.id+" group by p.id order by pname asc;").results();
 		}
 		
 		var totalPrice = 0;
@@ -173,10 +173,10 @@ class ContractAdmin extends Controller
 			var data = new Array<Dynamic>();
 			
 			for (o in orders) {
-				data.push({"quantity":o.quantity,"pname":o.pname,"price":view.formatNum(o.price),"total":o.quantity*o.price});				
+				data.push({"quantity":o.quantity,"pname":o.pname,"ref":o.ref,"price":view.formatNum(o.price),"total":o.quantity*o.price});				
 			}
 
-			setCsvData(data, ["quantity", "pname", "price", "total"],"Export-"+contract.name+"-par produits");
+			setCsvData(data, ["quantity", "pname","ref", "price", "total"],"Export-"+contract.name+"-par produits");
 			return;
 		}
 		
