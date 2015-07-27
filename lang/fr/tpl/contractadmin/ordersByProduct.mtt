@@ -10,20 +10,23 @@
 			<tr>
 				<th>Quantités</th>
 				<th>Produit</th>
+				<th>Référence</th>
 				<th>Prix unitaire TTC</th>
 				<th>Total</th>
 			</tr>
 
 				::foreach m orders::
 				
-								
-				<tr>
+			<tr>
 				
 					<td>
 						::m.quantity::
 					</td>
 					<td>
 						::m.pname::
+					</td>
+					<td>
+						$$nullSafe(::m.ref::)
 					</td>
 					<td>
 						::m.price:: €
@@ -36,10 +39,9 @@
 				</tr>
 				::end::
 				
-							
 				<tr style="background:#DDD;">
 					
-					<th colspan="3">Total</th>
+					<th colspan="4">Total</th>
 					<th>::formatNum(totalPrice)::€</th>
 	
 				</tr>

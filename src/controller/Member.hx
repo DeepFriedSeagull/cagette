@@ -447,18 +447,17 @@ class Member extends Controller
 				}
 				return;
 			}else {
-				//update model
+				//insert user
 				var u = new db.User();
-				
 				form.toSpod(u); 
-				u.id = null;
 				u.lang = "fr";
 				u.lastName = u.lastName.toUpperCase();
 				if (u.lastName2 != null) u.lastName2 = u.lastName2.toUpperCase();
+				u.insert();
 				
 				//insert userAmap
 				var ua = new db.UserAmap();
-				ua.userId = u.id;
+				ua.user = u;
 				ua.amap = app.user.getAmap();
 				ua.insert();	
 				

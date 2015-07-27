@@ -10,7 +10,8 @@ class Product extends Object
 {
 	public var id : SId;
 	public var name : SString<128>;
-	public var type : SInt;
+	public var type : SInt;	//icones
+	public var ref : SNull<SString<32>>;	//référence produit
 	
 	@:relation(contractId)
 	public var contract : Contract;

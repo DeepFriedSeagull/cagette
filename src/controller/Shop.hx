@@ -59,7 +59,7 @@ class Shop extends sugoi.BaseController
 		var pids = Lambda.map(order.products, function(p) return p.productId);
 		var products = db.Product.manager.search($id in pids, false);
 		var _cids = Lambda.map(products, function(p) return p.contract.id);
-		var distribs = db.Distribution.manager.search($contractId in _cids, { orderBy:date, limit:5 }, false);
+		var distribs = db.Distribution.manager.search(($contractId in _cids) && $date > Date.now(), { orderBy:date, limit:5 }, false);
 		
 		//dedups cids
 		var cids = new Map<Int,Int>();

@@ -22,11 +22,12 @@ class Contract extends Controller
 	/**
 	 * contrats de l'utilisateur en cours
 	 */
-	@tpl("contract/default.mtt")
+	@tpl("contract/default.mtt")Date.
 	function doDefault() {
 		
 		var out = new Array< {amap:db.Amap, constOrders:Array<db.UserContract> , varOrders:Map<String,Array<db.UserContract>> } >();
-		for ( a in app.user.getAmaps()) {
+		//for ( a in app.user.getAmaps()) {
+		var a = App.current.user.amap;
 			
 			var row = { amap:a, constOrders:[], varOrders:new Map() };
 			
@@ -56,7 +57,7 @@ class Contract extends Controller
 			row.varOrders = distribs;
 			
 			out.push(row);
-		}
+		//}
 		view.orders = out;
 	}
 
