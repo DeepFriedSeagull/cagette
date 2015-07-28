@@ -22,7 +22,7 @@ class Contract extends Controller
 	/**
 	 * contrats de l'utilisateur en cours
 	 */
-	@tpl("contract/default.mtt")Date.
+	@tpl("contract/default.mtt")
 	function doDefault() {
 		
 		var out = new Array< {amap:db.Amap, constOrders:Array<db.UserContract> , varOrders:Map<String,Array<db.UserContract>> } >();
@@ -61,6 +61,9 @@ class Contract extends Controller
 		view.orders = out;
 	}
 
+	/**
+	 * Modifie un contrat
+	 */
 	@tpl("form.mtt")
 	function doEdit(c:db.Contract) {
 		
@@ -116,6 +119,9 @@ class Contract extends Controller
 		
 	}
 	
+	/**
+	 * Créé un nouveau contrat
+	 */
 	@tpl("form.mtt")
 	function doInsert(?type:Int) {
 		if (!app.user.isAmapManager()) throw Error('/', 'Action interdite');
@@ -179,6 +185,9 @@ class Contract extends Controller
 		throw Error("/contractAdmin","Erreur de token");
 	}
 	
+	/**
+	 * Faire ou modifier une commande 
+	 */
 	@tpl("contract/order.mtt")
 	function doOrder(c:db.Contract,args:{?d:db.Distribution}) {
 		if (!c.isUserOrderAvailable()) throw Error("/", "Ce contrat n'est pas ouvert aux commandes ");
@@ -264,6 +273,104 @@ class Contract extends Controller
 		}
 		
 		view.userOrders = userOrders;
+		
+	}
+	
+	/**
+	 * Modifier une commande en fonction du jour de livraison (tout fournisseurs confondus)
+	 */
+	@tpl("contract/orderByDate.mtt")
+	function doEditOrderByDate(date:Date) {
+		
+		
+		//comment on sait si on peut encore modifier la commande ?
+		// Il faut regarder le contrat de chaque produit et verifier si le contrat est toujours ouvert à la commande.
+		
+		
+		
+		//if (!c.isUserOrderAvailable()) throw Error("/", "Ce contrat n'est pas ouvert aux commandes ");
+		/*if (c.type == db.Contract.TYPE_VARORDER && args.d == null ) {
+			throw Error("/", "Ce contrat est à commande variable, vous devez sélectionner une date de distribution pour faire votre commande.");
+		}
+		view.c = view.contract = c;
+		if (c.type == db.Contract.TYPE_VARORDER) {
+			view.distribution = args.d;
+		}else {
+			view.distributions = c.getDistribs(false);
+		}
+		
+		var userOrders = new Array<{order:db.UserContract,product:db.Product}>();
+		var products = c.getProducts();
+		
+		for ( p in products) {
+			var ua = { order:null, product:p };
+			
+			var order : db.UserContract = null;
+			if (c.type == db.Contract.TYPE_VARORDER) {
+				order = db.UserContract.manager.select($user == app.user && $productId == p.id && $distributionId==args.d.id, true);	
+			}else {
+				order = db.UserContract.manager.select($user == app.user && $productId == p.id, true);
+			}
+			
+			if (order != null) ua.order = order;
+			userOrders.push(ua);
+		}
+		
+		//form check
+		if (checkToken()) {
+			
+			//get dsitrib if needed
+			var distrib : db.Distribution = null;
+			if (c.type == db.Contract.TYPE_VARORDER) {
+				distrib = db.Distribution.manager.get(Std.parseInt(app.params.get("distribution")), false);
+			}
+			
+			for (k in app.params.keys()) {
+				var param = app.params.get(k);
+				if (k.substr(0, "product".length) == "product") {
+					
+					//trouve le produit dans userOrders
+					var pid = Std.parseInt(k.substr("product".length));
+					var uo = Lambda.find(userOrders, function(uo) return uo.product.id == pid);
+					if (uo == null) throw "Impossible de retrouver le produit " + pid;
+					var q = Std.parseInt(param);
+					
+					var order = new db.UserContract();
+					if (uo.order != null) {
+						//record existant
+						order = uo.order;
+						if (q == 0) {
+							order.lock();
+							order.delete();
+						}else {
+							order.lock();
+							order.paid = (q==order.quantity && order.paid); //si deja payé et quantité inchangée
+							order.quantity = q;						
+							order.update();	
+						}
+					}else {
+						//nouveau record
+						if (q != 0) {
+							order.user = app.user;
+							order.product = uo.product;
+							order.quantity = q;
+							order.paid = false;
+							order.amap = app.user.amap;
+							order.distribution = distrib;
+							order.insert();	
+						}
+					}
+				}
+			}
+			if (distrib != null) {
+				throw Ok("/contract/order/" + c.id+"?d="+distrib.id, "Votre commande a été mise à jour");	
+			}else {
+				throw Ok("/contract/order/" + c.id, "Votre commande a été mise à jour");	
+			}
+			
+		}
+		
+		view.userOrders = userOrders;*/
 		
 	}
 	

@@ -62,23 +62,27 @@
 					</td>
 					<td>
 						::formatNum(m.quantity*m.price)::&nbsp;€
+						::set p = (m.quantity*m.price)::
 					</td>
 					<td>
 						<!-- frais -->
 						::if c.percentageValue!=null::
 						<a href="#" data-toggle="tooltip" data-placement="top" title="::c.percentageName:: : ::c.percentageValue:: %">
-							::formatNum(m.price/100*c.percentageValue):: €
+							::formatNum(p/100*c.percentageValue):: €
 						</a>
 						::end::
 					</td>
 					<td>
 						<!-- total -->
+						
+						
 						::if c.percentageValue!=null::
-							::formatNum(m.price + (m.price/100*c.percentageValue)):: €
-							::set total = total + m/price + (m.price/100*c.percentageValue)::
+							::set t = p + (p/100*c.percentageValue)::
+							::formatNum(t):: €
+							::set total = total + t::
 						::else::
-							::formatNum(m.price):: €
-							::set total = total + m.price::
+							::formatNum(p):: €
+							::set total = total + t::
 						::end::
 					</td>
 					<td>
@@ -92,31 +96,12 @@
 				</tr>
 				::end::
 				
-				::set extra = 0::
-				::if c.hasPercentageOnOrders()::
-				<tr style="background:#DDD;">
-					
-					<th colspan="2">Total commande</th>
-					<th>::formatNum(totalPrice)::€</th>
-					
-					<th></th>
-				</tr>
-				<tr style="background:#DDD;">
-					
-					<td colspan="2">::c.percentageName:: (::c.percentageValue::%)</td>
-					::set extra = totalPrice*(c.percentageValue/100)::
-					<td>::formatNum(extra)::€</td>
-					
-					<th></th>
-				</tr>
-				 
-				::end::
 				
 				
 				<tr style="background:#DDD;">
 					
-					<th colspan="2">Total</th>
-					<th>::formatNum(totalPrice+extra)::€</th>
+					<th colspan="5">Total</th>
+					<th>::formatNum(total)::€</th>
 					
 					<th></th>
 				</tr>

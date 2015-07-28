@@ -119,26 +119,19 @@ class ContractAdmin extends Controller
 		}
 		//var orders = contract.getOrders();
 		
-		
-		var totalPrice = 0;
-		for ( o in orders) {
-			totalPrice += o.quantity * o.price;
+		if (app.params.exists("csv")) {
+			var data = new Array<Dynamic>();
+			
+			for (o in orders) {
+				data.push({"firstName":o.firstName,"uname":o.uname,"pname":o.pname,"price":view.formatNum(o.price),"quantity":o.quantity,"paid":o.paid});				
+			}
+
+			setCsvData(data, ["firstName", "uname", "pname", "price", "quantity", "paid"],"Export-"+contract.name+"-Cagette");
+			return;
 		}
-		
-		//if (app.params.exists("csv")) {
-			//var data = new Array<Dynamic>();
-			//
-			//for (o in orders) {
-				//data.push({"firstName":o.firstName,"uname":o.uname,"pname":o.pname,"price":view.formatNum(o.price),"quantity":o.quantity,"paid":o.paid});				
-			//}
-//
-			//setCsvData(data, ["firstName", "uname", "pname", "price", "quantity", "paid"],"Export-"+contract.name+"-Cagette");
-			//return;
-		//}
 		
 		
 		view.orders = orders;
-		view.totalPrice = totalPrice;
 	}
 	
 	/**
