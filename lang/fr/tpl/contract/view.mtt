@@ -21,8 +21,7 @@
 					<h4>
 						<a onclick="_.overlay('/shop/productInfo/::p.id::')" href="#">::p.name::</a>
 					</h4>
-					<span class="price">::p.price:: €</span>
-										
+					<span class="price">::p.price::&nbsp;€</span>
 					<div>
 						<a class="btn btn-default btn-xs" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	
 					</div>

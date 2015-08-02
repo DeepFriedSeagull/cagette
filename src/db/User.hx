@@ -83,6 +83,7 @@ class User extends Object{
 		}else {
 			var ua = getUserAmap(getAmap());
 			if (ua == null) return false;
+			if (ua.rights == null) return false;
 			for (r in ua.rights) {
 				switch(r) {
 					case Right.ContractAdmin(cid):

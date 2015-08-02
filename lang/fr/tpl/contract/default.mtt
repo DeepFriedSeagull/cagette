@@ -50,11 +50,11 @@
 								::set price = p._product.price*p.quantity::
 								<td>::p.quantity::</td>
 								<td>::p._product.name::</td>
-								<td>::formatNum(p._product.price)::  €</td>
-								<td>::formatNum(price):: €</td>
+								<td>::formatNum(p._product.price)::&nbsp;€</td>
+								<td>::formatNum(price)::&nbsp;€</td>
 								<td>
 									<!-- frais -->
-									::if p._product._contract.percentageValue!=null::
+									::if p._product._contract.percentageValue!=null && p._product._contract.percentageValue!=0::
 									<a href="#" data-toggle="tooltip" data-placement="top" title="::p._product._contract.percentageName:: : ::p._product._contract.percentageValue:: %">
 										::formatNum(price/100*p._product._contract.percentageValue):: €
 									</a>
