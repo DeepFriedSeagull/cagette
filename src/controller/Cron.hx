@@ -51,7 +51,7 @@ class Cron extends Controller
 			var report = new StringBuf();
 			report.add("<h1>" + App.config.NAME + " : ERRORS</h1>");
 			for (e in errors) {
-				report.add("<div><pre>"+e.error + " at URL " + e.url + " ( user : " + (e.user!=null?e.user.toString():"none") + ", IP : " + e.ip + ")</pre></div></hr>");
+				report.add("<div><pre>"+e.error + " at URL " + e.url + " ( user : " + (e.user!=null?e.user.toString():"none") + ", IP : " + e.ip + ")</pre></div><hr/>");
 			}
 			
 			var mail = new sugoi.mail.MandrillApiMail();

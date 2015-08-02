@@ -2,6 +2,7 @@
  * Shared entities between neko and js
  */
 
+//utilisé dans le shop
 @:keep
 typedef Order = {
 	token:String,
@@ -13,6 +14,7 @@ typedef ProductInfo = {
 	id : Int,
 	name : String,
 	type : ProductType,
+	image : Null<String>,
 	contractId : Int,
 	price : Float,
 	vat : Float,
@@ -58,4 +60,25 @@ typedef Link = {
 	var name:String;
 }
 
-typedef UserOrder = {userId:Int,userName:String,productId:Int,productName:String,quantity:Int,subTotal:Float,fees:Float,percentageName:String,percentageValue:Float,total:Float,paid:Bool}
+typedef UserOrder = {
+	id:Int,
+	userId:Int,
+	userName:String,
+	
+	productId:Int,
+	productName:String,
+	productPrice:Float,
+	productImage:String,
+	
+	quantity:Int,
+	subTotal:Float,
+	fees:Float,
+	percentageName:String,
+	percentageValue:Float,
+	total:Float,
+	paid:Bool,
+	canModify:Bool,
+	
+	contractId:Int,
+	contractName:String,
+}

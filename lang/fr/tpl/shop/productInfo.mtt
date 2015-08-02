@@ -1,10 +1,9 @@
 
 <div class="article row">
 
-		<div class="col-md-3" style="vertical-align:top;">
-			<img src="/img/::getProductImage(p.type)::" />	
-		</div>
-		<div class="col-md-9">
+		
+		<div class="col-md-12">
+			<img src="::p.image::" style="float:left;width:300px;height:300px;margin:12px;" class="img-thumbnail" />
 			<h2>::p.name::</h2>
 			
 			<p ::cond p.desc!=null::>

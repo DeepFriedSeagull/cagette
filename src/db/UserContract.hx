@@ -11,10 +11,6 @@ class UserContract extends Object
 
 	public var id : SId;
 	
-	@:relation(amapId)
-	public var amap : db.Amap;
-	public var amapId: SInt;
-	
 	@formPopulate("populate") @:relation(userId)
 	public var user : User;
 	public var userId: SInt;
@@ -27,6 +23,7 @@ class UserContract extends Object
 	
 	@formPopulate("populateProducts") @:relation(productId)
 	public var product : Product;
+	public var productId : SInt;
 	
 	public var paid : SBool;
 	
@@ -39,6 +36,7 @@ class UserContract extends Object
 	{
 		super();
 		quantity = 1;
+		paid = false;
 	}
 	
 	public function populate() {
@@ -74,16 +72,21 @@ class UserContract extends Object
 	 * Prepare un dataset simple pret pour affichage ou export csv.
 	 * Penser à classer par user !
 	 */
-	public static function prepare(orders:List<db.UserContract>) {
+	public static function prepare(orders:List<db.UserContract>):Array<UserOrder> {
 		var out = new Array<UserOrder>();
 		
 		for (o in orders) {
 		
-			var x : UserOrder = cast {};
+			var x : UserOrder = cast { };
+			x.id = o.id;
 			x.userId = o.user.id;
 			x.userName = o.user.getCoupleName();
+			
 			x.productId = o.product.id;
 			x.productName = o.product.name;
+			x.productPrice = o.product.price;
+			x.productImage = o.product.getImage();
+			
 			x.quantity = o.quantity;
 			x.subTotal = o.quantity * o.product.price;
 			var c = o.product.contract;
@@ -97,6 +100,11 @@ class UserContract extends Object
 			}
 			x.paid = o.paid;
 			
+			x.contractId = c.id;
+			x.percentageName = c.name;
+			
+			x.canModify = c.isUserOrderAvailable() && !o.paid; //on peut modifier si ça na pas deja été payé + commande encore ouvertes
+			
 			out.push(x);
 			
 		}
@@ -105,4 +113,41 @@ class UserContract extends Object
 		return out;
 	}
 	
+	/**
+	 * Créer une commande
+	 * 
+	 * @param	quantity
+	 * @param	productId
+	 */
+	public static function make(user:db.User, quantity:Int, productId:Int, ?distribId:Int) {
+		
+	
+		//vérifie si il n'y a pas de commandes existantes avec les memes paramètres
+		var orders = new List<db.UserContract>();
+		
+		if (distribId == null) {
+			orders = db.UserContract.manager.search($productId==productId && $user==user, true);
+		}else {
+			orders = db.UserContract.manager.search($productId==productId && $user==user && $distributionId==distribId, true);
+		}
+		
+		var o = new db.UserContract();
+		o.productId = productId;
+		o.quantity = quantity;
+		o.user = user;
+		if (distribId != null) o.distributionId = distribId;
+		
+		if (orders.length > 0) {
+			for (prevOrder in orders) {
+				if (!prevOrder.paid) {
+					o.quantity += prevOrder.quantity;
+					prevOrder.delete();
+				}
+			}
+		}
+		
+		o.insert();
+		
+		//TODO : gestion des stocks
+	}
 }

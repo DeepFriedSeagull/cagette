@@ -27,7 +27,7 @@ class Shop extends sugoi.BaseController
 				contracts.remove(c);
 			}
 		}
-		var products = db.Product.manager.search($contractId in Lambda.map(contracts, function(c) return c.id), false);
+		var products = db.Product.manager.search($contractId in Lambda.map(contracts, function(c) return c.id),{orderBy:name}, false);
 		return Lambda.array(Lambda.map(products, function(p) return p.infos()));
 	}
 	
@@ -116,20 +116,19 @@ class Shop extends sugoi.BaseController
 			
 			//créé les commandes
 			for (o in order.products) {
+				var p = db.Product.manager.get(o.productId,false);
 				
-				var cmd = new db.UserContract();
-				cmd.user = app.user;
-				var p = db.Product.manager.get(o.productId, false);
-				cmd.product = p;
-				cmd.amap = app.user.amap;
 				var d = cd.get(p.contract.id);
 				if (d == null) {
 					//throw "pas trouvé la distribution du produit " + o.productId+" , contrat "+p.contract.name;
 					errors.push("Le produit \""+p.name+"\" n'ayant pas de livraison associée, il a été retiré de votre commande");
+				}else {
+					
+					//enregistre la commande
+					db.UserContract.make(app.user,o.quantity, o.productId, d);
+					
 				}
-				cmd.distributionId = d;
-				cmd.quantity = o.quantity;
-				cmd.insert();
+				
 			}
 			
 			if(errors.length>0) app.session.addMessage(errors.join("<br/>"),true);

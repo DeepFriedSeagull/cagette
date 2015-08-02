@@ -9,8 +9,7 @@ import Common;
 class Product extends Object
 {
 	public var id : SId;
-	public var name : SString<128>;
-	public var type : SInt;	//icones
+	public var name : SString<128>;	
 	public var ref : SNull<SString<32>>;	//référence produit
 	
 	@:relation(contractId)
@@ -22,14 +21,28 @@ class Product extends Object
 	
 	public var desc : SNull<SText>;
 	
+	public var type : SInt;	//icones
+	@:relation(imageId)
+	public var image : SNull<sugoi.db.File>;
+	
 	public function new() 
 	{
 		super();
 	}
 	
+	/**
+	 * Renvoie l'URL complète d'une image en fonction du type
+	 * ou une photo uploadée si elle existe
+	 */
 	public function getImage() {
-		var e = Type.createEnumIndex(ProductType, type);		
-		return Std.string(e).substr(2).toLowerCase()+".png";
+		if (image == null) {
+			var e = Type.createEnumIndex(ProductType, type);		
+			return "/img/"+Std.string(e).substr(2).toLowerCase()+".png";	
+		}else {
+			return "/file/" + App.current.view.file(image.id) + ".jpg";
+		}
+		
+		
 		
 	}
 	
@@ -47,6 +60,7 @@ class Product extends Object
 			id : id,
 			name : name,
 			type : Type.createEnumIndex(ProductType, type),
+			image : getImage(),
 			contractId : contract.id,
 			price : contract.percentageValue!=null ? price*(contract.percentageValue/100+1) : price, //prix total incluant com de contrat
 			vat : vat,

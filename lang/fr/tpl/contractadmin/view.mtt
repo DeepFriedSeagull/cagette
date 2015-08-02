@@ -47,7 +47,7 @@
 		<table class="table table-bordered" style="width:400px;">
 			::foreach p contract.getProducts()::
 			<tr>
-				<td><img src="/img/::p.getImage()::" style="width:32px;height:32px;" />	</td>
+				<td><img src="::p.getImage()::" style="width:32px;height:32px;" />	</td>
 				<td>::p.name::</td>
 				<td>::formatNum(p.price)::&nbsp;&euro;</td>					
 			</tr>

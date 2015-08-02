@@ -27,15 +27,16 @@ App.prototype = {
 		return new Tagger(cid);
 	}
 	,overlay: function(url) {
-		js.JQuery("body").append("<div class='overlay background'></div>");
+		js.JQuery("body").append("<div class='overlayBackground'></div>");
 		var r = new haxe_Http(url);
 		r.onData = function(data) {
-			js.JQuery("body").append("<div class='overlay'><div class='overlayContent'>" + data + "<a class='btn btn-default' onclick='_.closeOverlay()'><span class='glyphicon glyphicon-remove'></span> Fermer</a></div></div>");
+			js.JQuery("body").append("<div class='overlayContent'>" + data + "<a class='btn btn-default' onclick='_.closeOverlay()'><span class='glyphicon glyphicon-remove'></span> Fermer</a></div>");
 		};
 		r.request();
 	}
 	,closeOverlay: function() {
-		js.JQuery(".overlay").remove();
+		js.JQuery(".overlayContent").remove();
+		js.JQuery(".overlayBackground").remove();
 	}
 	,__class__: App
 };

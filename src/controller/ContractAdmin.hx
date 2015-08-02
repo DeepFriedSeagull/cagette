@@ -446,7 +446,6 @@ class ContractAdmin extends Controller
 								order.product = uo.product;
 								order.quantity = q;
 								order.paid = (app.params.get("paid" + pid) == "1");
-								order.amap = app.user.amap;
 								order.distribution = distrib;
 								order.insert();	
 							}

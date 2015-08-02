@@ -6,12 +6,20 @@
 	<table class="table">
 		::foreach p c.getProducts()::
 		<tr>
-			<td><img src="/img/::p.getImage()::" style="width:32px;height:32px;" />	</td>
+			<td>
+				
+				<img src="::p.getImage()::" style="width:64px;height:64px;" />
+				
+			</td>
+			<td>$$nullSafe(::p.ref::)</td>
 			<td>::p.name::</td>
 			<td>::formatNum(p.price):: &euro;</td>
 
 			<td>
 				$$edit(modifier,/product/edit/::p.id::)
+				
+				<a href="/product/addImage/::p.id::" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-picture"></span> Photo</a>
+				
 				$$delete(Suppr.,/product/delete/::p.id::?token=::token::)
 			</td>
 

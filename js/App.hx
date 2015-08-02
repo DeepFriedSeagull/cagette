@@ -29,18 +29,19 @@ class App {
 	
 	public function overlay(url:String) {
 	
-		App.j("body").append("<div class='overlay background'></div>");
+		App.j("body").append("<div class='overlayBackground'></div>");
 		
 		var r = new haxe.Http(url);
 		r.onData = function(data) {
-			App.j("body").append("<div class='overlay'><div class='overlayContent'>" + data + "<a class='btn btn-default' onclick='_.closeOverlay()'><span class='glyphicon glyphicon-remove'></span> Fermer</a></div></div>");
+			App.j("body").append("<div class='overlayContent'>" + data + "<a class='btn btn-default' onclick='_.closeOverlay()'><span class='glyphicon glyphicon-remove'></span> Fermer</a></div>");
 			
 		}
 		r.request();
 	}
 	
 	public function closeOverlay() {
-		App.j(".overlay").remove();
+		App.j(".overlayContent").remove();
+		App.j(".overlayBackground").remove();
 	}
 	
 	

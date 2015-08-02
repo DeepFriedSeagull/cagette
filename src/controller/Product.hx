@@ -14,7 +14,11 @@ class Product extends Controller
 	@tpl('form.mtt')
 	function doEdit(d:db.Product) {
 		
+		if (!app.user.canManageContract(d.contract)) throw "Accès interdit";
+		
 		var f = sugoi.form.Form.fromSpod(d);
+		
+		f.removeElement( f.getElement('imageId') );		
 		
 		//type (->icon)
 		f.removeElement( f.getElement("type") );
@@ -22,8 +26,7 @@ class Product extends Controller
 		f.addElement( pt );
 		
 		//vat selector
-		f.removeElement( f.getElement('vat') );
-		
+		f.removeElement( f.getElement('vat') );		
 		var data = [];
 		for (k in app.user.amap.vatRates.keys()) {
 			data.push( { key:app.user.amap.vatRates[k].string(), value:k } );
@@ -50,7 +53,10 @@ class Product extends Controller
 		
 		var d = new db.Product();
 		var f = sugoi.form.Form.fromSpod(d);
-		f.removeElement( f.getElement("type") );
+		
+		f.removeElement( f.getElement('imageId') );	
+		
+		f.removeElement( f.getElement("type") );		
 		var pt = new form.ProductTypeRadioGroup("type", "type", "1");
 		f.addElement( pt );
 		f.removeElementByName("contractId");
@@ -79,6 +85,9 @@ class Product extends Controller
 	}
 	
 	public function doDelete(p:db.Product) {
+		
+		if (!app.user.canManageContract(p.contract)) throw "Accès interdit";
+		
 		if (checkToken()) {
 			var orders = db.UserContract.manager.search($productId == p.id, false);
 			if (orders.length > 0) {
@@ -96,6 +105,8 @@ class Product extends Controller
 	
 	@tpl('product/import.mtt')
 	function doImport(c:db.Contract, ?args: { confirm:Bool } ) {
+		
+		if (!app.user.canManageContract(c)) throw "Accès interdit";
 			
 		var step = 1;
 		var request = sugoi.tools.Utils.getMultipart(1024 * 1024 * 4);
@@ -146,6 +157,8 @@ class Product extends Controller
 	@tpl("product/categorize.mtt")
 	public function doCategorize(contract:db.Contract) {
 		
+		if (!app.user.canManageContract(contract)) throw "Accès interdit";
+		
 		if (db.CategoryGroup.get(app.user.amap).length == 0) throw Error("/contractAdmin", "Vous devez d'abord définir des catégories avant de pouvoir catégoriser vos produits");
 		
 		//var form = new sugoi.form.Form("cat");
@@ -168,6 +181,9 @@ class Product extends Controller
 	 * @param	contract
 	 */	
 	public function doCategorizeInit(contract:db.Contract) {
+		
+		if (!app.user.canManageContract(contract)) throw "Accès interdit";
+		
 		var data : TaggerInfos = {
 			products:[],
 			categories:[]
@@ -193,6 +209,9 @@ class Product extends Controller
 	}
 	
 	public function doCategorizeSubmit(contract:db.Contract) {
+		
+		if (!app.user.canManageContract(contract)) throw "Accès interdit";
+		
 		var data : TaggerInfos = haxe.Json.parse(app.params.get("data"));
 		
 		db.ProductCategory.manager.unsafeDelete("delete from ProductCategory where productId in (" + Lambda.map(contract.getProducts(), function(t) return t.id).join(",")+")");
@@ -211,4 +230,36 @@ class Product extends Controller
 		
 	}
 	
+	
+	@tpl('product/addimage.mtt')
+	function doAddImage(product:db.Product) {
+		
+		if (!app.user.canManageContract(product.contract)) throw "Accès interdit";
+		
+		view.c = product.contract;
+		view.image = product.image;
+		
+		var request = sugoi.tools.Utils.getMultipart(1024*1024); //1M
+		if (request.exists("image")) {
+			
+			
+			
+			//Image
+			var image = request.get("image");
+			if (image !=null && image.length > 0) {
+				var img = sugoi.db.File.create(image);
+				product.lock();
+				
+				if (product.image != null) {
+					//efface ancienne
+					product.image.lock();
+					product.image.delete();
+				}
+				
+				product.image = img;
+				product.update();
+				throw Ok('/product/addImage/'+product.id,'Image mise à jour');
+			}
+		}
+	}	
 }

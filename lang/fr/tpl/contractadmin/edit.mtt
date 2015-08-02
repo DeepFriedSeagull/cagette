@@ -52,7 +52,7 @@
 				::foreach uo userOrders::
 				<tr>
 					<td>
-						<img src="/img/::uo.product.getImage()::" style="width:32px;height:32px;" />
+						<img src="::uo.product.getImage()::" style="width:32px;height:32px;" />
 					</td>
 					<td>
 						::uo.product.name::	

@@ -61,7 +61,6 @@ class User extends Object{
 	}
 	
 	public function isAmapManager() {
-		//if (isAdmin()) return true;
 		//if (getAmap().contact == null) throw "Cette AMAP n'a pas de responsable général.";
 		var ua = getUserAmap(getAmap());
 		if (ua == null) return false;
@@ -74,21 +73,16 @@ class User extends Object{
 	
 	/**
 	 * Est ce que ce membre a la gestion de ce contrat
-	 * si null, est ce qu'il a la gestion d'un contrat
+	 * si null, est ce qu'il a la gestion d'un des contrat, n'importe lequel (utilse pour afficher 'gestion contrat' dans la nav )
 	 * @param	contract
 	 */
 	public function isContractManager(?contract:db.Contract ) {
 		if (isAdmin()) return true;
-		var ua = getUserAmap(getAmap());
-		if (ua == null) return false;
-		if (ua.rights == null) return false;
-		if (ua.hasRight(Right.ContractAdmin())) return true;
-		
-		if (contract != null) {
-			//return contract.contact.id==this.id && App.current.user.amap.id==contract.amap.id;
-			return ua.hasRight(Right.ContractAdmin(contract.id));
+		if (contract != null) {			
+			return canManageContract(contract);
 		}else {
-			
+			var ua = getUserAmap(getAmap());
+			if (ua == null) return false;
 			for (r in ua.rights) {
 				switch(r) {
 					case Right.ContractAdmin(cid):

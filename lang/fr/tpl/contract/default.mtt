@@ -5,7 +5,7 @@
 	::foreach o orders::
 	<div class="article">
 		
-		
+			<!-- COMMANDES AMAP -->
 			::if o.constOrders.length>0::
 			<h4>Contrats AMAP</h4>		
 			<table class="table table-bordered table-condensed" >
@@ -30,6 +30,7 @@
 			</table>
 			::end::
 			
+			<!-- COMMANDES VARIABLES-->
 			::if count(o.varOrders)>0::
 				::foreach d o.varOrders.keys()::
 					<h4>Commande du ::hDate(Date.fromString(d))::</h4>
@@ -76,7 +77,10 @@
 							</tr>
 						::end::	
 						<tr>
-							<td colspan="4"></td>
+							<th colspan="4">
+								$$edit(Modifier cette commande,/contract/editOrderByDate/::d::)
+								
+							</th>
 							<td>TOTAL</td>
 							<td><b>::formatNum(total):: €</b></td>
 						</tr>

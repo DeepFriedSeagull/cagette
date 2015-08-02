@@ -4,7 +4,13 @@
 	
 	<macro name="confirm(?text)" onclick="return $$jsConfirm(::text::)"/>
 	
-	<macro name="file(id,?def)">::if id == null && def != null::::def::::else::/file/::makeFileSign(id)::.png::end::</macro>
+	<macro name="file(id,?def)">
+		::if id == null && def != null::
+			::def::
+		::else::
+			/file/::makeFileSign(id)::.jpg
+		::end::
+	</macro>
 	
 	<macro name="img(id,?def)"><img src="$$file(::id::,::def::)"/></macro>
 	

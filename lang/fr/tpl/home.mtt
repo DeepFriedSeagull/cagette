@@ -60,7 +60,7 @@
 						<table>
 							<tr>
 								<td>
-									<img src="/img/::c._product.getImage()::" style="margin-right:8px;" />	
+									<img src="::c._product.getImage()::" style="margin-right:8px;max-height:64px;max-width:64px;" />	
 								</td>
 								
 								<td class="name">

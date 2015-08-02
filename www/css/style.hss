@@ -21,6 +21,7 @@ h2,h3,h4{
 }
 a{
 	color:CSS(" #007700 !important");
+	cursor:pointer;
 }
 a.btn{
 	color:CSS(" #333333 !important");
@@ -49,6 +50,7 @@ pre{
 
 body{
 	background:#FFE28B url('/img/bg.gif');
+	//position: relative;
 }
 
 .sqlLog{
@@ -125,13 +127,14 @@ span.panel-title{
 	border: 2px solid #C3A04C;
 }
 
-
+/* Petit tableau contenant descriptif d'un produit */
 table.product{
 	td{
 		padding:8px;	
 	}
 	width:100%;
-	height:115px;
+	
+	height:135px;
 	overflow:auto;
 	//border:1px solid #000000 ;
 	
@@ -164,23 +167,42 @@ table.product{
 	//font-size:80%;
 }
 
-.overlay{
+/*.overlay{
 	position:absolute;
 	width:100%;
 	height:100%;
 	top: 0;
 	left: 0;
-}
-.overlay.background{
+}*/
+
+.overlayBackground{
+	/*position:absolute;
+	top:0;
+	left:0;
 	background:#000;
 	opacity:0.5;
 	width:100%;
-	height:100%;
+	height:100%;*/
+	position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 10;
 }
 .overlayContent{
+	/*position:fixed;
 	width:50%;
-	margin:auto;
-	margin-top:150px;
+	*/
+	width: 50%;
+    position: fixed;
+    
+    left: 25%;
+    margin:auto;
+	top: 150px;
+	
+    z-index: 11;
 	
 	.article{
 		padding:24px;

@@ -15,7 +15,7 @@
 		<table class="product">
 			<tr>
 				<td style="vertical-align:top;">
-					<img src="/img/::p.getImage()::" />	
+					<a onclick="_.overlay('/shop/productInfo/::p.id::')" ><img src="::p.getImage()::" style="width:64px;height:64px;" /></a>	
 				</td>
 				<td>
 					<h4>
@@ -24,7 +24,7 @@
 					<span class="price">::p.price:: €</span>
 										
 					<div>
-						<a class="btn btn-default btn-xs" href="#" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	
+						<a class="btn btn-default btn-xs" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	
 					</div>
 					
 				</td>

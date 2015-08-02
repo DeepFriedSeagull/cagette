@@ -82,7 +82,7 @@
 							::set total = total + t::
 						::else::
 							::formatNum(p):: €
-							::set total = total + t::
+							::set total = total + p::
 						::end::
 					</td>
 					<td>
