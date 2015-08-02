@@ -1,0 +1,79 @@
+::use 'design.mtt'::
+<div id="content" class="col-md-8">
+	<div class="article">
+		<h2>Modifier la commande livrée le ::hDate(date)::</h2>
+		
+		<p>
+			Vous pouvez modifier ici une commande déjà réalisée. Si vous souhaitez enlever un article, mettez simplement la quantité à zéro.<br/>
+			Vous ne pourrez pas forcément modifier tous les articles car la commande peut être close pour certains fournisseurs.
+		</p>
+		
+		<form name="order" id="order" method="POST" action="">
+			<input type="hidden" name="token" value="::token::"/>
+			
+			<table class="table table-bordered">
+			<tr>
+				
+				<th>Produit</th>
+				<th>P.U</th>
+				<th>Sous-total</th>
+				<th>Frais</th>
+				<th>Total</th>
+				<th>Quantité</th>
+			</tr>
+			::set total = 0::
+			::foreach o orders::
+			<tr>
+				<td>
+					<a href="#" onclick="_.overlay('/shop/productInfo/::o.productId::')">
+						<img src="::o.productImage::" style="width:32px;height:32px;" />
+						::o.quantity:: x ::o.productName::
+					</a>
+				</td>
+				<td>
+					::o.productPrice::&nbsp;&euro;
+				</td>
+				<td>
+					::o.subTotal::&nbsp;&euro;
+				</td>
+				<td>
+					$$nullSafe(::o.fees::)
+				</td>
+				<td>
+					::o.total::&nbsp;&euro;
+				</td>
+				<td>
+					::if o.canModify::
+					<input type="text" class="form-control" name="product::o.productId::" id="product::o.productId::" value="::o.quantity::" />
+					::else::
+					<span style="color:#AAA">Commande close ou déjà payée</span>
+					::end::
+				</td>
+				
+				::set total = total + o.total::
+			</tr>
+				
+			::end::
+			
+
+			<tr>
+				<th colspan="3"></th>
+				<th>TOTAL</th>
+				<th>::roundTo(total,2)::€</th>
+				<th></th>
+			</tr>
+		</table>
+		
+		
+		
+		
+		
+		<input type="submit" class="btn btn-primary" value="Mettre à jour la commande" name="submit" id="submit" />
+		
+		</form>
+	
+	</div>
+</div>
+
+
+::end::
