@@ -30,6 +30,9 @@ class Amap extends Object
 	
 	public var flags:SFlags<AmapFlags>;
 	
+	@:relation(imageId)
+	public var image : SNull<sugoi.db.File>;
+	
 	public function new() 
 	{
 		super();

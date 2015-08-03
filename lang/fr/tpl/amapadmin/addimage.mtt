@@ -1,0 +1,32 @@
+::use 'amapadmin/design.mtt'::
+	
+
+<h2>Définir un logo</h2>
+
+
+<div class="row">
+	
+<div class="col-md-6">
+	<form action="" method="POST" enctype="multipart/form-data">
+		<input name="image" type="file" class="btn btn-default"/>
+		
+		<br/>		
+		Format : JPG, GIF ou PNG <br/>
+		<br/>
+		
+		<input type="submit" value="Envoyer" class="btn btn-primary" />
+	</form>
+	<br/>	
+	
+</div>
+
+<div class="col-md-6" ::cond image!=null:: >
+
+	<img src="/file/::file(image.id)::.jpg" class="img-thumbnail" />
+</div>
+	
+</div>
+
+
+
+::end::

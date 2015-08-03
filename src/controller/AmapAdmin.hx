@@ -27,6 +27,43 @@ class AmapAdmin extends Controller
 		view.contractsNum = app.user.amap.getActiveContracts().length;
 	}
 	
+	@tpl("amapadmin/addimage.mtt")
+	function doAddimage() {
+		if (!app.user.isAmapManager()) throw "Vous n'avez pas accès a cette section";
+		
+		var user = app.user;
+		view.image = user.amap.image;
+		
+		var request = new Map();
+		try {
+			request = sugoi.tools.Utils.getMultipart(1024 * 1024); //1Mb	
+		}catch (e:Dynamic) {
+			throw Error("/amapadmin", "L'image envoyée est trop lourde. Le poids maximum autorisé est de 1 Mo");
+		}
+		
+		if (request.exists("image")) {
+			
+			//Image
+			var image = request.get("image");
+	
+			if (image !=null && image.length > 0) {
+				var img = sugoi.db.File.create(image,request.get("image_filename"));
+				
+				user.amap.lock();
+				
+				if (user.amap.image != null) {
+					//efface ancienne
+					user.amap.image.lock();
+					user.amap.image.delete();
+				}
+				
+				user.amap.image = img;
+				user.amap.update();
+				throw Ok('/amapadmin/','Image mise à jour');
+			}
+		}
+		
+	}
 	
 	
 	@tpl("amapadmin/rights.mtt")
@@ -67,7 +104,7 @@ class AmapAdmin extends Controller
 
 	}
 	
-	@admin
+	/*@admin
 	public function doMigrateRights() {
 		var users = new Map<Int,db.User>();
 		var amaps = db.Amap.manager.all();
@@ -95,7 +132,7 @@ class AmapAdmin extends Controller
 		//}
 		
 		
-	}
+	}*/
 	
 	@tpl("form.mtt")
 	public function doEditRight(?u:db.User) {

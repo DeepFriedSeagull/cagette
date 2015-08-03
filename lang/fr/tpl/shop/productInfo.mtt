@@ -7,7 +7,7 @@
 			<h2>::p.name::</h2>
 			
 			<p ::cond p.desc!=null::>
-				::p.desc::
+				::raw nl2br(p.desc)::
 			</p>
 			
 			<span class="price">::formatNum(p.price):: € TTC</span>

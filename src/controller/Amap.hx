@@ -21,6 +21,9 @@ class Amap extends Controller
 		
 	}
 	
+	
+	
+	
 	@tpl("form.mtt")
 	function doEdit() {
 		
@@ -28,6 +31,7 @@ class Amap extends Controller
 		
 		var form = Form.fromSpod(app.user.amap);
 		form.removeElement(form.getElement("vatRates"));
+		form.removeElement(form.getElement("imageId"));
 	
 		if (form.checkToken()) {
 			form.toSpod(app.user.amap);

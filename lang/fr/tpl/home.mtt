@@ -143,8 +143,18 @@
 </div>
 <div class="col-md-4">
 	
-	<div class="block" ::cond user._amap.txtHome!=null && user._amap.txtHome!=""::>
-		::raw nl2br(user._amap.txtHome)::
+	
+	
+	
+	<div class="block" >
+		
+		::if user._amap._image!=null::
+		<img src="::file(user._amap._image)::" style="margin:auto;display: block;" /><br/>
+		::end::
+		
+		::if user._amap.txtHome!=null && user._amap.txtHome!=""::
+			::raw nl2br(user._amap.txtHome)::
+		::end::
 		
 	</div>
 	

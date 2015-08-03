@@ -8,7 +8,6 @@
 		
 		<ul class="nav nav-tabs nav-stacked" >
 			
-			<li><a href="/amap/edit">Propriétés</a></li>
 			<li><a href="/amapadmin/rights/">Droits et accès</a></li>
 			<li><a href="/amapadmin/vatRates/">Taux de TVA</a></li>
 			<li><a href="/amapadmin/categories/">Catégories</a></li>

@@ -39,7 +39,7 @@ class Product extends Object
 			var e = Type.createEnumIndex(ProductType, type);		
 			return "/img/"+Std.string(e).substr(2).toLowerCase()+".png";	
 		}else {
-			return "/file/" + App.current.view.file(image.id) + ".jpg";
+			return App.current.view.file(image);
 		}
 		
 		

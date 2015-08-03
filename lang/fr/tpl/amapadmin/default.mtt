@@ -1,11 +1,33 @@
 ::use 'amapadmin/design.mtt'::
 
-	<h3>Mon ::wAmap()::</h3>		
+	<h3>::user._amap.name::</h3>		
 	
-	<p>
-		<strong>::membersNum::</strong> foyers adhérents.<br/>
-		<strong>::contractsNum::</strong> contrats en cours.<br/>
-	</p>
+	<div class="row">
+		
+		<div class="col-md-6">
+			<p>
+				<strong>::membersNum::</strong> foyers adhérents.<br/>
+				<strong>::contractsNum::</strong> contrats en cours.<br/>	
+			</p>
+			<p>
+				
+			</p>
+			
+		</div>
+		
+		<div class="col-md-6">
+			
+			::if user._amap._image!=null::
+			<img src="/file/::file(user._amap._image.id)::.jpg"/>
+			::end::
+		</div>
+		
+		<div class="col-md-12">
+			$$edit(Modifier les propriétés,/amap/edit)
+				
+			<a href="/amapadmin/addimage/" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-picture"></span>&nbsp;Définir un logo</a>
+		</div>
+	</div>
 
 
 ::end::

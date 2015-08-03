@@ -32,7 +32,7 @@
 		
 		::if user != null::
 			
-			<div class="row">
+			<div class="row" style="margin-top:10px;">
 				<div class="col-md-7">
 					<h1>
 					::if user.getAmap()!=null::
