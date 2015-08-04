@@ -17,9 +17,9 @@
 	::elseif step==2::
 		<h4>Personnes à importer</h4>
 		<div style="margin-bottom:24px;">
-			::if data!=null && data.length>0::
+			::if (data!=null && data.length>0) || (data2!=null && data2.length>0)::
 			
-			<table class="table" style="font-size:11px;background-color:#FFF;">
+			<table class="table table-bordered" style="font-size:11px;background-color:#FFF;">
 				<tr>
 					<th>Prénom</th>
 					<th>Nom</th>
@@ -44,6 +44,37 @@
 				</tr>
 				::end::
 			</table>
+			
+			
+			
+			
+			<h4>Personnes déjà inscrites sur Cagette.net</h4>
+			<table class="table table-bordered" style="font-size:11px;color:#666666;background-color:#FFF;">
+			<tr>
+				<th>Prénom</th>
+				<th>Nom</th>
+				<th>Email</th>
+				<th>Téléphone</th>
+				<th>Prénom conjoint</th>
+				<th>Nom conjoint</th>
+				<th>Email conjoint</th>
+				<th>Téléphone</th>
+				<th>Adresse 1</th>
+				<th>Adresse 2</th>
+				<th>Code postal</th>
+				<th>Ville</th>
+			</tr>
+			::foreach d data2::
+			<tr>
+				::foreach r d::
+				<td>
+					::if r!=null:: ::r:: ::end::
+				</td>
+				::end::
+			</tr>
+			::end::
+			</table>
+			
 			<div class="alert alert-error">
 					<b>Attention</b>
 					<p>
@@ -52,7 +83,7 @@
 					</p>
 					<a href="/member/import">Recommencer</a>
 				</div>
-			<a href="/member/import?confirm=1" class="btn btn-danger">Importer ces personnes dans la base de données</a>
+				<a href="/member/import?confirm=1" class="btn btn-danger">Finaliser l'importation</a>
 			::else::
 				
 				<div class="alert alert-error">
@@ -64,35 +95,7 @@
 			::end::
 		</div>
 		
-		<div ::cond data2.length > 0:: >
-			
-			<h4>Personnes déjà présentes dans la base de données</h4>
-			<table class="table" style="font-size:11px;color:#666666;background-color:#FFF;">
-				<tr>
-			<th>Prénom</th>
-			<th>Nom</th>
-			<th>Email</th>
-			<th>Téléphone</th>
-			<th>Prénom conjoint</th>
-			<th>Nom conjoint</th>
-			<th>Email conjoint</th>
-			<th>Téléphone</th>
-			<th>Adresse 1</th>
-			<th>Adresse 2</th>
-			<th>Code postal</th>
-			<th>Ville</th>
-		</tr>
-			::foreach d data2::
-			<tr>
-				::foreach r d::
-				<td>
-					::if r!=null:: ::r:: ::end::
-				</td>
-				::end::
-			</tr>
-			::end::
-			</table>
-		</div>
+		
 	::elseif step==3::
 		::if numImported>0::
 		
@@ -131,7 +134,7 @@
 		<li>Pour commencer, <a href="/adherents.xls">téléchargez ce fichier de démonstration.</a></li>
 		<li>Remplissez correctement ce fichier, ou modifiez votre fichier existant pour respecter scrupuleusement l'ordre des colonnes.</li>
 		<li>Une fois votre fichier rempli, cliquez sur "enregistrer sous" dans votre tableur, et choisissez le format "CSV"</li>
-		<li>Choisissez les options suivantes : caractère de séparation : <b>point virgule</b>, encodage : <b>Unicode UTF-8</b></li>
+		<li>Choisissez les options suivantes : caractère de séparation : <b>virgule</b>, encodage : <b>Unicode UTF-8</b></li>
 		<li>Enregitrez votre fichier</li>
 		<li>Ensuite, cliquez sur le bouton "choisissez un fichier" ci dessus et envoyez votre fichier</li>
 	</ul>

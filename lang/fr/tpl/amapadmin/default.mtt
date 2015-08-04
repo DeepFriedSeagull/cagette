@@ -18,7 +18,7 @@
 		<div class="col-md-6">
 			
 			::if user._amap._image!=null::
-			<img src="/file/::file(user._amap._image.id)::.jpg"/>
+			<img src="::file(user._amap._image)::"/>
 			::end::
 		</div>
 		

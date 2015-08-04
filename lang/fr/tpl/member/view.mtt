@@ -5,7 +5,7 @@
 	<div class="article">
 		
 		<div style="font-weight:bold;font-size:120%;">::member.firstName:: ::member.lastName::
-		::if member.firstName2!=null::
+		::if member.firstName2!=null && member.lastName2!=null::
 			& ::member.firstName2:: ::member.lastName2::
 			
 		::end::</div>

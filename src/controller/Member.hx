@@ -233,52 +233,20 @@ class Member extends Controller
 	function doImport(?args:{confirm:Bool}) {
 			
 		var step = 1;
-		var request = Utils.getMultipart(1024 * 1024 * 4);
+		var request = Utils.getMultipart(1024 * 1024 * 4); //4mb
 		
 		//on recupere le contenu de l'upload
-		if (request.get("file") != null) {
+		var data = request.get("file");
+		if ( data != null) {
 			
-			var data = request.get("file").split("\n");
-			var unregistred = [];
-			//fix fields like this : "23 allée des Taupes; Camboulis"
-			for (d in data) {				
-				var x = d.split('"');
-				for (i in 0...x.length) {
-					if (i % 2 == 1) x[i] = StringTools.replace(x[i], ";", ",");
-				}
-				d = x.join("");
-				
-				unregistred.push(d.split(";"));
-				
-				for (u in unregistred) {
-					for (i in 0...u.length) {
-						u[i] = StringTools.replace(u[i], ",", ";");
-					}
-				}
-			}
+			var csv = new sugoi.tools.Csv();
+			var unregistred = csv.importDatas(data);
+			
+			/*var t = new sugoi.helper.Table("table");
+			trace(t.toString(unregistred));*/
 			
 			//cleaning
 			for ( user in unregistred.copy() ) {
-				//vire lignes vides
-				if (user == null || user.length <= 1) {
-					unregistred.remove(user);
-					continue;
-				}
-				
-				
-				for (i in 0...user.length) {
-					//mets les champs "" en null
-					if (user[i] == "") {
-						user[i] = null;
-						continue;
-					}
-					
-					//clean espaces et autres caracteres inutiles
-					user[i] = StringTools.trim(user[i]);
-					user[i] = StringTools.replace(user[i], "\n", "");
-					user[i] = StringTools.replace(user[i], "\t", "");
-					user[i] = StringTools.replace(user[i], "\r", "");
-				}
 				
 				//check nom+prenom
 				if (user[0] == null || user[1] == null) throw "Vous devez remplir le nom et prénom de la personne. <br/>Cette ligne est incomplète : " + user;
@@ -289,8 +257,6 @@ class Member extends Controller
 				
 				App.log(user);
 			}
-			
-			unregistred.shift(); //vire les headers du csv
 			
 			//utf-8 check
 			for ( row in unregistred.copy()) {
@@ -314,11 +280,16 @@ class Member extends Controller
 			for (r in unregistred.copy()) {
 				var firstName = r[0];
 				var lastName = r[1];
+				var email = r[2];
 				var firstName2 = r[4];
 				var lastName2 = r[5];
-					
-				var us = db.User.manager.search(
-					/*app.user.amapId == $amapId &&*/ (
+				var email2 = r[6];
+				
+				var us = db.User.getSimilar(firstName, lastName, email, firstName2, lastName2, email2);
+				
+				
+				/*var us = db.User.manager.search(
+					(
 					
 						($firstName.like(firstName) && $lastName.like(lastName)) || 
 						($firstName2!=null && $firstName2.like(firstName) && $lastName2.like(lastName)) ||
@@ -332,7 +303,7 @@ class Member extends Controller
 						($email2!=null && $email2.like(r[6]))
 					)
 					
-				,false);
+				,false);*/
 				if (us.length > 0) {
 					//trace(r[0]+" "+r[1]+" existe deja : "+us);
 					unregistred.remove(r);
@@ -341,15 +312,19 @@ class Member extends Controller
 			}
 			
 			
-			app.session.data.csvImportedData = unregistred;
-			//trace("registred "+registred);
+			app.session.data.csvUnregistered = unregistred;
+			app.session.data.csvRegistered = registred;
+			
 			view.data = unregistred;
 			view.data2 = registred;
 			step = 2;
 		}
 		
+		
 		if (args != null && args.confirm) {
-			var i : Iterable<Dynamic> = cast app.session.data.csvImportedData;
+			
+			//import unregistered members
+			var i : Iterable<Dynamic> = cast app.session.data.csvUnregistered;
 			for (u in i) {
 				if (u[0] == null || u[0] == "") continue;
 								
@@ -384,15 +359,41 @@ class Member extends Controller
 				ua.insert();
 			}
 			
-			view.numImported = app.session.data.csvImportedData.length;
-			app.session.data.csvImportedData = null;
+			//import registered members
+			var i : Iterable<Dynamic> = cast app.session.data.csvRegistered;
+			for (u in i) {
+				var firstName = u[0];
+				var lastName = u[1];
+				var email = u[2];
+				var firstName2 = u[4];
+				var lastName2 = u[5];
+				var email2 = u[6];
+				
+				var us = db.User.getSimilar(firstName, lastName, email, firstName2, lastName2, email2);
+				var userAmaps = db.UserAmap.manager.search($amap == app.user.amap && $userId in Lambda.map(us, function(u) return u.id), false);
+				
+				if (userAmaps.length == 0) {
+					//il existe dans cagette, mais pas pour ce groupe
+					var ua = new db.UserAmap();
+					ua.userId = us.first().id;
+					ua.amap = app.user.amap;
+					ua.insert();
+				}
+				
+				
+			}
+			
+			view.numImported = app.session.data.csvUnregistered.length + app.session.data.csvRegistered.length;
+			app.session.data.csvUnregistered = null;
+			app.session.data.csvRegistered = null;
 			
 			step = 3;
 		}
 		
 		if (step == 1) {
 			//reset import when back to import page
-			app.session.data.csvImportedData =	null;
+			app.session.data.csvUnregistered = null;
+			app.session.data.csvRegistered = null;
 		}
 		
 		view.step = step;
