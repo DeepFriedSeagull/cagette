@@ -29,11 +29,11 @@ class App {
 	
 	public function overlay(url:String) {
 	
-		App.j("body").append("<div class='overlayBackground'></div>");
+		App.j("body").append("<div class='overlayBackground' onclick='_.closeOverlay()'></div>");
 		
 		var r = new haxe.Http(url);
 		r.onData = function(data) {
-			App.j("body").append("<div class='overlayContent'>" + data + "<a class='btn btn-default' onclick='_.closeOverlay()'><span class='glyphicon glyphicon-remove'></span> Fermer</a></div>");
+			App.j("body").append("<div class='overlayContent' >" + data + "<a class='btn btn-default' onclick='_.closeOverlay()'><span class='glyphicon glyphicon-remove'></span> Fermer</a></div>");
 			
 		}
 		r.request();

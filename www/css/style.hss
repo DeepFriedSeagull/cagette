@@ -200,7 +200,7 @@ table.product{
     
     left: 25%;
     margin:auto;
-	top: 150px;
+	top:20px;
 	
     z-index: 11;
 	

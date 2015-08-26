@@ -10,6 +10,7 @@
 			<li><a href="/contractAdmin/view/::c.id::">Récapitulatif</a></li>
 			<li><a href="/contract/edit/::c.id::">Modifier contrat</a></li>
 			<li><a href="/contractAdmin/products/::c.id::">Produits</a></li>
+			<!--<li><a ::cond c.hasStockManagement():: href="/contractAdmin/stocks/::c.id::">Stocks</a></li>-->
 			<li><a href="/contractAdmin/distributions/::c.id::">Livraisons</a></li>
 			<li><a href="/contractAdmin/orders/::c.id::">Commandes</a></li>
 			<li><a href="/contractAdmin/stats/::c.id::">Statistiques</a></li>

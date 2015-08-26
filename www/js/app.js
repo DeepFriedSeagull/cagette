@@ -27,10 +27,10 @@ App.prototype = {
 		return new Tagger(cid);
 	}
 	,overlay: function(url) {
-		js.JQuery("body").append("<div class='overlayBackground'></div>");
+		js.JQuery("body").append("<div class='overlayBackground' onclick='_.closeOverlay()'></div>");
 		var r = new haxe_Http(url);
 		r.onData = function(data) {
-			js.JQuery("body").append("<div class='overlayContent'>" + data + "<a class='btn btn-default' onclick='_.closeOverlay()'><span class='glyphicon glyphicon-remove'></span> Fermer</a></div>");
+			js.JQuery("body").append("<div class='overlayContent' >" + data + "<a class='btn btn-default' onclick='_.closeOverlay()'><span class='glyphicon glyphicon-remove'></span> Fermer</a></div>");
 		};
 		r.request();
 	}

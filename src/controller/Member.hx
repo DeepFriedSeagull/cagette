@@ -402,8 +402,6 @@ class Member extends Controller
 	@tpl("user/insert.mtt")
 	public function doInsert() {
 		
-		if (!app.user.isContractManager()) return;
-		
 		var e = new event.Event();
 		e.id = "wantToAddMember";
 		App.current.eventDispatcher.dispatch(e);

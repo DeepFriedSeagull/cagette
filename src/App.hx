@@ -106,8 +106,8 @@ class App extends sugoi.BaseApp {
 		out.set("pname", "Produit");
 		out.set("membershipRenewalDate", "Adhésions : Date de renouvellement");
 		out.set("membershipPrice", "Adhésions : Coût de l'adhésion");
-		out.set("UsersCanOrder", "Les adhérents peuvent saisir leur commande");
-		out.set("OrdersManuallyEnabled", "Le contrat est actuellement ouvert aux commandes");
+		out.set("UsersCanOrder", "Les adhérents peuvent saisir leur commande en ligne");
+		out.set("StockManagement", "Gestion des stocks");
 		out.set("contact", "Responsable");
 		out.set("PercentageOnOrders", "Ajouter des frais au pourcentage de la commande");
 		out.set("percentageValue", "Pourcentage des frais");

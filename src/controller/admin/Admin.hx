@@ -24,15 +24,9 @@ class Admin extends Controller {
 	
 	function doMigrate() {
 		
-		//fix contrat miel
-		
-		//var c = db.Contract.manager.get(90);
-		//var pids = Lambda.map(c.getProducts(), function(p) return p.id);
-		//var d = db.Distribution.manager.get(900);
-		//for ( o in db.UserContract.manager.search($productId in pids, true)) {
-			//o.distribvaution  = d;
-			//o.update();
-			//trace(o.user.getName()+" a commandé "+o.product);
+		//for ( c in db.Contract.manager.all(true)) {
+			//c.flags.unset(db.Contract.ContractFlags.StockManagement);
+			//c.update();
 		//}
 	}
 	

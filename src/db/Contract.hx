@@ -3,8 +3,8 @@ import sys.db.Object;
 import sys.db.Types;
 
 enum ContractFlags {
-	UsersCanOrder;  		//adhérents peuvent saisir eux meme la commande
-	OrdersManuallyEnabled; 	//fermeture/ouverture manuelle des commandes
+	UsersCanOrder;  		//adhérents peuvent saisir eux meme la commande en ligne
+	StockManagement; 		//gestion des commandes
 	PercentageOnOrders;		//calcul d'une commission supplémentaire 
 	
 	//LogisticMgmt;		//gestion logistique
@@ -49,10 +49,13 @@ class Contract extends Object
 	}
 	
 	public function isUserOrderAvailable():Bool {
-		return flags.has(OrdersManuallyEnabled) && flags.has(UsersCanOrder);
+		return flags.has(UsersCanOrder);
 	}
 	public function hasPercentageOnOrders():Bool {
 		return flags.has(PercentageOnOrders);
+	}
+	public function hasStockManagement():Bool {
+		return flags.has(StockManagement);
 	}
 	
 	/**

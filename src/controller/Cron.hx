@@ -1,4 +1,5 @@
 package controller;
+import sugoi.db.Cache;
 
 class Cron extends Controller
 {
@@ -90,7 +91,7 @@ class Cron extends Controller
 		
 		//on vérifie dans le cache du jour que ces distrib n'ont pas deja été traitées lors d'un cron précédent
 		var cacheId = Date.now().toString().substr(0, 10)+Std.string(flag);
-		var dist :Array<Int> = db.Cache.get(cacheId);
+		var dist :Array<Int> = sugoi.db.Cache.get(cacheId);
 		if (dist != null) {
 			for (d in Lambda.array(distribs)) {
 				if (Lambda.exists(dist, function(x) return x == d.id)) {
@@ -108,7 +109,7 @@ class Cron extends Controller
 		
 		//stocke cache
 		for (d in distribs) dist.push(d.id);
-		db.Cache.set(cacheId, dist,24*60*60);
+		Cache.set(cacheId, dist,24*60*60);
 		
 		var distribsByContractId = new Map<Int,db.Distribution>();
 		for (d in distribs) distribsByContractId.set(d.contract.id, d);

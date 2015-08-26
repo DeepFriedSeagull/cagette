@@ -22,12 +22,23 @@ class Shop extends sugoi.BaseController
 	 */
 	public function getProducts():Array<ProductInfo> {
 		var contracts = db.Contract.getActiveContracts(app.user.amap);
+		
+		//que les contrats a commande variables
 		for (c in Lambda.array(contracts)) {
 			if (c.type != db.Contract.TYPE_VARORDER) {
 				contracts.remove(c);
 			}
 		}
-		var products = db.Product.manager.search($contractId in Lambda.map(contracts, function(c) return c.id),{orderBy:name}, false);
+		var products = db.Product.manager.search($contractId in Lambda.map(contracts, function(c) return c.id), { orderBy:name }, false);
+		
+		//retire les produits avec un stock à zero
+		for (p in products) {
+			if (p.contract.hasStockManagement() && p.stock <= 0) {
+				products.remove(p);
+			}
+			
+		}
+		
 		return Lambda.array(Lambda.map(products, function(p) return p.infos()));
 	}
 	
@@ -64,7 +75,7 @@ class Shop extends sugoi.BaseController
 		var pids = Lambda.map(order.products, function(p) return p.productId);
 		var products = db.Product.manager.search($id in pids, false);
 		var _cids = Lambda.map(products, function(p) return p.contract.id);
-		var distribs = db.Distribution.manager.search(($contractId in _cids) && $date > Date.now(), { orderBy:date, limit:5 }, false);
+		var distribs = db.Distribution.manager.search(($contractId in _cids) && $date >= Date.now(), { orderBy:date, limit:5 }, false);
 		
 		//dedups cids
 		var cids = new Map<Int,Int>();

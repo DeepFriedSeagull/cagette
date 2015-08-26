@@ -83,8 +83,8 @@
 	<div class="block">
 		<h3>Sélections</h3>
 		<ul>
-			<li><a href="/member/">Tous les amapiens</a></li>
-			<li><a href="/member/?select=nocontract">Sans contrats</a></li>
+			<li><a href="/member/">Tout le monde</a></li>
+			<li><a href="/member/?select=nocontract">Sans contrats/commandes</a></li>
 			<li ::cond user._amap.hasMembership()::><a href="/member/?select=nomembership">Adhésion à renouveller</a></li>
 		</ul>
 		

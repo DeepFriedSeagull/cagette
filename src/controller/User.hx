@@ -54,9 +54,11 @@ class User extends Controller
 	}
 	
 	@tpl("user/choose.mtt")
-	function doChoose(?args:{amap:db.Amap}) {
+	function doChoose(?args: { amap:db.Amap } ) {
+		if (app.user == null) throw "Vous n'êtes pas connecté";
 		var amaps = db.UserAmap.manager.search($user == app.user, false);
-		if (amaps.length == 0) throw "Vous ne faites partie d'aucune AMAP";
+		
+		if (amaps.length == 0) throw "Vous ne faites partie d'aucun groupe";
 		if (amaps.length == 1) {
 			//qu'une amap
 			app.session.data.amapId = amaps.first().amapId;

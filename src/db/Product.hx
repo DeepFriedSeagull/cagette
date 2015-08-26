@@ -20,6 +20,7 @@ class Product extends Object
 	public var vat : SFloat;
 	
 	public var desc : SNull<SText>;
+	public var stock : SNull<SInt>;
 	
 	public var type : SInt;	//icones
 	@:relation(imageId)

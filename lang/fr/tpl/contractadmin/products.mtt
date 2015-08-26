@@ -3,7 +3,17 @@
 		
 	<h3>Produits</h3>
 	
-	<table class="table">
+	<table class="table table-striped">
+		<tr>
+			<th></th>
+			<th>Réf.</th>
+			<th>Nom</th>
+			<th>Prix</th>
+			::if c.hasStockManagement()::
+			<th>Stock</th>
+			::end::
+			<th></th>
+		</tr>
 		::foreach p c.getProducts()::
 		<tr>
 			<td>
@@ -14,7 +24,26 @@
 			<td>$$nullSafe(::p.ref::)</td>
 			<td>::p.name::</td>
 			<td>::formatNum(p.price):: &euro;</td>
-
+			<td>
+			::if c.hasStockManagement() ::
+				::if p.stock==null::
+					-
+				::else::
+					::if p.stock <= 10::
+						<span style="color:red;font-weight:bold;">
+							
+							::p.stock::
+						</span>
+					::else::
+						::p.stock::
+					::end::
+				
+					
+				::end::
+				
+			
+			::end::
+			</td>
 			<td>
 				$$edit(modifier,/product/edit/::p.id::)
 				

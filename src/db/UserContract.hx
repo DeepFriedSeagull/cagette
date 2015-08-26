@@ -121,14 +121,15 @@ class UserContract extends Object
 	 */
 	public static function make(user:db.User, quantity:Int, productId:Int, ?distribId:Int) {
 		
-	
+		if (quantity <= 0) return;
+		
 		//vérifie si il n'y a pas de commandes existantes avec les memes paramètres
-		var orders = new List<db.UserContract>();
+		var prevOrders = new List<db.UserContract>();
 		
 		if (distribId == null) {
-			orders = db.UserContract.manager.search($productId==productId && $user==user, true);
+			prevOrders = db.UserContract.manager.search($productId==productId && $user==user, true);
 		}else {
-			orders = db.UserContract.manager.search($productId==productId && $user==user && $distributionId==distribId, true);
+			prevOrders = db.UserContract.manager.search($productId==productId && $user==user && $distributionId==distribId, true);
 		}
 		
 		var o = new db.UserContract();
@@ -137,8 +138,8 @@ class UserContract extends Object
 		o.user = user;
 		if (distribId != null) o.distributionId = distribId;
 		
-		if (orders.length > 0) {
-			for (prevOrder in orders) {
+		if (prevOrders.length > 0) {
+			for (prevOrder in prevOrders) {
 				if (!prevOrder.paid) {
 					o.quantity += prevOrder.quantity;
 					prevOrder.delete();
@@ -148,6 +149,97 @@ class UserContract extends Object
 		
 		o.insert();
 		
-		//TODO : gestion des stocks
+		//stocks
+		if (o.product.stock != null) {
+			var c = o.product.contract;
+			if (c.hasStockManagement()) {
+				if (o.product.stock == 0) {
+					App.current.session.addMessage("Il n'y a plus de '" + o.product.name + "' en stock nous l'avons donc retiré de votre commande", true);
+					return;
+					
+				}else if (o.product.stock - quantity < 0) {
+					var canceled = quantity - o.product.stock;
+					o.quantity -= canceled;
+					o.update();
+					
+					App.current.session.addMessage("Nous avons réduit votre commande de '" + o.product.name + "' à "+o.quantity+" articles car il n'y a plus de stock disponible", true);
+					o.product.lock();
+					o.product.stock = 0;
+					o.product.update();
+					
+				}else {
+					o.product.lock();
+					o.product.stock -= quantity;
+					o.product.update();	
+				}
+				
+			}	
+		}
+		
+		
+	}
+	
+	
+	/**
+	 * Modifie une commande (la quantité)
+	 */
+	public static function edit(order:db.UserContract, newquantity:Int) {
+		
+		if (newquantity == order.quantity) return;
+		
+		order.lock();
+		
+		//stocks
+		if (order.product.stock != null) {
+			var c = order.product.contract;
+			if (c.hasStockManagement()) {
+				
+				
+				if (newquantity < order.quantity) {
+					
+					//on commande moins que prévu : incrément de stock						
+					order.product.lock();
+					order.product.stock +=  (order.quantity-newquantity);
+					order.product.update();
+					
+				}else {
+				
+					//on commande plus que prévu : décrément de stock
+					
+					var addedquantity = newquantity - order.quantity;
+					
+					if (order.product.stock - addedquantity < 0) {
+						//modification de commande
+						newquantity = order.quantity + order.product.stock;
+						
+						App.current.session.addMessage("Nous avons réduit votre commande de '" + order.product.name + "' à "+newquantity+" articles car il n'y a plus de stock disponible", true);
+						order.product.lock();
+						order.product.stock = 0;
+						order.product.update();
+						
+					}else {
+						order.product.lock();
+						order.product.stock -= addedquantity;
+						order.product.update();	
+					}
+					
+				}
+				
+				
+				
+				
+			}	
+		}
+		
+		
+		if (newquantity == 0) {
+			order.delete();
+		}else {
+			order.quantity = newquantity;
+			order.update();	
+		}
+		
+		
+		
 	}
 }

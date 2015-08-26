@@ -305,18 +305,11 @@ class Contract extends Controller
 					var pid = Std.parseInt(k.substr("product".length));
 					var order = Lambda.find(orders, function(uo) return uo.product.id == pid);
 					if (order == null) throw "Erreur, impossible de retrouver la commande";
-					var quantity = Std.parseInt(param);
-					order.lock();
-					if (quantity == 0) {
-						
-						order.delete();
-					}else {
-						if (!order.paid && order.product.contract.isUserOrderAvailable()) {
-							order.quantity = quantity;						
-							order.update();		
-						}
-						
-						
+					var quantity = Std.int(Math.abs(Std.parseInt(param)));
+
+					if (!order.paid && order.product.contract.isUserOrderAvailable()) {
+						//met a jour la commande
+						db.UserContract.edit(order, quantity);
 					}
 					
 				}
