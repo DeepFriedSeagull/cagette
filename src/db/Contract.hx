@@ -52,7 +52,7 @@ class Contract extends Object
 		return flags.has(UsersCanOrder);
 	}
 	public function hasPercentageOnOrders():Bool {
-		return flags.has(PercentageOnOrders);
+		return flags.has(PercentageOnOrders) && percentageValue!=null && percentageValue!=0;
 	}
 	public function hasStockManagement():Bool {
 		return flags.has(StockManagement);
@@ -98,9 +98,16 @@ class Contract extends Object
 		return Lambda.array(out);
 	}
 	
-	public function getOrders():Array<db.UserContract> {
+	public function getOrders(?d:db.Distribution):Array<db.UserContract> {
+		if (type == TYPE_VARORDER && d == null) throw "Il faut spécifier une livraison pour ce type de contrat";
+		
 		var pids = getProducts().map(function(x) return x.id);
-		var ucs = UserContract.manager.search($productId in pids,{orderBy:userId}, false);
+		var ucs = new List<db.UserContract>();
+		if (d != null) {
+			ucs = UserContract.manager.search( ($productId in pids) && $distribution==d,{orderBy:userId}, false);	
+		}else {
+			ucs = UserContract.manager.search($productId in pids,{orderBy:userId}, false);	
+		}		
 		return Lambda.array(ucs);
 	}
 	

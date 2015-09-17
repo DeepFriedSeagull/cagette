@@ -26,6 +26,10 @@ class View extends sugoi.BaseView {
 	}
 	
 	
+	function getUser(uid:Int):db.User {
+		return db.User.manager.get(uid, false);
+	}
+	
 	/**
 	 * Round a number to r digits after coma.
 	 * 

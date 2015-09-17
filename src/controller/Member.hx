@@ -90,12 +90,12 @@ class Member extends Controller
 		var row = { constOrders:[], varOrders:new Map() };
 			
 		//commandes fixes
-		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_CONSTORDERS && $amap == app.user.amap && $endDate > Date.now(), false);
+		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_CONSTORDERS && $amap == app.user.amap && $endDate > DateTools.delta(Date.now(),-1000.0*60*60*24*30), false);
 		var orders = member.getOrdersFromContracts(contracts);
 		row.constOrders = Lambda.array(orders);
 		
 		//commandes variables groupées par date de distrib
-		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_VARORDER && $amap == app.user.amap && $endDate > Date.now(), false);
+		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_VARORDER && $amap == app.user.amap && $endDate > DateTools.delta(Date.now(),-1000.0*60*60*24*30), false);
 		var distribs = new Map<String,Array<db.UserContract>>();
 		for (c in contracts) {
 			var ds = c.getDistribs();
@@ -142,8 +142,39 @@ class Member extends Controller
 		form.getElement("email").addValidator(new EmailValidator());
 		form.getElement("email2").addValidator(new EmailValidator());
 		
+		
+		
 		if (form.checkToken()) {
-			form.toSpod(member); //update model
+			
+			//vérifie si mails pas déjà 
+			var sim = db.User.getSimilar(form.getValueOf("firstName"), form.getValueOf("lastName"), form.getValueOf("email"), form.getValueOf("firstName2"), form.getValueOf("lastName2"), form.getValueOf("email2"));
+			for ( s in sim) {				
+				if (s.id == member.id) sim.remove(s);
+			}
+			if (sim.length>0) {
+				throw Error("/member/edit/" + member.id, "Attention, Cet email ou ce nom existe déjà dans une autre fiche : "+Lambda.map(sim,function(u) return "<a href='/member/view/"+u.id+"'>"+u.getCoupleName()+"</a>").join(","));
+			}
+			
+			//verif changement d'email
+			if (form.getValueOf("email") != member.email) {
+				var mail = new sugoi.mail.MandrillApiMail();
+				mail.setSender("noreply@cagette.net");
+				mail.setRecipient(member.email);
+				mail.setSubject("Changement d'email sur votre compte Cagette.net");
+				mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email") } );			
+				mail.send();	
+			}
+			if (form.getValueOf("email2") != member.email2 && member.email2!=null) {
+				var mail = new sugoi.mail.MandrillApiMail();
+				mail.setSender("noreply@cagette.net");
+				mail.setRecipient(member.email2);
+				mail.setSubject("Changement d'email sur votre compte Cagette.net");
+				mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2") } );			
+				mail.send();	
+			}
+			
+			//update model
+			form.toSpod(member); 
 			member.lastName = member.lastName.toUpperCase();
 			if (member.lastName2 != null) member.lastName2 = member.lastName2.toUpperCase();
 			member.update();

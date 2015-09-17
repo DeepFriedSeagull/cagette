@@ -66,6 +66,7 @@ typedef UserOrder = {
 	userName:String,
 	
 	productId:Int,
+	productRef:String,
 	productName:String,
 	productPrice:Float,
 	productImage:String,

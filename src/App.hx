@@ -30,6 +30,15 @@ class App extends sugoi.BaseApp {
 		super.mainLoop();
 	}
 	
+	override function setCookie( oldCookie : String ) {
+	
+		if( session != null && session.sid != null && session.sid != oldCookie ) {
+			neko.Web.setHeader("Set-Cookie", cookieName+"=" + session.sid + "; path=/;");
+			//neko.Web.setHeader("Set-Cookie", cookieName+"="+session.sid+"; Domain=" + cookieDomain + "; path=/;");
+			//neko.Web.setCookie(cookieName, session.sid, new Date(1970,1,1,0,0,0), cookieDomain,"/"); //delete this fucking cookie .app.cagette.net //nope, sur IE, setter deux cookie foire tout
+		}
+	}
+	
 	public function getPlugin(name:String):plugin.IPlugIn {
 		for (p in plugins) {
 			if (p.getName() == name) return p;
@@ -112,6 +121,7 @@ class App extends sugoi.BaseApp {
 		out.set("PercentageOnOrders", "Ajouter des frais au pourcentage de la commande");
 		out.set("percentageValue", "Pourcentage des frais");
 		out.set("percentageName", "Libellé pour ces frais");
+		out.set("fees", "frais");
 		out.set("AmapAdmin", "Accès à la gestion d'Amap");
 		out.set("Membership", "Accès à la gestion des adhérents");
 		out.set("Messages", "Accès à la messagerie");

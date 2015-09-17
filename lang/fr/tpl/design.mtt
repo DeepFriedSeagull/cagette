@@ -30,6 +30,10 @@
 
 	<body class="container">
 		
+		::if DEBUG::
+		<div style="position: absolute;background: #666;padding: 8px;left: 0;color: #FF0;">DEBUG</div>
+		::end::
+		
 		::if user != null::
 			
 			<div class="row" style="margin-top:10px;">

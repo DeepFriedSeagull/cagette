@@ -158,49 +158,8 @@ class User extends Controller
 
 	}
 	
-	/*@tpl('user/register.mtt')
-	function doRegister() {
-		
-		var form = new Form('register',null,FormMethod.GET);
-		form.addElement(new Input('name', 'Your nickname'));
-		var pass1 = new Input('pass1', 'Your password');
-		pass1.password = true;
-		form.addElement(pass1);
-		var pass2 = new Input('pass2', 'Please enter your password again');
-		pass2.password = true;
-		form.addElement(pass2);
-		var email = new Input('email', 'Your e-mail');
-		//email.addValidator(new EmailValidator());
-		form.addElement(email);
-		
-		if(form.isSubmitted()){
-			if (form.isValid()) {
-				
-				if (form.getValueOf('pass1') != form.getValueOf('pass2')) {
-					throw Error('/user/register', 'Please enter the same password twice');
-				}
-				var user = new db.User();
-				user.name = form.getValueOf('name');
-				user.pass = Md5.encode( App.config.get('key') + form.getValueOf('pass1') );
-				user.email = form.getValueOf('email');
-				user.insert();
-				
-				//TODO : send an email
-				
-				throw Ok('/user/login', 'Congratulations ! <br/> You can now log into ' + App.config.NAME);
-				
-			}else {
-				throw Error('/', 'Error');
-			}
-		}
-		view.form = form;
-		
-	}*/
 	
-	
-	
-	
-	
+	@logged
 	@tpl("form.mtt")
 	function doDefinePassword(?key:String,?u:db.User){
 		if (app.user.pass != "859738d2fed6a98902defb00263f0d35") throw Error("/","Vous avez déjà un mot de passe");

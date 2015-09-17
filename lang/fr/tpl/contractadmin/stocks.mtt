@@ -1,0 +1,27 @@
+::use 'contractadmin/design.mtt'::
+	
+		
+	<h3>Produits</h3>
+	
+	<table class="table">
+		::foreach p c.getProducts()::
+		<tr>
+			<td>
+				
+				<img src="::p.getImage()::" style="width:64px;height:64px;" />
+				
+			</td>
+			<td>$$nullSafe(::p.ref::)</td>
+			<td>::p.name::</td>
+			<td>::p.stock::</td>
+
+			<td>
+				$$edit(modifier,/product/edit/::p.id::)
+			</td>
+
+		</tr>
+		::end::
+	</table>
+
+
+::end::

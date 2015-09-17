@@ -108,25 +108,31 @@ class ContractAdmin extends Controller
 		if (contract.type == db.Contract.TYPE_VARORDER ) view.distribution = args.d;
 		view.c = contract;
 		
-		var pids = db.Product.manager.search($contract == contract, false);
-		var pids = Lambda.map(pids, function(x) return x.id);
-		
-		var orders : List<Dynamic>;
+		var orders = new Array<db.UserContract>();
 		if (contract.type == db.Contract.TYPE_VARORDER ) {
-			orders = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,p.price as price, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" and up.distributionId="+args.d.id+" order by uname asc;").results();	
+			orders = contract.getOrders(args.d);	
 		}else {
-			orders = sys.db.Manager.cnx.request("select u.firstName , u.lastName as uname, u.id as uid, p.name as pname ,p.price as price, up.* from User u, UserContract up, Product p where up.userId=u.id and up.productId=p.id and p.contractId="+contract.id+" order by uname asc;").results();
+			orders = contract.getOrders();
 		}
-		//var orders = contract.getOrders();
+		
+		var orders = db.UserContract.prepare(Lambda.list(orders));
 		
 		if (app.params.exists("csv")) {
 			var data = new Array<Dynamic>();
 			
 			for (o in orders) {
-				data.push({"firstName":o.firstName,"uname":o.uname,"pname":o.pname,"price":view.formatNum(o.price),"quantity":o.quantity,"paid":o.paid});				
+				data.push( { 
+					"name":o.userName,
+					"productName":o.productName,
+					"price":view.formatNum(o.productPrice),
+					"quantity":o.quantity,
+					"fees":view.formatNum(o.fees),
+					"total":view.formatNum(o.total),
+					"paid":o.paid
+				});				
 			}
 
-			setCsvData(data, ["firstName", "uname", "pname", "price", "quantity", "paid"],"Export-"+contract.name+"-Cagette");
+			setCsvData(data, ["name",  "productName", "price", "quantity","fees","total", "paid"],"Export-"+contract.name+"-Cagette");
 			return;
 		}
 		

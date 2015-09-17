@@ -44,7 +44,7 @@
 		$$insert(Nouveau contrat,/contract/insert/)
 	::end::
 	<a href="/contractAdmin?old=1" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-folder-close"></span> Contrats anciens</a>
-		
+	<a href="/distribution/listByDate" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Liste d'émargement globale</a>
 	</div>
 	
 </div>

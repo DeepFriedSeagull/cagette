@@ -19,27 +19,29 @@
 
 				::foreach m orders::
 				
-				::if m.firstName+" "+m.uname != name::
+				::if m.userName != name::
 					<tr style="background-color:#666;">
-						<td colspan="6" style="font-size:120%;color:#e7e7e7;">
-							::m.uname:: ::m.firstName:: 
+						<td colspan="7" style="font-size:120%;color:#e7e7e7;">
+							::m.userName:: 
 							
 							
-							::set name =  m.firstName+" "+m.uname ::		
+							::set name =  m.userName ::		
 						</td>
 						<td>
+							<!--::if m.canModify==true::-->
 							::if distribution!=null::
-							<a href="/contractAdmin/edit/::c.id::/::m.uid::?d=::distribution.id::" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+							<a href="/contractAdmin/edit/::c.id::/::m.userId::?d=::distribution.id::" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
 							::else::
-							<a href="/contractAdmin/edit/::c.id::/::m.uid::" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+							<a href="/contractAdmin/edit/::c.id::/::m.userId::" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
 							::end::
-							
+							<!--::end::-->
 							
 						</td>
 					
 					</tr>
 					<tr>
 						<th>Qté</th>
+						<th>Réf.</th>
 						<th>Produit</th>
 						<th><a href="#" data-toggle="tooltip" data-placement="top" title="Prix unitaire TTC">P.U</a></th>
 						<th>Sous-total</th>
@@ -55,35 +57,29 @@
 						::m.quantity:
 					</td>
 					<td>
-						::m.pname::
+						$$nullSafe(::m.productRef::)
 					</td>
 					<td>
-						::formatNum(m.price)::&nbsp;&euro;
+						::m.productName::
 					</td>
 					<td>
-						::formatNum(m.quantity*m.price)::&nbsp;€
-						::set p = (m.quantity*m.price)::
+						::formatNum(m.productPrice)::&nbsp;&euro;
+					</td>
+					<td>
+						::formatNum(m.subTotal)::&nbsp;&euro;
 					</td>
 					<td>
 						<!-- frais -->
-						::if c.percentageValue!=null::
-						<a href="#" data-toggle="tooltip" data-placement="top" title="::c.percentageName:: : ::c.percentageValue:: %">
-							::formatNum(p/100*c.percentageValue):: €
+						::if m.percentageValue!=null::
+						<a href="#" data-toggle="tooltip" data-placement="top" title="::m.percentageName:: : ::m.percentageValue:: %">
+							::formatNum(m.fees)::&nbsp;&euro;
 						</a>
 						::end::
 					</td>
 					<td>
 						<!-- total -->
-						
-						
-						::if c.percentageValue!=null::
-							::set t = p + (p/100*c.percentageValue)::
-							::formatNum(t):: €
-							::set total = total + t::
-						::else::
-							::formatNum(p):: €
-							::set total = total + p::
-						::end::
+						::formatNum(m.total)::&nbsp;&euro;
+						::set total = total + m.total::
 					</td>
 					<td>
 						::if m.paid==true::
@@ -100,8 +96,8 @@
 				
 				<tr style="background:#DDD;">
 					
-					<th colspan="5">Total</th>
-					<th>::formatNum(total)::€</th>
+					<th colspan="6">Total</th>
+					<th>::formatNum(total)::&nbsp;&euro;</th>
 					
 					<th></th>
 				</tr>

@@ -70,10 +70,20 @@ class UserContract extends Object
 	
 	/**
 	 * Prepare un dataset simple pret pour affichage ou export csv.
-	 * Penser à classer par user !
 	 */
 	public static function prepare(orders:List<db.UserContract>):Array<UserOrder> {
 		var out = new Array<UserOrder>();
+		var orders = Lambda.array(orders);
+		//tri par nom de famille
+		orders.sort(function(a, b) {
+			if (a.user.lastName+a.user.id > b.user.lastName+b.user.id ) {
+				return 1;
+			}
+			if (a.user.lastName+a.user.id < b.user.lastName+b.user.id ) {
+				return -1;
+			}
+			return 0;
+		});
 		
 		for (o in orders) {
 		
@@ -83,6 +93,7 @@ class UserContract extends Object
 			x.userName = o.user.getCoupleName();
 			
 			x.productId = o.product.id;
+			x.productRef = o.product.ref;
 			x.productName = o.product.name;
 			x.productPrice = o.product.price;
 			x.productImage = o.product.getImage();
@@ -91,7 +102,7 @@ class UserContract extends Object
 			x.subTotal = o.quantity * o.product.price;
 			var c = o.product.contract;
 			if (c.hasPercentageOnOrders()) {
-				x.fees = c.percentageValue * x.subTotal;
+				x.fees = c.percentageValue/100 * x.subTotal;
 				x.percentageName = c.percentageName;
 				x.percentageValue = c.percentageValue;
 				x.total = x.subTotal + x.fees;
@@ -101,7 +112,7 @@ class UserContract extends Object
 			x.paid = o.paid;
 			
 			x.contractId = c.id;
-			x.percentageName = c.name;
+			x.contractName = c.name;
 			
 			x.canModify = c.isUserOrderAvailable() && !o.paid; //on peut modifier si ça na pas deja été payé + commande encore ouvertes
 			

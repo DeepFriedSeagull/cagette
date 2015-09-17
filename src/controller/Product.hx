@@ -135,6 +135,9 @@ class Product extends Controller
 				
 				var fv = new sugoi.form.filters.FloatFilter();
 				product.price = fv.filter(p[1]);
+				product.ref = p[2];
+				product.desc = p[3];
+				product.vat = fv.filter(p[4]);
 				product.contract = c;
 				product.insert();
 				

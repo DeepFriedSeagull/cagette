@@ -23,6 +23,9 @@
 				<tr>
 					<th>Nom</th>
 					<th>Prix (sans symbole euro)</th>
+					<th>Référence</th>
+					<th>Description</th>
+					<th>Taux de TVA</th>
 				</tr>
 				::foreach d data::
 				<tr>

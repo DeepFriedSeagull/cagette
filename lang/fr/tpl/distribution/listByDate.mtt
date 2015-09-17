@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Liste d'émargement</title>
+	<style>
+	
+	body{
+		font-family:'Arial';
+		font-size:12px;
+	}
+	
+	table tr,td,th{
+		margin:1px;
+		padding:4px;		
+		border:solid 1px #DDD;
+		
+	}
+	
+	table th{
+		background-color:#DDD;
+	}
+	
+	table {
+		border-collapse: collapse;
+	}
+	
+	
+	
+	h1, h2{
+		margin:auto;
+		text-align:center;
+	}
+	
+	</style>
+</head>
+<body>
+	
+	
+	<h2>Livraison du ::hDate(date)::</h2>
+	
+	
+	
+		<table class=""  style="width:100%;">
+				::set name = ""::
+				::set total = 0::
+				<tr>
+					<th>Nom</th>
+					<th>Coordonnées</th>
+					<th>Qté</th>
+					<th>Produit</th>
+					<th>P.U</th>
+					<th>Frais</th>
+					<th>Total</th>
+					
+					<th>Signature</th>
+					
+				</tr>
+		
+				::foreach m orders::				
+				
+				<tr>
+				
+					<td>
+						::if m.userName != name::
+							<b>
+								::m.userName:: 
+								::set total = 0::
+							
+							</b>
+						::end::
+						
+					</td>
+					<td>
+						::if m.userName != name::
+							::set u = getUser(m.userId):
+							::if u !=null::
+							$$nullSafe(::u.phone::)
+							::end::
+						::end::
+						
+					</td>
+					::set name =  m.userName ::
+					<td>
+						::m.quantity::
+					</td>
+					<td>
+						::m.productName::
+					</td>
+					<td>
+						::formatNum(m.productPrice)::&nbsp;&euro;
+					</td>
+					<td>
+						::if m.fees!=null::
+							::formatNum(m.fees)::&nbsp;&euro;
+						::end::
+					</td>
+					<td>
+						::formatNum(m.total)::&nbsp;&euro;
+						::set total = total + m.total::
+					</td>
+					
+					<td style="width:20%;">
+						
+						
+						
+						
+					</td>
+				</tr>
+			
+				<!--TOTAL-->
+				::set next = orders[repeat.m.index+1]::
+						::if next==null || next.userName!=name::
+						<tr>
+							<th colspan="5"></th>
+							<th>TOTAL</th>
+							<th style="text-align:left;">::formatNum(total)::&nbsp;&euro;</th>
+							<th></th>
+						</tr>
+						::end::
+				::end::
+
+				</table>
+				
+				<p>::raw nl2br(user.getAmap().txtDistrib)::</p>
+		
+				<p><i>Appuyez sur "Control + P" pour imprimer cette page.</i></p>
+	
+	
+	
+	<table class="" ::cond sqlLog::>
+	::foreach r sqlLog::
+	<tr ::attr class if(r.bad) 'badSql'::>
+		<td>::r.t::ms</td>
+		<td>::r.length::</td>
+		<td><a href="#" onclick="javascript:alert('::r.explain::');return false;">Exp</a></td>
+		<td><a href="#" onclick="javascript:alert('::r.stack::');return false;">Stack</a></td>
+		<td>::r.sql::</td>
+	</tr>
+	::end::
+	</table>
+	
+	
+</body>
+</html>

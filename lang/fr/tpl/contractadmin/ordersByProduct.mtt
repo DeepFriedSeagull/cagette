@@ -29,10 +29,10 @@
 						$$nullSafe(::m.ref::)
 					</td>
 					<td>
-						::m.price:: €
+						::formatNum(m.price)::&nbsp;&euro;
 					</td>
 					<td>
-						::formatNum(m.quantity*m.price)::&nbsp;€
+						::formatNum(m.quantity*m.price)::&nbsp;&euro;
 					</td>
 					
 					
@@ -42,7 +42,7 @@
 				<tr style="background:#DDD;">
 					
 					<th colspan="4">Total</th>
-					<th>::formatNum(totalPrice)::€</th>
+					<th>::formatNum(totalPrice)::&nbsp;&euro;</th>
 	
 				</tr>
 				

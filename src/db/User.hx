@@ -28,7 +28,7 @@ class User extends Object{
 	
 	public var firstName2:SNull<SString<32>>;
 	public var lastName2:SNull<SString<32>>;
-	public var email2 : SNull<STinyText>;
+	public var email2 : SNull<SString<64>>;
 	public var phone2:SNull<SString<19>>;
 	
 	public var address1:SNull<SString<64>>;

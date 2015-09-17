@@ -22,6 +22,65 @@ class Distribution extends Controller
 		
 	}
 	
+	
+	/**
+	 * Liste d'émargement globale pour une date donnée (multi fournisseur)
+	 */
+	@tpl('distribution/listByDate.mtt')
+	function doListByDate(?date:Date) {
+		
+		if (date == null) {
+		
+			var f = new sugoi.form.Form("listBydate", null, sugoi.form.Form.FormMethod.GET);
+			f.addElement(new sugoi.form.elements.DatePicker("date", "Date de livraison", true));
+			view.form = f;
+			app.setTemplate("form.mtt");
+			
+			if (f.checkToken()) throw Redirect('/distribution/listByDate/'+f.getValueOf("date").toString().substr(0,10));
+			
+			return;
+			
+		}else {
+			view.date = date;
+			var d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+			var d2 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+			var contracts = app.user.amap.getActiveContracts(true);
+			var cids = Lambda.map(contracts, function(c) return c.id);
+			var cconst = [];
+			var cvar = [];
+			for ( c in contracts) {
+				if (c.type == db.Contract.TYPE_CONSTORDERS) cconst.push(c.id);
+				if (c.type == db.Contract.TYPE_VARORDER) cvar.push(c.id);
+			}
+			
+			//commandes variables
+			var distribs = db.Distribution.manager.search(($contractId in cvar) && $date >= d1 && $date <= d2 , false);		
+			var orders = db.UserContract.manager.search($distributionId in Lambda.map(distribs, function(d) return d.id)  , { orderBy:userId } );
+			
+			//commandes fixes
+			var distribs = db.Distribution.manager.search(($contractId in cconst) && $date >= d1 && $date <= d2 , false);	
+			var products = [];
+			for ( d in distribs) {
+				for ( p in d.contract.getProducts()) {
+					products.push(p);
+				}
+			}
+			var orders2 = db.UserContract.manager.search($productId in Lambda.map(products, function(d) return d.id)  , { orderBy:userId } );
+			
+			var orders = Lambda.array(orders).concat(Lambda.array(orders2));
+			
+			view.orders = db.UserContract.prepare(Lambda.list(orders));
+		}
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
 	function doDelete(d:db.Distribution) {
 		
 		if (!app.user.canManageContract(d.contract)) throw "action non autorisée";
