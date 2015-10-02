@@ -62,6 +62,8 @@ class View extends sugoi.BaseView {
 	}
 	
 	public function formatNum(n:Float):String {
+		if (n == null) return "";
+		
 		//arrondi a 2 apres virgule
 		var out  = Std.string(roundTo(n, 2));		
 		

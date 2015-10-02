@@ -37,26 +37,41 @@ class Messages extends Controller
 				if (d.email2 != null) mails.push(d.email2);
 			}
 			
-			
-			
 			//mails
-			for( m in mails) mail.addRecipient(m);
-			mail.setSender(app.user.email, app.user.firstName+" "+app.user.lastName);
-			mail.title = form.getElement("subject").value;
-			var text :String = form.getElement("text").value;
-			mail.setHtmlBody('mail/message.mtt', { text:text } );
+			//for( m in mails) mail.addRecipient(m);
+			//mail.setSender(app.user.email, app.user.firstName+" "+app.user.lastName);
+			//mail.title = form.getElement("subject").value;
+			//var text :String = form.getElement("text").value;
+			//mail.setHtmlBody('mail/message.mtt', { text:text } );
 			
-			var e = new event.MessageEvent();
-			e.id = "sendMessage";
-			e.message = mail;
-			App.current.eventDispatcher.dispatch(e);
 			
-			mail.send();
+			//send mail confirmation link
+			var e = new ufront.mail.Email();		
+			e.setSubject(form.getValueOf("subject"));
+			e.bcc(Lambda.map(mails, function(m) return new ufront.mail.EmailAddress(m)));
+			if (App.current.session.data.whichUser == 1) {
+				e.from(new ufront.mail.EmailAddress(app.user.email2, app.user.firstName2+" " + app.user.lastName2));			
+			}else {
+				e.from(new ufront.mail.EmailAddress(app.user.email, app.user.firstName+" " + app.user.lastName));		
+			}
+			
+			var text :String = form.getValueOf("text");
+			var html = app.processTemplate("mail/message.mtt", { text:text });		
+			e.setHtml(html);
+			
+			
+			
+			var event = new event.MessageEvent();
+			event.id = "sendMessage";
+			event.message = mail;
+			App.current.eventDispatcher.dispatch(event);
+			
+			App.getMailer().send(e);
 			
 			var m = new db.Message();
 			m.sender = app.user;
-			m.title = mail.title;
-			m.body = mail.htmlBody;
+			m.title = e.subject;
+			m.body = e.html;
 			m.date = Date.now();
 			m.amap = app.user.amap;
 			m.recipientListId = listId;

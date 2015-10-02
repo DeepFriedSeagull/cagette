@@ -5,6 +5,7 @@
 -lib hxevents
 -lib cagette-hosted
 -lib hscript
+-lib ufront-mail
 -cp common
 -cp src
 -neko www/index.n
