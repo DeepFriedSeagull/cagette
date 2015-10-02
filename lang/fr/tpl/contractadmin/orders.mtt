@@ -14,6 +14,7 @@
 			::end::
 		</div>
 		::set total = 0::
+		::set totalAdh = 0::
 		<table class="table table-bordered table-hover table-condensed"  style="width:100%;">
 				::set name = ""::
 
@@ -25,7 +26,8 @@
 							::m.userName:: 
 							
 							
-							::set name =  m.userName ::		
+							::set name =  m.userName ::	
+							::set totalAdh = totalAdh+1::
 						</td>
 						<td>
 							<!--::if m.canModify==true::-->
@@ -104,6 +106,12 @@
 				
 
 				</table>
+
+
+				<div style="margin-top:18px;margin-bottom:18px;">
+					<b>::totalAdh::</b> adhérents dans cette commande.					
+				</div>
+
 
 				<div>
 					::if distribution!=null::

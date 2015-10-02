@@ -77,10 +77,10 @@
 						
 							
 							<b>
-								::m.firstName:: ::m.uname:: 
+								::m.uname:: ::m.firstName:: 
 								
 								::if m.firstName2!=null::
-								& ::m.firstName2:: ::m.lastName2::
+								& ::m.lastName2:: ::m.firstName2:: 
 								::end::
 							</b>
 							

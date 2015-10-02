@@ -35,6 +35,7 @@
 					<td>
 						$$edit(modifier,/distribution/edit/::d.id::) 
 						$$delete(supprimer,/distribution/delete/::d.id::)
+						<a href="/distribution/list/::d.id::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span>&nbsp;Liste d'émargement</a>
 					</td>
 				</tr>
 				

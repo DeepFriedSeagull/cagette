@@ -19,9 +19,9 @@ class Amap extends Object
 	@formPopulate("getMembersFormElementData") @:relation(userId)
 	public var contact : SNull<User>;
 	
-	public var txtIntro:SText; 	//introduction de l'amap
+	public var txtIntro:SNull<SText>; 	//introduction de l'amap
 	public var txtHome:SNull<SText>; 	//texte accueil adhérents
-	public var txtDistrib:SText; //sur liste d'emargement
+	public var txtDistrib:SNull<SText>; //sur liste d'emargement
 	
 	public var membershipRenewalDate : SNull<SDate>;
 	public var membershipPrice : SNull<STinyInt>;
@@ -129,6 +129,7 @@ class Amap extends Object
 		if (d == null) d = Date.now();
 		var year = d.getFullYear();
 		var n = membershipRenewalDate;
+		if (n == null) n = Date.now();
 		var renewalDate = new Date(year, n.getMonth(), n.getDate(), 0, 0, 0);
 		
 		//if (membershipRenewalDate.getMonth() <= 1) {
@@ -149,7 +150,7 @@ class Amap extends Object
 	 * @param	y
 	 */
 	public function getPeriodNameFromYear(y:Int):String {
-		if (membershipRenewalDate.getMonth() <= 1) {
+		if (membershipRenewalDate!=null && membershipRenewalDate.getMonth() <= 1) {
 			return Std.string(y);
 		}else {
 			return Std.string(y) + "-" + Std.string(y+1);

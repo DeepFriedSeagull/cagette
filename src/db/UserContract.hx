@@ -32,11 +32,14 @@ class UserContract extends Object
 	public var distribution:SNull<db.Distribution>;
 	public var distributionId : SNull<SInt>;
 	
+	public var date : SDateTime;
+	
 	public function new() 
 	{
 		super();
 		quantity = 1;
 		paid = false;
+		date = Date.now();
 	}
 	
 	public function populate() {

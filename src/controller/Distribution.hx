@@ -27,21 +27,37 @@ class Distribution extends Controller
 	 * Liste d'émargement globale pour une date donnée (multi fournisseur)
 	 */
 	@tpl('distribution/listByDate.mtt')
-	function doListByDate(?date:Date) {
+	function doListByDate(?date:Date,?onePage:Bool) {
 		
 		if (date == null) {
 		
 			var f = new sugoi.form.Form("listBydate", null, sugoi.form.Form.FormMethod.GET);
 			f.addElement(new sugoi.form.elements.DatePicker("date", "Date de livraison", true));
+			f.addElement(new sugoi.form.elements.RadioGroup("page", "Affichage", [ { key:"onePage", value:"Une personne par page" }, { key:"all", value:"Tout à la suite" } ]));
+			
 			view.form = f;
 			app.setTemplate("form.mtt");
 			
-			if (f.checkToken()) throw Redirect('/distribution/listByDate/'+f.getValueOf("date").toString().substr(0,10));
+			if (f.checkToken()) {
+				
+				var url = '/distribution/listByDate/' + f.getValueOf("date").toString().substr(0, 10);
+				
+				if (f.getValueOf("page") == "onePage") {
+					url += "/1";
+				}
+				
+				throw Redirect( url );
+			}
 			
 			return;
 			
 		}else {
 			view.date = date;
+			
+			if (onePage) {
+				app.setTemplate("distribution/listByDateOnePage.mtt");
+			}
+			
 			var d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 			var d2 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
 			var contracts = app.user.amap.getActiveContracts(true);
@@ -72,27 +88,19 @@ class Distribution extends Controller
 			view.orders = db.UserContract.prepare(Lambda.list(orders));
 		}
 		
-		
-		
-		
-		
-		
 	}
 	
 	
 	
 	function doDelete(d:db.Distribution) {
 		
-		if (!app.user.canManageContract(d.contract)) throw "action non autorisée";
-		
+		if (!app.user.canManageContract(d.contract)) throw "action non autorisée";		
 		if (db.UserContract.manager.search($distributionId == d.id, false).length > 0) throw Error("/contractAdmin/distributions/" + d.contract.id, "Effacement impossible : Des commandes sont enregistrées pour cette distribution.");
 		
 		d.lock();
 		var cid = d.contract.id;
 		d.delete();
 		throw Ok("/contractAdmin/distributions/" + cid, "la distribution a bien été effacée");
-		
-		
 	}
 	
 	

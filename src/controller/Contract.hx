@@ -190,11 +190,18 @@ class Contract extends Controller
 	 * Faire ou modifier une commande 
 	 */
 	@tpl("contract/order.mtt")
-	function doOrder(c:db.Contract,args:{?d:db.Distribution}) {
+	function doOrder(c:db.Contract, args: { ?d:db.Distribution } ) {
+		
+		//checks
+		if (app.user.amap.hasShopMode()) {
+			throw Redirect("/shop");
+		}
+		
 		if (!c.isUserOrderAvailable()) throw Error("/", "Ce contrat n'est pas ouvert aux commandes ");
 		if (c.type == db.Contract.TYPE_VARORDER && args.d == null ) {
 			throw Error("/", "Ce contrat est à commande variable, vous devez sélectionner une date de distribution pour faire votre commande.");
 		}
+		
 		view.c = view.contract = c;
 		if (c.type == db.Contract.TYPE_VARORDER) {
 			view.distribution = args.d;
