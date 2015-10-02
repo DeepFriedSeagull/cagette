@@ -50,9 +50,11 @@ class Messages extends Controller
 			e.setSubject(form.getValueOf("subject"));
 			e.bcc(Lambda.map(mails, function(m) return new ufront.mail.EmailAddress(m)));
 			if (App.current.session.data.whichUser == 1) {
-				e.from(new ufront.mail.EmailAddress(app.user.email2, app.user.firstName2+" " + app.user.lastName2));			
+				e.from(new ufront.mail.EmailAddress(app.user.email2, app.user.firstName2 + " " + app.user.lastName2));			
+				e.replyTo(new ufront.mail.EmailAddress(app.user.email2, app.user.firstName2 + " " + app.user.lastName2));
 			}else {
 				e.from(new ufront.mail.EmailAddress(app.user.email, app.user.firstName+" " + app.user.lastName));		
+				e.replyTo(new ufront.mail.EmailAddress(app.user.email, app.user.firstName+" " + app.user.lastName));		
 			}
 			
 			var text :String = form.getValueOf("text");
