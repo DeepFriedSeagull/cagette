@@ -6,9 +6,17 @@ import sugoi.form.Form;
 import sugoi.form.validators.EmailValidator;
 import neko.Web;
 
+enum LoginError {
+	UserDoesntExists;
+	BadPassword;
+	NoPass;
+}
+
 
 class User extends Controller
 {
+	
+	public static var EMPTY_PASS = "859738d2fed6a98902defb00263f0d35";
 
 	public function new() 
 	{
@@ -27,20 +35,33 @@ class User extends Controller
 		if (App.current.user != null) throw Redirect('/');
 		
 		if (args != null) {
-			var pass = Md5.encode( App.config.get('key') + StringTools.trim(args.pass));
-			var user = db.User.manager.select( ($email == StringTools.trim(args.name) || $email2 ==StringTools.trim(args.name) ) && $pass == pass, true);
+			
+			//user exists ?
+			var user = db.User.manager.select( $email == StringTools.trim(args.name) || $email2 == StringTools.trim(args.name) , true);
 			if (user == null) {
+				view.error = LoginError.UserDoesntExists.getIndex();
+				return;
+			}
+			
+			//new account
+			if (user.pass == "" || user.pass == null || user.pass == EMPTY_PASS) {
+				login(user,args.name);
+				throw Redirect("/user/definePassword");
+			}
+			
+			
+			var pass = Md5.encode( App.config.get('key') + StringTools.trim(args.pass));
+			
+			if (user.pass != pass) {
 				//empty pass
 				user = db.User.manager.select( ($email == StringTools.trim(args.name) || $email2 ==StringTools.trim(args.name) ) && $pass == "", true);
 				if (user == null) {
-					throw Error("/user/login", "Email ou mot de passe incorrect");	
+					view.error = LoginError.BadPassword.getIndex();
+					return;
 				}
 			}
 			
-			user.ldate = Date.now();
-			user.update();
-			App.current.session.setUser(user);
-			App.current.session.data.whichUser = (args.name == user.email) ? 0 : 1; //qui est connecté, monsieur ou madame ?
+			login(user,args.name);
 			
 			//sugoi.db.Session.clean();
 			
@@ -51,6 +72,16 @@ class User extends Controller
 			}
 			
 		}
+	}
+	
+	function login(user:db.User, name:String) {
+		
+		user.lock();
+		user.ldate = Date.now();
+		user.update();
+		App.current.session.setUser(user);
+		App.current.session.data.whichUser = (name == user.email) ? 0 : 1; //qui est connecté, monsieur ou madame ?	
+		
 	}
 	
 	@logged
@@ -163,7 +194,7 @@ class User extends Controller
 	@logged
 	@tpl("form.mtt")
 	function doDefinePassword(?key:String,?u:db.User){
-		if (app.user.pass != "859738d2fed6a98902defb00263f0d35") throw Error("/","Vous avez déjà un mot de passe");
+		if (app.user.pass != EMPTY_PASS) throw Error("/","Vous avez déjà un mot de passe");
 
 		var form = new Form("definepass");
 		form.addElement(new Input("pass1","Votre nouveau mot de passe"));

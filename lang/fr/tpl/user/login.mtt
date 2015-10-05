@@ -1,21 +1,74 @@
 ::use 'design.mtt'::
 
-	
-	<div style="margin:32px auto 32px auto;width:400px;">
+	<div class="col-md-2"></div>
+
+	<div class="col-md-8">
+		
+		::if error!=null::
+		
+		<div class="alert alert-danger">
+			<!--::error::-->
+			<span class="glyphicon glyphicon-exclamation-sign"></span>
+			::if error == 0::
+			
+			<b>Ce compte n'existe pas</b>
+			<p>
+				Vous n'êtes pas inscrit sur ::NAME:: !
+			</p>
+			<p>
+				<b>Faites vous partie d'un groupe qui utilise déjà ::NAME:: ?</b>
+				
+				<ul>
+					<li>
+						<b>Oui</b>
+						<p>
+							Les coordinateurs de votre groupe n'ont pas dû encore inscrire votre compte dans la base de données.
+							Contactez-les pour en savoir plus et vérifiez qu'ils ont bien saisi votre email.
+						</p>
+						
+					</li>
+					<li>
+						<b>Non</b>
+						<p>
+							Si votre groupe n'utilise pas ::NAME::, vous pouvez créer un compte de test pour tester le logiciel.<br/>							
+							<a href="/p/hosted/register" class="btn btn-default btn-sm">Créer un compte et tester le logiciel</a>
+						</p>
+					</li>
+					<li>
+						<b>Je ne fais partie d'aucune AMAP ou groupement d'achat</b>
+						<p>
+							::NAME:: est un logiciel en ligne de gestion d'achats groupés.<br/>
+							Il est conçu pour les groupes déjà existants. Si vous cherchez une AMAP dans votre région, 
+							faites une recherche dans l'annuaire national des AMAP : <br/>
+							<a href="http://www.reseau-amap.org/recherche-amap.php" class="btn btn-default btn-sm" target="_blank">Annuaire des AMAP</a>
+							
+						</p>
+					</li>
+					
+				</ul>
+				
+			</p>
+			
+			
+			::end::
+		</div>
+		
+		
+		::end::
+		
+		
 		
 		<h1>Connexion</h1>
 		<div class="block">
 			<form action="/user/login" method="post">
 				
-						<label>Email : </label>
-						<input type="text" name="name" value="" class="form-control" />
-					
-						<label>Mot de passe : </label>
-						<input type="password" name="pass" value="" class="form-control"/>
-					
-				
-				
-						<input type="submit" value="OK" class="btn btn-primary" style="margin-top:12px;" />
+				<label>Email : </label>
+				<input type="text" name="name" value="" class="form-control" />
+			
+				<label>Mot de passe : </label>
+				<input type="password" name="pass" value="" class="form-control"/>		
+		
+				<input type="submit" value="OK" class="btn btn-primary" style="margin-top:12px;" />
 			</form>
 
 			<p>
@@ -29,5 +82,9 @@
 			Si c'est votre <b>première connexion</b>, saisissez uniquement votre email et <b>laissez le champs "mot de passe" vide</b>.
 		</div>
 	</div>
+
+
+	<div class="col-md-2"></div>
+
 
 ::end::

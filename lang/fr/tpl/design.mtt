@@ -34,18 +34,19 @@
 		<div style="position: absolute;background: #666;padding: 8px;left: 0;color: #FF0;">DEBUG</div>
 		::end::
 		
-		::if user != null::
+		
 			
 			<div class="row" style="margin-top:10px;">
 				<div class="col-md-7">
 					<h1>
-					::if user.getAmap()!=null::
+					::if user!=null && user.getAmap()!=null::
 						::user.getAmap().name::
 					::else::
 						Cagette.net
 					::end::
 					</h1>
 				</div>
+				::if user != null::
 				<div class="col-md-5" style="margin-top:12px;text-align:right;">
 					::user.getName()::
 					::if user.firstName2!=null::
@@ -53,8 +54,11 @@
 					::end::
 					<a href="/user/logout" class="btn btn-default btn-xs">Déconnexion</a>
 				</div>
+				::end::
 			</div>
-			
+		
+		
+			::if user != null::
 
 			<nav class="navbar navbar-default" ::cond user.getAmap()!=null::>
 					<div class="navbar-header">
