@@ -19,9 +19,7 @@ class Distribution extends Controller
 		var contract = d.contract;
 		view.contract = d.contract;
 		view.contracts = d.getOrders();
-		
 	}
-	
 	
 	/**
 	 * Liste d'émargement globale pour une date donnée (multi fournisseur)
@@ -158,7 +156,8 @@ class Distribution extends Controller
 		if (form.isValid()) {
 			form.toSpod(d); //update model
 			d.contract = contract;
-			var days = Math.floor( d.date.getTime() / 1000 / 60 / 60 / 24 );
+			var days = Math.floor( d.date.getTime() / 1000 / 60 / 60 / 24 );			
+			if (d.end == null) d.end = DateTools.delta(d.date, 1000.0 * 60 * 60);
 			d.end = new Date(d.date.getFullYear(), d.date.getMonth(), d.date.getDate(), d.end.getHours(), d.end.getMinutes(), 0);
 			d.insert();
 			//Weblog.debug(d);
