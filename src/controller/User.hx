@@ -80,13 +80,13 @@ class User extends Controller
 		}
 	}
 	
-	function login(user:db.User, name:String) {
+	function login(user:db.User, email:String) {
 		
 		user.lock();
 		user.ldate = Date.now();
 		user.update();
 		App.current.session.setUser(user);
-		App.current.session.data.whichUser = (name == user.email) ? 0 : 1; //qui est connecté, monsieur ou madame ?	
+		App.current.session.data.whichUser = (email == user.email) ? 0 : 1; //qui est connecté, monsieur ou madame ?	
 		
 	}
 	
@@ -204,8 +204,7 @@ class User extends Controller
 
 		var form = new Form("definepass");
 		form.addElement(new Input("pass1","Votre nouveau mot de passe"));
-		form.addElement(new Input("pass2", "Retapez votre mot de passe pour vérification"));
-		
+		form.addElement(new Input("pass2", "Retapez votre mot de passe pour vérification"));		
 		
 		if (form.isValid()) {
 			
@@ -222,6 +221,25 @@ class User extends Controller
 		}
 		view.form = form;
 		view.title = "Définissez un mot de passe pour votre compte";
+	}
+	
+	
+	public function doValidate(k:String ) {
+		
+		var uid = Std.parseInt(sugoi.db.Cache.get("validation" + k));		
+		if (uid == null || uid==0) throw Error('/user/login', 'Votre invitation est invalide ou a expiré');
+		var user = db.User.manager.get(uid, true);
+		
+		login(user, user.email);
+		
+		app.session.data.amapId = user.getAmaps().first().id;
+		
+		sugoi.db.Cache.destroy("validation" + k);
+	
+		throw Ok("/user/definePassword", "Félicitations " + user.getName() +", votre compte est validé !");
+		
+		
+		
 	}
 	
 	

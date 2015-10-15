@@ -328,13 +328,17 @@ class User extends Object {
 			group = App.current.user.amap;	
 		}
 		
+		//store token
+		var k = sugoi.db.Session.generateId();
+		sugoi.db.Cache.set("validation" + k, this.id, 60 * 60 * 24 * 7); //expire dans une semaine
+		
 		
 		var e = new ufront.mail.Email();		
 		e.setSubject("Invitation "+group.name);
-		e.to(new ufront.mail.EmailAddress(this.email));
-		e.from(new ufront.mail.EmailAddress("noreply@cagette.net"));			
+		e.to(new ufront.mail.EmailAddress(this.email,this.getName()));
+		e.from(new ufront.mail.EmailAddress("noreply@cagette.net","Cagette.net"));			
 		
-		var html = App.current.processTemplate("mail/invitation.mtt", { email:email, email2:email2, group:group.name,name:firstName } );		
+		var html = App.current.processTemplate("mail/invitation.mtt", { email:email, email2:email2, group:group.name,name:firstName,k:k } );		
 		e.setHtml(html);
 		
 		App.getMailer().send(e);
