@@ -13,7 +13,9 @@ enum RightSite {
 }
 
 @:index(email,unique)
-class User extends Object{
+class User extends Object {
+
+	public static var EMPTY_PASS = "859738d2fed6a98902defb00263f0d35";
 	
 	public var id : SId;
 	public var lang : SString<2>;
@@ -229,7 +231,7 @@ class User extends Object{
 	/**
 	 * renvoie toutes les amaps aupres desquelles le user appartient
 	 */
-	public function getAmaps() {
+	public function getAmaps():List<db.Amap> {
 		return Lambda.map(UserAmap.manager.search($user == this, false), function(o) return o.amap);
 	}
 	
@@ -310,6 +312,34 @@ class User extends Object{
 		}
 		
 		return Lambda.map(ua, function(x) return x.user);	
+	}
+	
+	public function sendInvitation() {
+		
+		if (pass!=null && pass != "" && pass != EMPTY_PASS) throw "cet utilisateur ne peut pas recevoir d'invitation";
+		
+		
+		var group : db.Amap = null;
+		
+		if (App.current.user == null) {			
+			group = this.getAmaps().first();	
+		}else {
+			//prend l'amap du user connecté qui a lancé l'invite.
+			group = App.current.user.amap;	
+		}
+		
+		
+		var e = new ufront.mail.Email();		
+		e.setSubject("Invitation "+group.name);
+		e.to(new ufront.mail.EmailAddress(this.email));
+		e.from(new ufront.mail.EmailAddress("noreply@cagette.net"));			
+		
+		var html = App.current.processTemplate("mail/invitation.mtt", { email:email, email2:email2, group:group.name,name:firstName } );		
+		e.setHtml(html);
+		
+		App.getMailer().send(e);
+		
+		
 	}
 	
 	

@@ -1,0 +1,49 @@
+:: use 'mail/design.mtt'::
+<style>
+.btn{
+	display:block;
+	padding:8px;
+	background:#227700;
+	border-radius:8px;
+	width:auto;
+	color: white;
+    margin: 12px;
+    text-decoration: none;
+	margin-top:16px;
+	font-size:120%;
+}
+
+
+</style>
+<div style="max-width:400px;margin:auto;border:solid 1px #AAA;border-radius:8px;padding:12px;text-align:center;font-family:Arial;">
+	
+	<img src="http://::HOST::/img/logo.png"/>
+	
+	<p>
+		Bonjour $$nullSafe(::name::),
+	</p>
+	<p>
+		En tant que membre du groupe<br/>
+		<b style="font-size:140%;">::group::</b><br/>
+		vous avez été pré-inscrit sur le logiciel Cagette.net		
+	</p>
+	<p>
+		Ce logiciel en ligne facilite l'organisation du groupe en vous informant sur les prochaines dates de livraisons,
+		les commandes et les contrats en cours.
+	</p>
+	<p>
+		Afin de finaliser votre inscription, vous êtes invité(e) à définir votre mot de passe.
+	</p>
+	<p>
+		Vous pourrez ensuite vous connecter quand vous le souhaitez en utilisant votre email ( <i>::email::
+		::if email2!=null:: ou ::email2:: ::end::</i> ) et ce mot de passe en vous rendant sur le site web <a href="http://::HOST::">www.cagette.net</a>
+		<a href="#" class="btn" style="">&raquo; Finaliser votre inscription</a>
+		
+	</p>
+	
+	
+	
+</div>
+
+
+::end::

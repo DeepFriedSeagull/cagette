@@ -217,5 +217,15 @@ Called from controller/Main.hx line 117
 		d.dispatch(new controller.admin.Admin());
 	}
 	
+	//@tpl('mail/invitation.mtt')
+	//function doInvitation() {
+		//
+		//view.email = app.user.email;
+		//view.email2 = app.user.email2;
+		//view.group = app.user.amap.name;
+		//view.name = app.user.firstName;
+		//
+	//}
+	
 	
 }

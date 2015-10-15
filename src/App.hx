@@ -143,7 +143,8 @@ class App extends sugoi.BaseApp {
 		
 		return new ufront.mailer.SmtpMailer(
 		{
-			host:config.get("smtp_host"),			
+			host:config.get("smtp_host"),
+			port:config.getInt("smtp_port"),
 			user:config.get("smtp_user"),
 			pass:config.get("smtp_pass"),
 		});	

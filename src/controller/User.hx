@@ -16,7 +16,7 @@ enum LoginError {
 class User extends Controller
 {
 	
-	public static var EMPTY_PASS = "859738d2fed6a98902defb00263f0d35";
+	
 
 	public function new() 
 	{
@@ -44,9 +44,15 @@ class User extends Controller
 			}
 			
 			//new account
-			if (user.pass == "" || user.pass == null || user.pass == EMPTY_PASS) {
-				login(user,args.name);
-				throw Redirect("/user/definePassword");
+			if (user.pass == "" || user.pass == null || user.pass == db.User.EMPTY_PASS) {
+				//login(user,args.name);
+				//throw Redirect("/user/definePassword");
+				
+				
+				//send mail confirmation link
+				user.sendInvitation();
+				throw Ok("/user/login", "Votre compte n'a pas encore été validé. Nous vous avons envoyé un email à <b>" + user.email + "</b> pour finaliser votre inscription !");
+				
 			}
 			
 			
@@ -142,7 +148,7 @@ class User extends Controller
 			
 			
 			var m = new sugoi.mail.MandrillApiMail();
-			m.setSender(App.config.get("webmaster_email"), App.config.get("webmaster_name"));
+			m.setSender("noreply@cagette.net");
 			m.addRecipient(user.email, user.name, user.id);
 			m.title = App.config.NAME+" : Changement de mot de passe";
 			m.setHtmlBody('mail/forgottenPassword.mtt', { user:user, link:'http://' + App.config.HOST + '/user/forgottenPassword/'+m.getKey()+"/"+user.id } );
@@ -194,7 +200,7 @@ class User extends Controller
 	@logged
 	@tpl("form.mtt")
 	function doDefinePassword(?key:String,?u:db.User){
-		if (app.user.pass != EMPTY_PASS) throw Error("/","Vous avez déjà un mot de passe");
+		if (app.user.pass != db.User.EMPTY_PASS && app.user.pass != null) throw Error("/","Vous avez déjà un mot de passe");
 
 		var form = new Form("definepass");
 		form.addElement(new Input("pass1","Votre nouveau mot de passe"));
