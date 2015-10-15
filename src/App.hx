@@ -138,4 +138,29 @@ class App extends sugoi.BaseApp {
 		return user.amap.getMembersFormElementData();
 	}
 	
+	public static function getMailer() {
+		if (config.get("smtp_host") == null) throw "missing SMTP config";
+		
+		return new ufront.mailer.SmtpMailer(
+		{
+			host:config.get("smtp_host"),			
+			user:config.get("smtp_user"),
+			pass:config.get("smtp_pass"),
+		});	
+	}
+	
+	/**
+	 * process a template and returns the generated string
+	 * @param	tpl
+	 * @param	ctx
+	 */
+	public function processTemplate(tpl:String,ctx:Dynamic):String {
+		var tpl = loadTemplate(tpl);
+		var html = tpl.execute(ctx);	
+		#if php
+		if ( html.substr(0, 4) == "null") html = html.substr(4);
+		#end
+		return html;
+	}
+	
 }
