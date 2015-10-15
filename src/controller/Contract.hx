@@ -5,6 +5,7 @@ import sugoi.form.elements.Hidden;
 import sugoi.form.elements.Input;
 import sugoi.form.elements.Selectbox;
 import sugoi.form.Form;
+using Std;
 
 class Contract extends Controller
 {
@@ -25,40 +26,55 @@ class Contract extends Controller
 	@tpl("contract/default.mtt")
 	function doDefault() {
 		
-		var out = new Array< {amap:db.Amap, constOrders:Array<db.UserContract> , varOrders:Map<String,Array<db.UserContract>> } >();
-		//for ( a in app.user.getAmaps()) {
-		var a = App.current.user.amap;
-			
-			var row = { amap:a, constOrders:[], varOrders:new Map() };
-			
-			//commandes fixes
-			var contracts = db.Contract.manager.search($type == db.Contract.TYPE_CONSTORDERS && $amap == a && $endDate > Date.now(), false);
-			var orders = app.user.getOrdersFromContracts(contracts);
-			row.constOrders = Lambda.array(orders);
-			
-			//commandes variables groupées par date de distrib
-			var contracts = db.Contract.manager.search($type == db.Contract.TYPE_VARORDER && $amap == a && $endDate > Date.now(), false);
-			var distribs = new Map<String,Array<db.UserContract>>();
-			for (c in contracts) {
-				var ds = c.getDistribs();
-				for (d in ds) {
-					var k = d.date.toString().substr(0, 10);
-					var orders = app.user.getOrdersFromDistrib(d);
-					if (orders.length > 0) {
-						if (!distribs.exists(k)) {
-							distribs.set(k, Lambda.array(orders));
-						}else {
-							var z = distribs.get(k).concat(Lambda.array(orders));
-							distribs.set(k, z);
-						}	
-					}
+		var constOrders = new Array<db.UserContract>();
+		var varOrders = new Map<String,Array<db.UserContract>>();
+		
+		var a = App.current.user.amap;		
+		var oneMonthAgo = DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24 * 30);
+		
+		//commandes fixes
+		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_CONSTORDERS && $amap == a && $endDate > oneMonthAgo, false);
+		constOrders = Lambda.array(app.user.getOrdersFromContracts(contracts));
+		
+		//commandes variables groupées par date de distrib
+		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_VARORDER && $amap == a && $endDate > oneMonthAgo, false);
+		
+		for (c in contracts) {
+			var ds = c.getDistribs(false);
+			for (d in ds) {
+				//store orders in a stringmap like "2015-01-01" => [order1,order2,...]
+				var k = d.date.toString().substr(0, 10);
+				var orders = app.user.getOrdersFromDistrib(d);
+				if (orders.length > 0) {
+					if (!varOrders.exists(k)) {
+						varOrders.set(k, Lambda.array(orders));
+					}else {
+						var z = varOrders.get(k).concat(Lambda.array(orders));
+						varOrders.set(k, z);
+					}	
 				}
 			}
-			row.varOrders = distribs;
+		}
+		
+		//struct finale
+		var varOrders2 = new Array<{date:Date,orders:Array<db.UserContract>}>();
+		for ( k in varOrders.keys()) {
+			var d = new Date(k.split("-")[0].parseInt(), k.split("-")[1].parseInt()-1, k.split("-")[2].parseInt(), 0, 0, 0);
+			varOrders2.push({date:d,orders:varOrders[k]});
 			
-			out.push(row);
-		//}
-		view.orders = out;
+		}
+		
+		
+		//trier la map par ordre chrono desc
+		
+		
+		varOrders2.sort(function(b, a) {
+			return Math.round(a.date.getTime()/1000)-Math.round(b.date.getTime()/1000);
+		});
+		
+		
+		view.varOrders = varOrders2;
+		view.constOrders = constOrders;
 	}
 
 	/**
@@ -290,8 +306,10 @@ class Contract extends Controller
 	function doEditOrderByDate(date:Date) {
 		
 		//comment on sait si on peut encore modifier la commande ?
-		// Il faut regarder le contrat de chaque produit et verifier si le contrat est toujours ouvert à la commande.
+		// la date de livraison doit etre dans le futur
+		if (Date.now().getTime() > date.getTime()) throw Error("/contract", "Cette livraison a déjà eu lieu");
 		
+		// Il faut regarder le contrat de chaque produit et verifier si le contrat est toujours ouvert à la commande.		
 		var d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 		var d2 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
 				
