@@ -48,6 +48,9 @@
 				</ul>
 				
 			</p>
+			::elseif error == 1::
+			
+			Mot de passe incorrect.
 			
 			
 			::end::

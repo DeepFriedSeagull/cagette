@@ -45,16 +45,12 @@ class User extends Controller
 			
 			//new account
 			if (user.pass == "" || user.pass == null || user.pass == db.User.EMPTY_PASS) {
-				//login(user,args.name);
-				//throw Redirect("/user/definePassword");
-				
-				
+			
 				//send mail confirmation link
 				user.sendInvitation();
 				throw Ok("/user/login", "Votre compte n'a pas encore été validé. Nous vous avons envoyé un email à <b>" + user.email + "</b> pour finaliser votre inscription !");
 				
 			}
-			
 			
 			var pass = Md5.encode( App.config.get('key') + StringTools.trim(args.pass));
 			

@@ -155,7 +155,9 @@ class App extends sugoi.BaseApp {
 	 * @param	tpl
 	 * @param	ctx
 	 */
-	public function processTemplate(tpl:String,ctx:Dynamic):String {
+	public function processTemplate(tpl:String, ctx:Dynamic):String {
+		Reflect.setField(ctx, 'HOST', App.config.HOST);
+		
 		var tpl = loadTemplate(tpl);
 		var html = tpl.execute(ctx);	
 		#if php

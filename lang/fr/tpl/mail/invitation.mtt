@@ -21,7 +21,7 @@
 	</p>
 	<p>
 		Vous pourrez ensuite vous connecter quand vous le souhaitez en utilisant votre email ( <i>::email::
-		::if email2!=null:: ou ::email2:: ::end::</i> ) et ce mot de passe en vous rendant sur le site web <a href="http://::HOST::">www.cagette.net</a>
+		::if email2!=null:: ou ::email2:: ::end::</i> ) et votre mot de passe en vous rendant sur le site web <a href="http://::HOST::">www.cagette.net</a>
 		<a href="http://::HOST::/user/validate/::k::" class="btn" style="display:block;padding:8px;background:#227700;border-radius:8px;width:auto;color: white;margin: 12px; text-decoration: none;margin-top:16px;font-size:120%;">&raquo; Finaliser votre inscription</a>
 		
 	</p>
