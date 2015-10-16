@@ -203,9 +203,13 @@ class UserContract extends Object
 		
 		order.lock();
 		
+		//paid
+		if (order.quantity < newquantity) order.paid = false;
+		
 		//stocks
 		if (order.product.stock != null) {
 			var c = order.product.contract;
+			
 			if (c.hasStockManagement()) {
 				
 				

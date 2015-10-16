@@ -96,9 +96,17 @@ class Contract extends Controller
 			form.toSpod(c);
 			c.amap = app.user.amap;
 			
+			//checks & warnings
 			if (c.hasPercentageOnOrders() && c.percentageValue==null) throw Error("/contract/edit/"+c.id, "Si vous souhaitez ajouter des frais au pourcentage de la commande, spécifiez le pourcentage et son libellé.");
 			
-			
+			if (c.hasStockManagement()) {
+				for (p in c.getProducts()) {
+					if (p.stock == null) {
+						app.session.addMessage("Attention, vous avez activé la gestion des stocks. Pensez à renseigner le champs \"stock\" de tout vos produits", true);
+						break;
+					}
+				}
+			}
 			
 			c.update();
 			
@@ -209,10 +217,7 @@ class Contract extends Controller
 	function doOrder(c:db.Contract, args: { ?d:db.Distribution } ) {
 		
 		//checks
-		if (app.user.amap.hasShopMode()) {
-			throw Redirect("/shop");
-		}
-		
+		if (app.user.amap.hasShopMode()) throw Redirect("/shop");
 		if (!c.isUserOrderAvailable()) throw Error("/", "Ce contrat n'est pas ouvert aux commandes ");
 		if (c.type == db.Contract.TYPE_VARORDER && args.d == null ) {
 			throw Error("/", "Ce contrat est à commande variable, vous devez sélectionner une date de distribution pour faire votre commande.");
@@ -261,29 +266,33 @@ class Contract extends Controller
 					if (uo == null) throw "Impossible de retrouver le produit " + pid;
 					var q = Std.parseInt(param);
 					
-					var order = new db.UserContract();
+					//var order = new db.UserContract();
 					if (uo.order != null) {
 						//record existant
-						order = uo.order;
-						if (q == 0) {
-							order.lock();
-							order.delete();
-						}else {
-							order.lock();
-							order.paid = (q==order.quantity && order.paid); //si deja payé et quantité inchangée
-							order.quantity = q;						
-							order.update();	
-						}
+						//order = uo.order;
+						//if (q == 0) {
+							//order.lock();
+							//order.delete();
+						//}else {
+							//order.lock();
+							//order.paid = (q==order.quantity && order.paid); //si deja payé et quantité inchangée
+							//order.quantity = q;						
+							//order.update();	
+						//}
+						db.UserContract.edit(uo.order, q);
+						
+						
 					}else {
-						//nouveau record
-						if (q != 0) {
-							order.user = app.user;
-							order.product = uo.product;
-							order.quantity = q;
-							order.paid = false;
-							order.distribution = distrib;
-							order.insert();	
-						}
+						////nouveau record
+						//if (q != 0) {
+							//order.user = app.user;
+							//order.product = uo.product;
+							//order.quantity = q;
+							//order.paid = false;
+							//order.distribution = distrib;
+							//order.insert();	
+						//}
+						db.UserContract.make(app.user, q, uo.product.id, distrib!=null ? distrib.id : null);
 					}
 				}
 			}

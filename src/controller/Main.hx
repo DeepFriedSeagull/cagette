@@ -11,6 +11,8 @@ class Main extends Controller {
 		view.category = 'home';
 		
 		if (app.user != null) {
+			
+			if(app.user.amap==null) throw Redirect("/user/choose");
 		
 			var e = new event.Event();
 			e.id = "displayHome";

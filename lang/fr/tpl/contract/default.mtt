@@ -2,7 +2,7 @@
 <div class="col-md-8">
 	<h2>Toutes mes commandes en cours</h2>
 	
-	::foreach o constOrders::
+	
 	<div class="article">
 		
 		<!-- COMMANDES AMAP -->
@@ -31,7 +31,6 @@
 		::end::
 		
 	</div>	
-	::end::	
 	
 
 
