@@ -149,7 +149,7 @@
 	<div class="block" >
 		
 		::if user._amap._image!=null::
-		<img src="::file(user._amap._image)::" style="margin:auto;display: block;" /><br/>
+		<img src="::file(user._amap._image)::" style="margin:auto;display: block;width: 100%;" class="thumbnail" /><br/>
 		::end::
 		
 		::if user._amap.txtHome!=null && user._amap.txtHome!=""::

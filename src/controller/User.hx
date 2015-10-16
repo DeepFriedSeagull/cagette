@@ -196,7 +196,7 @@ class User extends Controller
 	@logged
 	@tpl("form.mtt")
 	function doDefinePassword(?key:String,?u:db.User){
-		if (app.user.pass != db.User.EMPTY_PASS && app.user.pass != null) throw Error("/","Vous avez déjà un mot de passe");
+		if (app.user.pass != db.User.EMPTY_PASS && app.user.pass != null && app.user.pass !="") throw Error("/","Vous avez déjà un mot de passe");
 
 		var form = new Form("definepass");
 		form.addElement(new Input("pass1","Votre nouveau mot de passe"));

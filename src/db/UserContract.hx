@@ -168,7 +168,8 @@ class UserContract extends Object
 			var c = o.product.contract;
 			if (c.hasStockManagement()) {
 				if (o.product.stock == 0) {
-					App.current.session.addMessage("Il n'y a plus de '" + o.product.name + "' en stock nous l'avons donc retiré de votre commande", true);
+					App.current.session.addMessage("Il n'y a plus de '" + o.product.name + "' en stock, nous l'avons donc retiré de votre commande", true);
+					o.delete();
 					return;
 					
 				}else if (o.product.stock - quantity < 0) {
