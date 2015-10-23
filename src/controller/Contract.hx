@@ -5,6 +5,7 @@ import sugoi.form.elements.Hidden;
 import sugoi.form.elements.Input;
 import sugoi.form.elements.Selectbox;
 import sugoi.form.Form;
+import db.Contract;
 using Std;
 
 class Contract extends Controller
@@ -108,6 +109,13 @@ class Contract extends Controller
 				}
 			}
 			
+			//no stock mgmt for constant orders
+			if (c.hasStockManagement() && c.type==db.Contract.TYPE_CONSTORDERS) {
+				c.flags.unset(ContractFlags.StockManagement);
+				app.session.addMessage("La gestion des stocks n'est pas disponible pour les contrats de type AMAP", true);
+			}
+			
+			
 			c.update();
 			
 			//update rights
@@ -120,14 +128,11 @@ class Contract extends Controller
 				
 				//remove rights to old contact
 				if (currentContact != null) {
-					
 					var x = db.UserAmap.get(currentContact, c.amap, true);
 					if (x != null) {
 						x.removeRight(ContractAdmin(c.id));
 						x.update();						
 					}
-					
-					
 				}
 				
 			}
@@ -316,7 +321,7 @@ class Contract extends Controller
 		
 		//comment on sait si on peut encore modifier la commande ?
 		// la date de livraison doit etre dans le futur
-		if (Date.now().getTime() > date.getTime()) throw Error("/contract", "Cette livraison a déjà eu lieu");
+		if (Date.now().getTime() > date.getTime()) throw Error("/contract", "Cette livraison a déjà eu lieu, vous ne pouvez plus modifier la commande.");
 		
 		// Il faut regarder le contrat de chaque produit et verifier si le contrat est toujours ouvert à la commande.		
 		var d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
@@ -351,12 +356,6 @@ class Contract extends Controller
 			
 			throw Ok("/contract", "Votre commande a été mise à jour");	
 			
-			
 		}
-		
-		
-		
 	}
-	
-	
 }

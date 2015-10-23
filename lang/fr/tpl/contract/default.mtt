@@ -2,11 +2,11 @@
 <div class="col-md-8">
 	<h2>Toutes mes commandes en cours</h2>
 	
-	
+	::if constOrders.length>0::
 	<div class="article">
 		
 		<!-- COMMANDES AMAP -->
-		::if constOrders.length>0::
+		
 		<h4>Contrats AMAP</h4>		
 		<table class="table table-bordered table-condensed" >
 			<tr>
@@ -28,10 +28,10 @@
 				</tr>
 			::end::			
 		</table>
-		::end::
+		
 		
 	</div>	
-	
+	::end::
 
 
 	<!-- COMMANDES VARIABLES-->
@@ -83,7 +83,7 @@
 				::end::	
 				<tr>
 					<th colspan="4">
-						$$edit(Modifier cette commande,/contract/editOrderByDate/::d::)
+						$$edit(Modifier cette commande,/contract/editOrderByDate/::d.date::)
 						
 					</th>
 					<td>TOTAL</td>

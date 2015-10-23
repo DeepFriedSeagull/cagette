@@ -431,10 +431,10 @@ class ContractAdmin extends Controller
 						if (uo == null) throw "Impossible de retrouver le produit " + pid;
 						var q = Std.parseInt(param);
 						
-						var order = new db.UserContract();
+						//var order = new db.UserContract();
 						if (uo.order != null) {
 							//record existant
-							order = uo.order;
+							/*order = uo.order;
 							if (q == 0) {
 								order.lock();
 								order.delete();
@@ -443,10 +443,11 @@ class ContractAdmin extends Controller
 								order.quantity = q;
 								order.paid = (app.params.get("paid" + pid) == "1");
 								order.update();	
-							}
+							}*/
+							db.UserContract.edit(uo.order, q);
 						}else {
 							//nouveau record
-							if (q != 0) {
+							/*if (q != 0) {
 								order.user = user;
 								if (user2 != null) order.user2 = user2;
 								order.product = uo.product;
@@ -454,7 +455,8 @@ class ContractAdmin extends Controller
 								order.paid = (app.params.get("paid" + pid) == "1");
 								order.distribution = distrib;
 								order.insert();	
-							}
+							}*/
+							db.UserContract.make(user, q, pid, distrib.id);
 						}
 					}
 				}
