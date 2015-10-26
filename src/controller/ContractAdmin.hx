@@ -184,10 +184,19 @@ class ContractAdmin extends Controller
 		view.totalPrice = totalPrice;
 	}
 	
-	@tpl("contractadmin/distributions.mtt")
-	function doDistributions(contract:db.Contract) {
+	@tpl("contractadmin/deliveries.mtt")
+	function doDistributions(contract:db.Contract, ?args: { old:Bool } ) {
+		
 		if (!app.user.canManageContract(contract)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
 		view.c = contract;
+		if (args != null && args.old) {
+			//display also old deliverues
+			view.deliveries = contract.getDistribs(false);
+		}else {
+			view.deliveries = db.Distribution.manager.search($end > DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24 * 30) && $contract == contract, { orderBy:date} );
+			
+		}
+		
 	}
 	
 	/**
@@ -456,7 +465,7 @@ class ContractAdmin extends Controller
 								order.distribution = distrib;
 								order.insert();	
 							}*/
-							db.UserContract.make(user, q, pid, distrib.id);
+							db.UserContract.make(user, q, pid, distrib==null ? null : distrib.id);
 						}
 					}
 				}

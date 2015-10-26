@@ -28,13 +28,18 @@ class Member extends Controller
 		var uids = db.UserAmap.manager.search($amap == app.user.getAmap(), false);
 		var uids = Lambda.map(uids, function(ua) return ua.userId);
 		if (args != null && args.search != null) {
-			//search
+			
+			//SEARCH
+			
 			browse = function(index:Int, limit:Int) {
 				var search = StringTools.trim(args.search);
 				return db.User.manager.search( ($lastName.like(search)||$lastName2.like(search)) && $id in uids , { orderBy:-id }, false);
 			}
 			view.search = args.search;
+			
 		}else if(args!=null && args.select!=null){
+			
+			//SELECTION
 			
 			switch(args.select) {
 				case "nocontract":
@@ -51,6 +56,13 @@ class Member extends Controller
 						return;
 					}else {
 						browse = function(index:Int, limit:Int) { return db.User.getUsers_NoMembership(index, limit); }
+					}
+				case "newusers" :
+					if (app.params.exists("csv")) {
+						setCsvData(Lambda.array(db.User.getUsers_NewUsers()), ["firstName", "lastName", "email"], "jamais-connecté");
+						return;
+					}else {
+						browse = function(index:Int, limit:Int) { return db.User.getUsers_NewUsers(index, limit); }
 					}
 				default:
 					throw "selection inconnue";
@@ -72,8 +84,12 @@ class Member extends Controller
 		}
 		
 		var count = uids.length;
-		var rb = new sugoi.tools.ResultsBrowser(count, 10, browse);
+		var rb = new sugoi.tools.ResultsBrowser(count, (args.select!=null||args.search!=null)?1000:10, browse);
 		view.members = rb;
+		
+		//count new users
+		view.newUsers = db.User.getUsers_NewUsers().length;
+		
 	}
 	
 	
@@ -113,7 +129,9 @@ class Member extends Controller
 			}
 		}
 		row.varOrders = distribs;
-		view.userContracts =row;
+		view.userContracts = row;
+		
+		checkToken(); //to insert a token in tpl
 		
 	}	
 	
@@ -184,21 +202,27 @@ class Member extends Controller
 		view.form = form;
 	}
 	
-	function doDelete(user:db.User) {
+	/**
+	 * Remove a user from this group
+	 */
+	function doDelete(user:db.User,?args:{confirm:Bool,token:String}) {
 		
-		if (!app.user.isContractManager()) throw "Vous ne pouvez pas faire ça.";
-		if (user.id == app.user.id) throw Error("/member/view/"+user.id,"Vous ne pouvez pas vous effacer vous même.");
-		if ( user.getOrders(app.user.amap).length > 0) throw throw Error("/member/view/"+user.id,"Vous ne pouvez pas effacer ce compte car il a des commandes en cours.");
+		if (checkToken()) {
+			if (!app.user.isContractManager()) throw "Vous ne pouvez pas faire ça.";
+			if (user.id == app.user.id) throw Error("/member/view/"+user.id,"Vous ne pouvez pas vous effacer vous même.");
+			if ( user.getOrders(app.user.amap).length > 0 && !args.confirm) throw Error("/member/view/"+user.id,"Attention, ce compte a des commandes en cours. <a class='btn btn-default btn-xs' href='/member/delete/"+user.id+"?token="+args.token+"&confirm=1'>Effacer quand-même</a>");
 		
-		var ua = db.UserAmap.get(user, app.user.amap, true);
-		if (ua != null) {
-			ua.delete();
-			throw Ok("/member", user.getName() + " a bien été supprimé(e) de votre AMAP");
+		
+			var ua = db.UserAmap.get(user, app.user.amap, true);
+			if (ua != null) {
+				ua.delete();
+				throw Ok("/member", user.getName() + " a bien été supprimé(e) de votre groupe");
+			}else {
+				throw Error("/member", "Cette personne ne fait pas partie de \"" + app.user.amap.name+"\"");			
+			}	
 		}else {
-			throw Error("/member", "Cette personne ne fait pas partie de \"" + app.user.amap.name+"\"");			
+			throw Redirect("/member/view/"+user.id);
 		}
-		
-		
 	}
 	
 	@tpl('form.mtt')

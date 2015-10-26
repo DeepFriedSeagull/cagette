@@ -7,6 +7,9 @@
 			Amapiens sans contrat
 		::elseif select=="nomembership"::
 			Adhésions à renouveller
+		::elseif select=="newusers"::
+			Adhérents qui ne se sont jamais connecté
+		
 		::end::
 		</h2>
 		
@@ -14,12 +17,13 @@
 	::elseif search!=null::
 		<h2>Recherche : ::search::</h2>
 		<a href="/member/">Revenir à la page principale</a>
+		
 	::else::	
 		<h2>Adhérents</h2>
 	::end::
 	
 
-	<table class="table table-bordered table-hover"  style="width:100%;">
+	<table class="table table-bordered table-hover table-striped"  style="width:100%;">
 		
 	::foreach m members.current()::	
 	<tr>
@@ -62,8 +66,9 @@
 	</table>
 
 	<div>
-		<a href="/member/insert" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvel adhérent</a>	
 		
+		<a href="/member/insert" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvel adhérent</a>	
+		$$export(::Web.getURI()+"?"+Web.getParamsString()::&csv=1)
 
 	</div>
 	
@@ -85,6 +90,7 @@
 		<ul>
 			<li><a href="/member/">Tout le monde</a></li>
 			<li><a href="/member/?select=nocontract">Sans contrats/commandes</a></li>
+			<li><a href="/member/?select=newusers">Ne s'est jamais connecté</a></li>
 			<li ::cond user._amap.hasMembership()::><a href="/member/?select=nomembership">Adhésion à renouveller</a></li>
 		</ul>
 		
@@ -112,6 +118,14 @@
 		<br/>
 		<a href="/member/import" class="btn btn-default btn-sm">Importer</a>
 		</p>
+	</div>
+	
+	<div class="block">
+		<h3>Nouveaux</h3>
+		Il y a <b>::newUsers::</b> adhérents qui ne se sont jamais connectés à Cagette.net<br/>
+		<a href="/member/?select=newusers" class="btn btn-default btn-sm">Afficher la liste</a>
+		
+		
 	</div>
 	
 </div>
