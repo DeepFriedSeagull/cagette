@@ -1,0 +1,57 @@
+::use 'contractadmin/design.mtt'::
+
+	
+		<h2>Livraisons</h2>
+		
+			
+			<table class="table">
+				::foreach d deliveries::
+				
+					::if d.date!=null && d.date.getTime() < Date.now().getTime()::
+						::set style = "opacity:0.5;"::
+					::else::
+						::set style = ""::
+					::end::
+					<tr  style="::style::" >
+			
+					<td>
+						::if d.distributionCycleId!=null::
+						<img src="/img/icons/arrow_refresh.png" style="opacity:0.5;" />
+						::end::
+						
+						::set da = getDate(d.date)::
+						
+						::if d.end!=null::
+						
+							::set e = getDate(d.end)::
+						::end::
+						
+						::da.dow:: ::da.d:: ::da.m::   de ::da.h+":"+da.i:: 
+						
+						::if d.end!=null::
+							à ::e.h+":"+e.i::
+						::end::
+					</td>
+					<td>
+						$$edit(modifier,/distribution/edit/::d.id::) 
+						$$delete(supprimer,/distribution/delete/::d.id::)
+						<a href="/distribution/list/::d.id::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span>&nbsp;Liste d'émargement</a>
+					</td>
+				</tr>
+				
+				::end::
+			</table>				
+			$$insert(Nouvelle livraison,/distribution/insert/::c.id::)
+			$$insert(Livraisons récurrentes,/distribution/insertCycle/::c.id::) 
+			<a href="/contractAdmin/distributionp/::c.id::" class="btn btn-default btn-sm">
+				<span class="glyphicon glyphicon-user"></span> Participations aux livraisons
+			</a>
+			<a href="/contractAdmin/distributions/::c.id::?old=1" class="btn btn-default btn-sm">
+				Livraisons anciennes
+			</a>
+
+	
+	
+
+
+::end::
