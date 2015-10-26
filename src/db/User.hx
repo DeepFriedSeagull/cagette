@@ -314,6 +314,30 @@ class User extends Object {
 		return Lambda.map(ua, function(x) return x.user);	
 	}
 	
+	public static function getUsers_NewUsers(?index:Int, ?limit:Int):List<db.User> {
+		//var uas = new List();
+		//if (index == null && limit == null) {
+			//uas = db.UserAmap.manager.search($amap == App.current.user.amap, false);	
+		//}else {
+			//uas = db.UserAmap.manager.search($amap == App.current.user.amap,{limit:[index,limit]}, false);
+		//}
+		//var out = new List();
+		//for ( ua in uas) {
+			//if (ua.user.pass == db.User.EMPTY_PASS) out.add(ua.user);
+		//}
+		//
+		//return out;
+		
+		var uas = db.UserAmap.manager.search($amap == App.current.user.amap, false);
+		var ids = Lambda.map(uas, function(x) return x.userId);
+		if (index == null && limit == null) {
+			return  db.User.manager.search($pass == db.User.EMPTY_PASS && ($id in ids), {orderBy:lastName} ,false);
+		}else {
+			return  db.User.manager.search($pass == db.User.EMPTY_PASS && ($id in ids), {limit:[index, limit] ,orderBy:lastName} , false);			
+		}
+		
+	}
+	
 	public function sendInvitation() {
 		
 		if (pass!=null && pass != "" && pass != EMPTY_PASS) throw "cet utilisateur ne peut pas recevoir d'invitation";

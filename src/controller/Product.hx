@@ -242,15 +242,20 @@ class Product extends Controller
 		view.c = product.contract;
 		view.image = product.image;
 		
-		var request = sugoi.tools.Utils.getMultipart(1024*1024); //1M
+		var request = sugoi.tools.Utils.getMultipart(1024 * 1024 * 12); //12Mb
+		
 		if (request.exists("image")) {
-			
-			
 			
 			//Image
 			var image = request.get("image");
-			if (image !=null && image.length > 0) {
-				var img = sugoi.db.File.create(image);
+			if (image != null && image.length > 0) {
+				var img : sugoi.db.File = null;
+				if ( Sys.systemName() == "Windows") {
+					img = sugoi.db.File.create(request.get("image"), request.get("image_filename"));
+				}else {
+					img = sugoi.tools.UploadedImage.resizeAndStore(request.get("image"), request.get("image_filename"), 400, 400);	
+				}
+				
 				product.lock();
 				
 				if (product.image != null) {

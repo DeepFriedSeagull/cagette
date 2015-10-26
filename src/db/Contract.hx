@@ -113,7 +113,8 @@ class Contract extends Object
 	
 	public function getDistribs(excludeOld = true,?limit=5):List<Distribution> {
 		if (excludeOld) {
-			return Distribution.manager.search($end > DateTools.delta(Date.now(), -1000 * 60 * 60 * 24) && $contract == this, { orderBy:date,limit:limit } );
+			//still include deliveries which just expired in last 24h
+			return Distribution.manager.search($end > DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24) && $contract == this, { orderBy:date,limit:limit } );
 		}else{
 			return Distribution.manager.search( $contract == this, { orderBy:date } );
 		}

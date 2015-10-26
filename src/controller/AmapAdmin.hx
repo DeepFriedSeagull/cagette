@@ -36,9 +36,9 @@ class AmapAdmin extends Controller
 		
 		var request = new Map();
 		try {
-			request = sugoi.tools.Utils.getMultipart(1024 * 1024); //1Mb	
+			request = sugoi.tools.Utils.getMultipart(1024 * 1024 * 12); //12Mb	
 		}catch (e:Dynamic) {
-			throw Error("/amapadmin", "L'image envoyée est trop lourde. Le poids maximum autorisé est de 1 Mo");
+			throw Error("/amapadmin", "L'image envoyée est trop lourde. Le poids maximum autorisé est de 12 Mo");
 		}
 		
 		if (request.exists("image")) {
@@ -46,19 +46,26 @@ class AmapAdmin extends Controller
 			//Image
 			var image = request.get("image");
 	
-			if (image !=null && image.length > 0) {
-				var img = sugoi.db.File.create(image,request.get("image_filename"));
+			if (image != null && image.length > 0) {
+				
+				var img : sugoi.db.File = null;
+				if ( Sys.systemName() == "Windows") {
+					img = sugoi.db.File.create(request.get("image"), request.get("image_filename"));
+				}else {
+					img = sugoi.tools.UploadedImage.resizeAndStore(request.get("image"), request.get("image_filename"), 400, 400);				
+				}
 				
 				user.amap.lock();
 				
 				if (user.amap.image != null) {
-					//efface ancienne
+					//delete previous file
 					user.amap.image.lock();
 					user.amap.image.delete();
 				}
 				
 				user.amap.image = img;
 				user.amap.update();
+				
 				throw Ok('/amapadmin/','Image mise à jour');
 			}
 		}

@@ -184,10 +184,19 @@ class ContractAdmin extends Controller
 		view.totalPrice = totalPrice;
 	}
 	
-	@tpl("contractadmin/distributions.mtt")
-	function doDistributions(contract:db.Contract) {
+	@tpl("contractadmin/deliveries.mtt")
+	function doDistributions(contract:db.Contract, ?args: { old:Bool } ) {
+		
 		if (!app.user.canManageContract(contract)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
 		view.c = contract;
+		if (args != null && args.old) {
+			//display also old deliverues
+			view.deliveries = contract.getDistribs(false);
+		}else {
+			view.deliveries = db.Distribution.manager.search($end > DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24 * 30) && $contract == contract, { orderBy:date} );
+			
+		}
+		
 	}
 	
 	/**
@@ -431,10 +440,10 @@ class ContractAdmin extends Controller
 						if (uo == null) throw "Impossible de retrouver le produit " + pid;
 						var q = Std.parseInt(param);
 						
-						var order = new db.UserContract();
+						//var order = new db.UserContract();
 						if (uo.order != null) {
 							//record existant
-							order = uo.order;
+							/*order = uo.order;
 							if (q == 0) {
 								order.lock();
 								order.delete();
@@ -443,10 +452,11 @@ class ContractAdmin extends Controller
 								order.quantity = q;
 								order.paid = (app.params.get("paid" + pid) == "1");
 								order.update();	
-							}
+							}*/
+							db.UserContract.edit(uo.order, q);
 						}else {
 							//nouveau record
-							if (q != 0) {
+							/*if (q != 0) {
 								order.user = user;
 								if (user2 != null) order.user2 = user2;
 								order.product = uo.product;
@@ -454,7 +464,8 @@ class ContractAdmin extends Controller
 								order.paid = (app.params.get("paid" + pid) == "1");
 								order.distribution = distrib;
 								order.insert();	
-							}
+							}*/
+							db.UserContract.make(user, q, pid, distrib==null ? null : distrib.id);
 						}
 					}
 				}

@@ -135,7 +135,13 @@ class UserContract extends Object
 	 */
 	public static function make(user:db.User, quantity:Int, productId:Int, ?distribId:Int) {
 		
+		//checks
 		if (quantity <= 0) return;
+		if (distribId != null) {
+			var d = db.Distribution.manager.get(distribId);
+			if (d.date.getTime() < Date.now().getTime()) throw "Impossible de modifier une commande pour une date de livraison échue.";	
+		}
+		
 		
 		//vérifie si il n'y a pas de commandes existantes avec les memes paramètres
 		var prevOrders = new List<db.UserContract>();
@@ -201,6 +207,7 @@ class UserContract extends Object
 	public static function edit(order:db.UserContract, newquantity:Int) {
 		
 		if (newquantity == order.quantity) return;
+		if (order.distribution != null && order.distribution.date.getTime() < Date.now().getTime()) throw "Impossible de modifier une commande pour une date de livraison échue.";
 		
 		order.lock();
 		

@@ -5,7 +5,7 @@
 		
 			
 			<table class="table">
-				::foreach d c.getDistribs(false,null)::
+				::foreach d deliveries::
 				
 					::if d.date!=null && d.date.getTime() < Date.now().getTime()::
 						::set style = "opacity:0.5;"::
@@ -45,6 +45,9 @@
 			$$insert(Livraisons récurrentes,/distribution/insertCycle/::c.id::) 
 			<a href="/contractAdmin/distributionp/::c.id::" class="btn btn-default btn-sm">
 				<span class="glyphicon glyphicon-user"></span> Participations aux livraisons
+			</a>
+			<a href="/contractAdmin/distributions/::c.id::?old=1" class="btn btn-default btn-sm">
+				Livraisons anciennes
 			</a>
 
 	
