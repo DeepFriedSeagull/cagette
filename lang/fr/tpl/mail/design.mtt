@@ -5,4 +5,14 @@
 <hr/>
 <div style="color:#666;font-size:12px;">
 Cet e-mail a été envoyé depuis <a href="http://www.cagette.net">Cagette.net</a>.
+
+::if group!=null::
+	<br/>
+	Vous recevez ce message car vous faites partie de <b>::group.name::</b>
+::end::
+
+::if list!=null::
+	 ( ::list:: )
+::end::
+
 </div>

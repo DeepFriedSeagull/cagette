@@ -49,16 +49,17 @@ class Messages extends Controller
 			var e = new ufront.mail.Email();		
 			e.setSubject(form.getValueOf("subject"));
 			e.bcc(Lambda.map(mails, function(m) return new ufront.mail.EmailAddress(m)));
+			
 			if (App.current.session.data.whichUser == 1) {
-				e.from(new ufront.mail.EmailAddress(app.user.email2, app.user.firstName2 + " " + app.user.lastName2));			
+				e.from(new ufront.mail.EmailAddress("noreply@cagette.net",app.user.firstName2 + " " + app.user.lastName2));		
 				e.replyTo(new ufront.mail.EmailAddress(app.user.email2, app.user.firstName2 + " " + app.user.lastName2));
-			}else {
-				e.from(new ufront.mail.EmailAddress(app.user.email, app.user.firstName+" " + app.user.lastName));		
+			}else {				
+				e.from(new ufront.mail.EmailAddress("noreply@cagette.net",app.user.firstName+" " + app.user.lastName));		
 				e.replyTo(new ufront.mail.EmailAddress(app.user.email, app.user.firstName+" " + app.user.lastName));		
 			}
 			
 			var text :String = form.getValueOf("text");
-			var html = app.processTemplate("mail/message.mtt", { text:text });		
+			var html = app.processTemplate("mail/message.mtt", { text:text,group:app.user.amap,list:getListName(listId) });		
 			e.setHtml(html);
 			
 			
@@ -121,6 +122,21 @@ class Messages extends Controller
 			out.push({key:'c'+c.id,value:'Souscripteurs '+c.toString()});
 		}
 		return out ;
+		
+	}
+	
+	/**
+	 * get list name from id
+	 * @param	listId
+	 */
+	function getListName(listId:String) {
+		var l = getLists();
+		
+		for (ll in l) {
+			if (ll.key == listId) return ll.value;
+		}
+		
+		return null;
 		
 	}
 	

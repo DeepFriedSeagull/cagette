@@ -1,8 +1,7 @@
 index.n
-lang/fr/tmp/*
+lang/fr/tmp/*.n
 www/index.n
 config.xml
-Makefile
 www/plugin/*
 lang/fr/tpl/plugin/*
 www/file/*

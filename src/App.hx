@@ -19,11 +19,10 @@ class App extends sugoi.BaseApp {
 	 * Init les plugins et le dispatcher juste avant de faire tourner l'app
 	 */
 	override public function mainLoop() {
-		
-		#if plugins
-		//Gestion expérimentale de plugin. Si ça ne complile pas, commentez les lignes ci-dessous
 		App.current.eventDispatcher = new hxevents.Dispatcher<event.Event>();
 		App.current.plugins = [];
+		#if plugins
+		//Gestion expérimentale de plugin. Si ça ne complile pas, commentez les lignes ci-dessous
 		App.current.plugins.push( new hosted.HostedPlugIn() );
 		#end
 	

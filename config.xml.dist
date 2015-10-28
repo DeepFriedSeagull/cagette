@@ -1,0 +1,33 @@
+<config
+	lang="fr"
+	langs="fr"
+
+	host="app.cagette"
+	name = "Cagette.net"
+	webmaster_email = "francois.barbut@gmail.com"
+	webmaster_name = "François"
+	
+	database="mysql://root:root@localhost/cagette"
+	sqllog="1"
+	
+	debug="1"
+	cache="0"
+	maintain="0"
+	cachetpl="0"
+	key="carotteMagique"
+	
+	mt.net.mail.MandrillMail.USER = "francois.barbut@gmail.com"
+	mt.net.mail.MandrillMail.PASS = "blabla"  
+	mt.net.mail.MandrillMail.HOST = "smtp.mandrillapp.com"
+	mt.net.mail.MandrillMail.PORT = "587"
+	
+	smtp_host="smtp.mandrillapp.com"
+	smtp_port="587"
+	smtp_user="francois.barbut@gmail.com"
+	smtp_pass="blabla"
+
+	mt.net.form.Form.HTML5 = "1"
+	mt.net.form.Form.USE_TWITTER_BOOTSTRAP = "1"
+	
+	google_geocoding_key="blabla"
+/>
