@@ -133,7 +133,7 @@ class UserContract extends Object
 	 * @param	quantity
 	 * @param	productId
 	 */
-	public static function make(user:db.User, quantity:Int, productId:Int, ?distribId:Int) {
+	public static function make(user:db.User, quantity:Int, productId:Int, ?distribId:Int,?paid:Bool) {
 		
 		//checks
 		if (quantity <= 0) return;
@@ -156,6 +156,7 @@ class UserContract extends Object
 		o.productId = productId;
 		o.quantity = quantity;
 		o.user = user;
+		if (paid != null) o.paid = paid;
 		if (distribId != null) o.distributionId = distribId;
 		
 		if (prevOrders.length > 0) {
@@ -204,15 +205,20 @@ class UserContract extends Object
 	/**
 	 * Modifie une commande (la quantité)
 	 */
-	public static function edit(order:db.UserContract, newquantity:Int) {
+	public static function edit(order:db.UserContract, newquantity:Int, ?paid:Bool) {
 		
-		if (newquantity == order.quantity) return;
+		
 		if (order.distribution != null && order.distribution.date.getTime() < Date.now().getTime()) throw "Impossible de modifier une commande pour une date de livraison échue.";
 		
 		order.lock();
 		
 		//paid
-		if (order.quantity < newquantity) order.paid = false;
+		if (paid != null) {
+			order.paid = paid;
+		}else {
+			if (order.quantity < newquantity) order.paid = false;	
+		}
+		
 		
 		//stocks
 		if (order.product.stock != null) {

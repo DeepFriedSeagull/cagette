@@ -23,7 +23,9 @@ class Member extends Controller
 	
 	@logged
 	@tpl('member/default.mtt')
-	function doDefault(?args:{?search:String,?select:String}) {
+	function doDefault(?args: { ?search:String, ?select:String } ) {
+		checkToken();
+		
 		var browse:Int->Int->List<Dynamic>;
 		var uids = db.UserAmap.manager.search($amap == app.user.getAmap(), false);
 		var uids = Lambda.map(uids, function(ua) return ua.userId);
@@ -87,8 +89,29 @@ class Member extends Controller
 		var rb = new sugoi.tools.ResultsBrowser(count, (args.select!=null||args.search!=null)?1000:10, browse);
 		view.members = rb;
 		
-		//count new users
-		view.newUsers = db.User.getUsers_NewUsers().length;
+		if (args.select == null || args.select != "newusers") {
+			//count new users
+			view.newUsers = db.User.getUsers_NewUsers().length;	
+		}
+		
+		
+	}
+	
+	/**
+	 * Invite 'never logged' users
+	 */
+	function doInvite() {
+		
+		if (checkToken()) {
+			
+			var users = db.User.getUsers_NewUsers();
+			for ( u in users) {
+				u.sendInvitation();
+				Sys.sleep(0.2);
+			}
+			
+			throw Ok('/member', "Bravo, vous avez envoyé <b>" + users.length + "</b> invitations.");
+		}
 		
 	}
 	
@@ -529,9 +552,6 @@ class Member extends Controller
 				throw Ok('/member/','Cette personne a bien été enregistrée');
 				
 			}
-			
-			
-			
 		}
 		
 		view.form = form;

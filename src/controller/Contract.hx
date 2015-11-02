@@ -27,7 +27,7 @@ class Contract extends Controller
 	@tpl("contract/default.mtt")
 	function doDefault() {
 		
-		var constOrders = new Array<db.UserContract>();
+		var constOrders = null;
 		var varOrders = new Map<String,Array<db.UserContract>>();
 		
 		var a = App.current.user.amap;		
@@ -35,7 +35,7 @@ class Contract extends Controller
 		
 		//commandes fixes
 		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_CONSTORDERS && $amap == a && $endDate > oneMonthAgo, false);
-		constOrders = Lambda.array(app.user.getOrdersFromContracts(contracts));
+		constOrders = db.UserContract.prepare(app.user.getOrdersFromContracts(contracts));
 		
 		//commandes variables groupées par date de distrib
 		var contracts = db.Contract.manager.search($type == db.Contract.TYPE_VARORDER && $amap == a && $endDate > oneMonthAgo, false);
@@ -77,6 +77,7 @@ class Contract extends Controller
 		view.varOrders = varOrders2;
 		view.constOrders = constOrders;
 	}
+	
 
 	/**
 	 * Modifie un contrat

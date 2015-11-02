@@ -27,7 +27,7 @@ class Messages extends Controller
 		
 		if (form.checkToken()) {
 			
-			var mail = new sugoi.mail.MandrillApiMail();
+			//var mail = new sugoi.mail.MandrillApiMail();
 			var listId = form.getElement("list").value;
 			var dest = getSelection(listId);
 		
@@ -66,7 +66,7 @@ class Messages extends Controller
 			
 			var event = new event.MessageEvent();
 			event.id = "sendMessage";
-			event.message = mail;
+			event.message = e;
 			App.current.eventDispatcher.dispatch(event);
 			
 			App.getMailer().send(e);

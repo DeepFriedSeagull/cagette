@@ -6,7 +6,7 @@ import Common;
  */
 class MessageEvent extends Event
 {
-	public var message : sugoi.mail.IMail; 
+	public var message : ufront.mail.Email; 
 	
 	public function new() 
 	{

@@ -72,7 +72,18 @@
 
 	</div>
 	
-	<hr/>
+	::if select=="newusers"::
+		<hr/>
+		<p style="text-align:center;">
+			Vous pouvez inviter par email tous les adhérents qui ne se sont jamais connecté à Cagette.net en un seul clic :
+			<br/>
+			<a href="/member/invite/?token=::token::" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-envelope"></span> Envoyer des invitations</a>
+			<br/>
+			Attention la page peut mettre un peu de temps à s'afficher si il y a beaucoup d'emails à envoyer.
+		</p>
+		
+	
+	::end::
 	
 	
 	
@@ -120,13 +131,14 @@
 		</p>
 	</div>
 	
-	<div class="block">
+	
+	::if select!="newusers"::
+	<div class="block">		
 		<h3>Nouveaux</h3>
 		Il y a <b>::newUsers::</b> adhérents qui ne se sont jamais connectés à Cagette.net<br/>
 		<a href="/member/?select=newusers" class="btn btn-default btn-sm">Afficher la liste</a>
-		
-		
 	</div>
+	::end::
 	
 </div>
 

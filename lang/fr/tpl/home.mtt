@@ -19,124 +19,125 @@
 		</div>
 	
 	
-		::if distribs==null || distribs.length==0::
-		<div class="homeBlock">
-			Votre planning de livraison est vide pour l'instant.<br/>
-		</div>
-		::end::
-		
-		::foreach ds distribs::
-		
+		::if distribs==null || count(distribs)==0::
 			<div class="homeBlock">
-				
-				::set x = getDate( ds[0].distrib.end )::
-				::if isToday(ds[0].distrib.date)::
-					$$today(::x.dow::,::x.d::,::x.m::,::x.y::,::ds[0].distrib._place::)
-				::else::
-					$$date(::x.dow::,::x.d::,::x.m::,::x.y::,::ds[0].distrib._place::)
-				::end::
-					
-				::foreach d ds::
-					<div class="content">
-						
-						<h2>
-							::set s = getDate(d.distrib.date) ::
-							::set e = getDate(d.distrib.end)::
-							
-							<span style="color:#999;">::s.h+":"+s.i:: - ::e.h+":"+e.i::</span>
-							&nbsp;Livraison <a href="/contract/view/::d.distrib._contract.id::">::d.distrib._contract.name::</a>
-							
-						</h2>
-						
-						<p ::cond d.distrib.text!=null:: style="border:2px solid #EEE;padding:4px;margin:4px 0;border-radius:4px;">
-							::d.distrib.text::
-						</p>
-						
-						
-						<!--de ::d.distrib._contract._vendor.name::-->
-						<div class="row">
-						::foreach c d.contracts::
-						<div class="col-md-4">
-						<table>
-							<tr>
-								<td>
-									<img src="::c._product.getImage()::" style="margin-right:8px;max-height:64px;max-width:64px;" />	
-								</td>
-								
-								<td class="name">
-								<span style="color:#999;" ::cond c.quantity >1:: > ::c.quantity:: x </span>
-								::c._product.name::
-								
-								::if c._user2!=null::
-									::if user.id==c._user.id::
-										::set you = c._user::
-										::set mate = c._user2::
-									::else::
-										::set mate = c._user::
-										::set you = c._user2::
-									::end::
-							
-									<br/>( partagé avec ::mate.getName():: 
-									
-									::if c.getWhosTurn(d.distrib)==false::
-							
-										::if c._user.getName() == you.getName()::
-											<span style="color:#080">, c'est votre tour</span>
-										::else::
-											, c'est son tour
-										::end::
-									::else::
-										::if c._user2.getName() == you.getName()::
-											<span style="color:#080">, c'est votre tour</span>
-										::else::
-											, c'est son tour
-										::end::
-									::end::
-									)
-								::end::
-							</td>
-							</tr>
-						</table>
-						</div>
-						::end::
-						</div>
-					</div>
-				
-					<div class="place">
-					
-						::if user.isContractManager(d.distrib._contract) || d.distrib.distributor1Id==user.id || d.distrib.distributor2Id==user.id || d.distrib.distributor3Id==user.id || d.distrib.distributor4Id==user.id:: 
-							<span class="glyphicon glyphicon-print"></span> <a href="/distribution/list/::d.distrib.id::">Liste d'émargement</a>
-						::end::
-						
-						<span class="glyphicon glyphicon-map-marker"></span>&nbsp;<a href="/place/view/::d.distrib._place.id::">Carte</a>
-						
-						<span ::cond d.distrib.distributor1Id!=null || d.distrib.distributor2Id!=null || d.distrib.distributor3Id!=null || d.distrib.distributor4Id!=null::>
-							&nbsp; <span class="glyphicon glyphicon-user"></span> <a href="#" onclick="$('#distributors::d.distrib.id::').toggle();return false;">Permanence</a>
-						</span>
-						
-						
-						&nbsp; <span class="glyphicon glyphicon-list-alt"></span> <a href="/contract/view/::d.distrib._contract.id::">Détails du contrat</a>
-						
-						
-						<div id="distributors::d.distrib.id::" style="display:none;margin:8px;">
-							<ul>
-								<li ::cond d.distrib.distributor1Id!=null::><i class="icon-user"></i> ::d.distrib._distributor1.getCoupleName():: </li>
-								<li ::cond d.distrib.distributor2Id!=null::><i class="icon-user"></i> ::d.distrib._distributor2.getCoupleName():: </li>
-								<li ::cond d.distrib.distributor3Id!=null::><i class="icon-user"></i> ::d.distrib._distributor3.getCoupleName():: </li>
-								<li ::cond d.distrib.distributor4Id!=null::><i class="icon-user"></i> ::d.distrib._distributor4.getCoupleName():: </li>
-							</ul>
-						</div>
-						
-						
-						
-						
-						<div class="distribMessage" ::cond d.distrib.distributor1Id==user.id || d.distrib.distributor2Id==user.id || d.distrib.distributor3Id==user.id || d.distrib.distributor4Id==user.id::>
-							Attention, vous ou votre conjoint(e) participe à la distribution !
-						</div>
-					</div>
-				::end::
+				Votre planning de livraison est vide pour l'instant.<br/>
 			</div>
+		::else::
 			
+			::foreach ds distribs::
+				
+				<div class="homeBlock">
+					
+					::set x = getDate( ds[0].distrib.end )::
+					::if isToday(ds[0].distrib.date)::
+						$$today(::x.dow::,::x.d::,::x.m::,::x.y::,::ds[0].distrib._place::)
+					::else::
+						$$date(::x.dow::,::x.d::,::x.m::,::x.y::,::ds[0].distrib._place::)
+					::end::
+						
+					::foreach d ds::
+						<div class="content">
+							
+							<h2>
+								::set s = getDate(d.distrib.date) ::
+								::set e = getDate(d.distrib.end)::
+								
+								<span style="color:#999;">::s.h+":"+s.i:: - ::e.h+":"+e.i::</span>
+								&nbsp;Livraison <a href="/contract/view/::d.distrib._contract.id::">::d.distrib._contract.name::</a>
+								
+							</h2>
+							
+							<p ::cond d.distrib.text!=null:: style="border:2px solid #EEE;padding:4px;margin:4px 0;border-radius:4px;">
+								::d.distrib.text::
+							</p>
+							
+							
+							<!--de ::d.distrib._contract._vendor.name::-->
+							<div class="row">
+							::foreach c d.orders::
+							<div class="col-md-4">
+							<table>
+								<tr>
+									<td>
+										<img src="::c._product.getImage()::" style="margin-right:8px;max-height:64px;max-width:64px;" />	
+									</td>
+									
+									<td class="name">
+									<span style="color:#999;" ::cond c.quantity >1:: > ::c.quantity:: x </span>
+									::c._product.name::
+									
+									::if c._user2!=null::
+										::if user.id==c._user.id::
+											::set you = c._user::
+											::set mate = c._user2::
+										::else::
+											::set mate = c._user::
+											::set you = c._user2::
+										::end::
+								
+										<br/>( partagé avec ::mate.getName():: 
+										
+										::if c.getWhosTurn(d.distrib)==false::
+								
+											::if c._user.getName() == you.getName()::
+												<span style="color:#080">, c'est votre tour</span>
+											::else::
+												, c'est son tour
+											::end::
+										::else::
+											::if c._user2.getName() == you.getName()::
+												<span style="color:#080">, c'est votre tour</span>
+											::else::
+												, c'est son tour
+											::end::
+										::end::
+										)
+									::end::
+								</td>
+								</tr>
+							</table>
+							</div>
+							::end::
+							</div>
+						</div>
+					
+						<div class="place">
+						
+							::if user.isContractManager(d.distrib._contract) || d.distrib.distributor1Id==user.id || d.distrib.distributor2Id==user.id || d.distrib.distributor3Id==user.id || d.distrib.distributor4Id==user.id:: 
+								<span class="glyphicon glyphicon-print"></span> <a href="/distribution/list/::d.distrib.id::">Liste d'émargement</a>
+							::end::
+							
+							<span class="glyphicon glyphicon-map-marker"></span>&nbsp;<a href="/place/view/::d.distrib._place.id::">Carte</a>
+							
+							<span ::cond d.distrib.distributor1Id!=null || d.distrib.distributor2Id!=null || d.distrib.distributor3Id!=null || d.distrib.distributor4Id!=null::>
+								&nbsp; <span class="glyphicon glyphicon-user"></span> <a href="#" onclick="$('#distributors::d.distrib.id::').toggle();return false;">Permanence</a>
+							</span>
+							
+							
+							&nbsp; <span class="glyphicon glyphicon-list-alt"></span> <a href="/contract/view/::d.distrib._contract.id::">Détails du contrat</a>
+							
+							
+							<div id="distributors::d.distrib.id::" style="display:none;margin:8px;">
+								<ul>
+									<li ::cond d.distrib.distributor1Id!=null::><i class="icon-user"></i> ::d.distrib._distributor1.getCoupleName():: </li>
+									<li ::cond d.distrib.distributor2Id!=null::><i class="icon-user"></i> ::d.distrib._distributor2.getCoupleName():: </li>
+									<li ::cond d.distrib.distributor3Id!=null::><i class="icon-user"></i> ::d.distrib._distributor3.getCoupleName():: </li>
+									<li ::cond d.distrib.distributor4Id!=null::><i class="icon-user"></i> ::d.distrib._distributor4.getCoupleName():: </li>
+								</ul>
+							</div>
+							
+							
+							
+							
+							<div class="distribMessage" ::cond d.distrib.distributor1Id==user.id || d.distrib.distributor2Id==user.id || d.distrib.distributor3Id==user.id || d.distrib.distributor4Id==user.id::>
+								Attention, vous ou votre conjoint(e) participe à la distribution !
+							</div>
+						</div>
+					::end::
+				</div>
+				
+			::end::
 		::end::
 
 	

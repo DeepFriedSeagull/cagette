@@ -11,20 +11,50 @@
 		<table class="table table-bordered table-condensed" >
 			<tr>
 				<th>Qté</th>
+
 				<th>Produit</th>
-				<th>Prix total</th>
-				<th>Contrat</th>
-				<th>::wVendor()::</th>
+				<th><a href="#" data-toggle="tooltip" data-placement="top" title="Prix unitaire TTC">P.U</a></th>
+				<th>Sous-total</th>
+				<th>Frais</th>
+				<th>Total</th>
+				<th>Payé</th>
 			</tr>
-			::foreach p constOrders::
+			
+			::foreach m constOrders::
 				<tr>
-					<td>::p.quantity::</td>
-					<td>::p._product.name::</td>
-					<td>::formatNum(p._product.price*p.quantity):: €</td>
+				
 					<td>
-						<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
+						::m.quantity:
 					</td>
-					<td>::p._product._contract._vendor.name::</td>
+					<td>
+						::m.productName::
+					</td>
+					<td>
+						::formatNum(m.productPrice)::&nbsp;&euro;
+					</td>
+					<td>
+						::formatNum(m.subTotal)::&nbsp;&euro;
+					</td>
+					<td>
+						<!-- frais -->
+						::if m.percentageValue!=null::
+						<a href="#" data-toggle="tooltip" data-placement="top" title="::m.percentageName:: : ::m.percentageValue:: %">
+							::formatNum(m.fees)::&nbsp;&euro;
+						</a>
+						::end::
+					</td>
+					<td>
+						<!-- total -->
+						::formatNum(m.total)::&nbsp;&euro;						
+					</td>
+					<td>
+						::if m.paid==true::
+						<span style="color:#00AA00;">Payé</span>
+						::else::
+						<span style="color:#DD0000;">Non payé</span>
+						::end::
+					</td>
+					
 				</tr>
 			::end::			
 		</table>

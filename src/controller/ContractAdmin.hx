@@ -424,7 +424,7 @@ class ContractAdmin extends Controller
 					
 				}
 				
-				//get dsitrib if needed
+				//get distrib if needed
 				var distrib : db.Distribution = null;
 				if (c.type == db.Contract.TYPE_VARORDER) {
 					distrib = db.Distribution.manager.get(Std.parseInt(app.params.get("distribution")), false);
@@ -442,30 +442,13 @@ class ContractAdmin extends Controller
 						
 						//var order = new db.UserContract();
 						if (uo.order != null) {
-							//record existant
-							/*order = uo.order;
-							if (q == 0) {
-								order.lock();
-								order.delete();
-							}else {
-								order.lock();
-								order.quantity = q;
-								order.paid = (app.params.get("paid" + pid) == "1");
-								order.update();	
-							}*/
-							db.UserContract.edit(uo.order, q);
+							//existing record
+							
+							db.UserContract.edit(uo.order, q, (app.params.get("paid" + pid) == "1"));
 						}else {
-							//nouveau record
-							/*if (q != 0) {
-								order.user = user;
-								if (user2 != null) order.user2 = user2;
-								order.product = uo.product;
-								order.quantity = q;
-								order.paid = (app.params.get("paid" + pid) == "1");
-								order.distribution = distrib;
-								order.insert();	
-							}*/
-							db.UserContract.make(user, q, pid, distrib==null ? null : distrib.id);
+							//new record
+							
+							db.UserContract.make(user, q, pid, distrib==null ? null : distrib.id,(app.params.get("paid" + pid) == "1"));
 						}
 					}
 				}

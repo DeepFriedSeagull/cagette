@@ -20,66 +20,79 @@ class Main extends Controller {
 
 			view.amap = app.user.getAmap();
 			
-			//s'inscrire a une distribution
-			view.contractsWithDistributors = Lambda.filter(app.user.getContracts(), function(c) return c.distributorNum > 0);
-			
-			//DISTRIBUTIONS
- 
-			var contracts = app.user.getOrders();
-			var contractIds = Lambda.map(contracts, function(c) return c.product.contract.id);
-			//les distribs dans lesquelles j'ai des produits a prendre
-			var distribs = Distribution.manager.search( ($contractId in contractIds) && $end > Date.now(),{orderBy:date,limit:10}, false );
-			
 			//contrats ouverts à la commande
 			var openContracts = Lambda.filter(app.user.amap.getActiveContracts(), function(c) return c.isUserOrderAvailable());
 			view.openContracts = openContracts;
 			
+			//s'inscrire a une distribution
+			view.contractsWithDistributors = Lambda.filter(app.user.getContracts(), function(c) return c.distributorNum > 0);
+			
+			//DISTRIBUTIONS
+ 			var orders = app.user.getOrders();
+			var contractIds = Lambda.map(orders, function(c) return c.product.contract.id);
+			//les distribs dans lesquelles j'ai des produits a prendre
+			var distribs = Distribution.manager.search( ($contractId in contractIds) && $end > Date.now(),{orderBy:date,limit:10}, false );
+			
+			
 			/**
 			 * HashMap de jours ( ie "2014-11-01" ), contenant les différentes distrib, pouvant impliquer plusieurs produits (userContracts)
 			 */
-			var mydistribs = new Map<String, Array<{distrib:Distribution,contracts:Array<db.UserContract>}> >();
+			var mydistribs = new Map<String, Array<{distrib:Distribution,orders:Array<db.UserContract>}> >();
 			
 			for ( d in distribs) {
 				
-				var x = { distrib:d,contracts:[] };
-				for (order in contracts) {
+				var x = { distrib:d,orders:[] };
+				for (order in orders) {
 					var contract = order.product.contract;
 					if (contract.id == d.contract.id) {
+						//trace("CONTRAT "+contract.name+"-"+contract.type+"-"+contract.id);
 						
 						if (contract.type == db.Contract.TYPE_VARORDER) {
 							if (order.distributionId == d.id) {
-								x.contracts.push(order);
+								//trace("VARY : "+order);
+								x.orders.push(order);								
 							}
+							
 						}else {
-							x.contracts.push(order);	
+							//trace("CONSTANT : "+order);
+							x.orders.push(order);	
 						}
 						
 					}
 				}
-				var key = d.end.toString().substr(0,10)+"-p"+d.place.id;
-				//trace(key);
-				var t = mydistribs.get(key);
-				if (t == null) {
-					t = [];
-					mydistribs.set(key, t);
-					//trace("set "+key);
+				
+				
+				
+				
+				
+				//do not push empty orders list
+				if (x.orders.length > 0) {
+					var key = d.end.toString().substr(0,10)+"-p"+d.place.id;				
+					var t = mydistribs.get(key);
+					if (t == null) {
+						t = [];
+						mydistribs.set(key, t);
+					}
+					
+					t.push( x );	
 				}
-				t.push( x );
-				//mydistribs.set(key, t);
+				
+				
 				
 			}
 			
-			//fix bug du sorting (les distribis du jour se mettent en bas)
+			//fix bug du sorting (les distribs du jour se mettent en bas)
 			var out = [];
 			for (x in mydistribs) out.push(x);
 			out.sort(function(a, b) {
 				return Std.int(a[0].distrib.date.getTime()/1000) - Std.int(b[0].distrib.date.getTime()/1000);
 			});
-			//trace(out);
-			view.distribs = out;
+			
+			view.distribs = out;	
+			
 			
 			//pass a definir
-			view.nopass = app.user.pass == "859738d2fed6a98902defb00263f0d35";
+			view.nopass = (app.user.pass == db.User.EMPTY_PASS);
 			
 		}else {
 			throw Redirect("/user/login");
