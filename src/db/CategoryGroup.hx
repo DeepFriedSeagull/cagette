@@ -9,8 +9,11 @@ class CategoryGroup extends sys.db.Object
 	public var name : SString<32>;
 	public var color : STinyInt; //id de couleur
 	
-	public var amapId:SInt; 
+	
 	@:relation(amapId) public  var amap:db.Amap;
+	#if neko
+	public var amapId:SInt; 
+	#end
 	
 	
 	@:skip public static var COLORS = [

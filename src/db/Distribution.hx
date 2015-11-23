@@ -20,15 +20,22 @@ class Distribution extends Object
 	public var date : SDateTime; //debut
 	public var end : SDateTime;	//fin
 	
-	@:relation(distributionCycleId)
-	public var distributionCycle : SNull<DistributionCycle>;
-	public var distributionCycleId: SNull<SInt>;
+	@:relation(distributionCycleId) public var distributionCycle : SNull<DistributionCycle>;
+	#if neko 
+	public var distributionCycleId: SNull<SInt>; 
+	#end
 	
-	@formPopulate("populate") @:relation(distributor1Id) public var distributor1 : SNull<db.User>; public var distributor1Id : SNull<SInt>;
-	@formPopulate("populate") @:relation(distributor2Id) public var distributor2 : SNull<db.User>; public var distributor2Id : SNull<SInt>;
-	@formPopulate("populate") @:relation(distributor3Id) public var distributor3 : SNull<db.User>; public var distributor3Id : SNull<SInt>;
-	@formPopulate("populate") @:relation(distributor4Id) public var distributor4 : SNull<db.User>; public var distributor4Id : SNull<SInt>;
+	@formPopulate("populate") @:relation(distributor1Id) public var distributor1 : SNull<db.User>; 
+	@formPopulate("populate") @:relation(distributor2Id) public var distributor2 : SNull<db.User>; 
+	@formPopulate("populate") @:relation(distributor3Id) public var distributor3 : SNull<db.User>; 
+	@formPopulate("populate") @:relation(distributor4Id) public var distributor4 : SNull<db.User>; 
 	
+	#if neko
+	public var distributor1Id : SNull<SInt>;
+	public var distributor2Id : SNull<SInt>;
+	public var distributor3Id : SNull<SInt>;
+	public var distributor4Id : SNull<SInt>;
+	#end
 	
 	public function new() 
 	{

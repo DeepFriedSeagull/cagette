@@ -50,7 +50,7 @@ class Messages extends Controller
 			e.setSubject(form.getValueOf("subject"));
 			e.bcc(Lambda.map(mails, function(m) return new ufront.mail.EmailAddress(m)));
 			
-			if (App.current.session.data.whichUser == 1) {
+			if (App.current.session.data.whichUser == 1 && app.user.email2!=null) {
 				e.from(new ufront.mail.EmailAddress("noreply@cagette.net",app.user.firstName2 + " " + app.user.lastName2));		
 				e.replyTo(new ufront.mail.EmailAddress(app.user.email2, app.user.firstName2 + " " + app.user.lastName2));
 			}else {				

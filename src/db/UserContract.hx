@@ -13,7 +13,9 @@ class UserContract extends Object
 	
 	@formPopulate("populate") @:relation(userId)
 	public var user : User;
+	#if neko
 	public var userId: SInt;
+	#end
 	
 	//panier alterné
 	@formPopulate("populate") @:relation(userId2)
@@ -23,14 +25,18 @@ class UserContract extends Object
 	
 	@formPopulate("populateProducts") @:relation(productId)
 	public var product : Product;
+	#if neko
 	public var productId : SInt;
+	#end
 	
 	public var paid : SBool;
 	
 	//if not null : varying orders
 	@:relation(distributionId)
 	public var distribution:SNull<db.Distribution>;
+	#if neko
 	public var distributionId : SNull<SInt>;
+	#end
 	
 	public var date : SDateTime;
 	

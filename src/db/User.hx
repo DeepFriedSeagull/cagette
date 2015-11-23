@@ -215,9 +215,7 @@ class User extends Object {
 	 */
 	public function getAmap() {
 		
-		//return Amap.manager.get(1);
-		
-		if (App.current.user != null && id != App.current.user.id) throw "cette fonction n'est valable que pour le joueur en cours";
+		if (App.current.user != null && id != App.current.user.id) throw "cette fonction n'est valable que pour l'utilisateur en cours";
 		if (App.current.session == null) return null;
 		var a = App.current.session.data.amapId;
 		if (a == null) {
@@ -274,9 +272,11 @@ class User extends Object {
 		
 		//recherche pour le deuxieme user
 		if (lastName2 != "" && lastName2 != null && firstName2 != "" && firstName2 != null) {
-			out = out.concat(Lambda.array(User.manager.search($firstName.like(firstName2) && $lastName.like(lastName2), false)));
+			out = out.concat(Lambda.array(User.manager.search($firstName.like(firstName2) && $lastName.like(lastName2), false)));			
+			out = out.concat(Lambda.array(User.manager.search($firstName2.like(firstName2) && $lastName2.like(lastName2), false)));			
+		}
+		if (email2 != null && email2 != "") {
 			out = out.concat(Lambda.array(User.manager.search($email.like(email2), false)));
-			out = out.concat(Lambda.array(User.manager.search($firstName2.like(firstName2) && $lastName2.like(lastName2), false)));
 			out = out.concat(Lambda.array(User.manager.search($email2.like(email2), false)));	
 		}
 		

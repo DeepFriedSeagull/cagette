@@ -216,8 +216,14 @@ class Member extends Controller
 			
 			//update model
 			form.toSpod(member); 
+			
+			//lower / upper case
 			member.lastName = member.lastName.toUpperCase();
 			if (member.lastName2 != null) member.lastName2 = member.lastName2.toUpperCase();
+			//member.email = member.email.toLowerCase();
+			//if(member.email2
+			
+			
 			member.update();
 			throw Ok('/member/view/'+member.id,'Ce membre a été mis à jour');
 		}
@@ -276,24 +282,31 @@ class Member extends Controller
 			
 			//on prend tout à m2 pour donner à m1			
 			//change usercontracts
-			var contracts = m2.getOrders(true);
+			var contracts = db.UserContract.manager.search($user==m2 || $user2==m2,true);
 			for (c in contracts) {
 				if (c.user.id == m2.id) c.user = m1;
 				if (c.user2!=null && c.user2.id == m2.id) c.user2 = m1;
 				c.update();
 			}
 			
+			//group memberships
+			var adh = db.UserAmap.manager.search($user == m2, true);
+			for ( a in adh) {
+				a.user = m1;
+				a.update();
+			}
+			
 			//change contacts
-			var contacts = m2.getContractManager(true);
+			var contacts = db.Contract.manager.search($contact==m2,true);
 			for (c in contacts) {
 				c.contact = m1;
 				c.update();
 			}
-			if (m2.amap.contact == m2) {
-				m1.amap.lock();
-				m1.amap.contact = m1;
-				m1.amap.update();
-			}
+			//if (m2.amap.contact == m2) {
+				//m1.amap.lock();
+				//m1.amap.contact = m1;
+				//m1.amap.update();
+			//}
 			
 			m2.delete();
 			
@@ -490,7 +503,7 @@ class Member extends Controller
 		form.removeElement(form.getElement("rights"));
 		form.removeElement(form.getElement("pass"));	
 		form.removeElement(form.getElement("ldate") );
-		form.addElement(new sugoi.form.elements.Checkbox("warnAmapManager", "Envoyer un mail au responsable de l'AMAP", true));
+		form.addElement(new sugoi.form.elements.Checkbox("warnAmapManager", "Envoyer un mail au responsable du groupe", true));
 		form.getElement("email").addValidator(new EmailValidator());
 		form.getElement("email2").addValidator(new EmailValidator());
 		
@@ -514,7 +527,7 @@ class Member extends Controller
 					ua.user = userSims.first();
 					ua.amap = app.user.amap;
 					ua.insert();	
-					throw Ok('/member/','Cette personne était déjà inscrite sur Cagette.net, nous l\'avons inscrite à votre AMAP.');
+					throw Ok('/member/','Cette personne était déjà inscrite sur Cagette.net, nous l\'avons inscrite à votre groupe.');
 				}else {
 					//demander validation avant d'inserer le userAmap
 					
@@ -541,10 +554,10 @@ class Member extends Controller
 				
 				if (form.getValueOf("warnAmapManager") == "1") {
 					var m = new sugoi.mail.MandrillApiMail();
-					m.setSubject("Nouvel inscrit à l'AMAP : " + u.getCoupleName());
+					m.setSubject(app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName());
 					m.setSender(app.user.email);
 					m.setRecipient(app.user.getAmap().contact.email);
-					var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne dans l'AMAP : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://www.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
+					var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://www.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
 					m.setHtmlBody('mail/message.mtt', { text:text } );
 					m.send();
 				}
