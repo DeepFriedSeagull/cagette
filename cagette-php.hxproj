@@ -25,16 +25,14 @@
     <option noInlineOnDebug="False" />
     <option mainClass="App" />
     <option enabledebug="False" />
-    <option additional="-D debugip=localhost:18080&#xA;-D weblogid=cagette&#xA;--next&#xA;-dce no&#xA;-cp common&#xA;-cp js&#xA;-lib sugoi&#xA;-main App&#xA;-js www/js/app.js" />
+    <option additional="&#xA;--next&#xA;-dce no&#xA;-cp common&#xA;-cp js&#xA;-lib sugoi&#xA;-main App&#xA;-js www/js/app.js" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
     <library name="dbadmin" />
     <library name="templo" />
-    <library name="weblog" />
     <library name="sugoi" />
     <library name="hxevents" />
-    <library name="cagette-hosted" />
     <library name="hscript" />
     <library name="ufront-mail" />
   </haxelib>

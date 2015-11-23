@@ -2,9 +2,7 @@ package controller;
 import db.UserContract;
 import sugoi.form.elements.Selectbox;
 import sugoi.form.Form;
-import neko.Web;
 import sugoi.tools.Utils;
-
 
 class Vendor extends Controller
 {

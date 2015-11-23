@@ -222,8 +222,8 @@ class Product extends Controller
 		for (p in data.products) {
 			for (t in p.categories) {
 				var x = new db.ProductCategory();
-				x.categoryId = t;
-				x.productId = p.product.id;
+				x.category = db.Category.manager.get(t);
+				x.product = db.Product.manager.get(p.product.id);
 				x.insert();
 				
 			}

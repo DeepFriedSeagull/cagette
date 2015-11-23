@@ -4,7 +4,11 @@ import haxe.Utf8;
 import sugoi.form.elements.Selectbox;
 import sugoi.form.Form;
 import sugoi.form.validators.EmailValidator;
+#if neko
 import neko.Web;
+#else
+import php.Web;
+#end
 import sugoi.tools.Utils;
 
 
@@ -28,7 +32,7 @@ class Member extends Controller
 		
 		var browse:Int->Int->List<Dynamic>;
 		var uids = db.UserAmap.manager.search($amap == app.user.getAmap(), false);
-		var uids = Lambda.map(uids, function(ua) return ua.userId);
+		var uids = Lambda.map(uids, function(ua) return ua.user.id);
 		if (args != null && args.search != null) {
 			
 			//SEARCH
@@ -466,7 +470,7 @@ class Member extends Controller
 				if (userAmaps.length == 0) {
 					//il existe dans cagette, mais pas pour ce groupe
 					var ua = new db.UserAmap();
-					ua.userId = us.first().id;
+					ua.user = us.first();
 					ua.amap = app.user.amap;
 					ua.insert();
 				}
@@ -517,7 +521,7 @@ class Member extends Controller
 			
 			if (userAmaps.length > 0) {
 				//user deja enregistré dans cette amap
-				throw Error('/member/view/' + userAmaps.first().userId, 'Cette personne est déjà inscrite dans cette AMAP');
+				throw Error('/member/view/' + userAmaps.first().user.id, 'Cette personne est déjà inscrite dans ce groupe');
 				
 			}else if (userSims.length > 0) {
 				//des users existent avec ce nom , 

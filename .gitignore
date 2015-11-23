@@ -1,5 +1,5 @@
 index.n
-lang/fr/tmp/*.n
+lang/fr/tmp/*
 www/index.n
 config.xml
 www/plugin/*

@@ -9,6 +9,9 @@ css:
 
 templates:
 	(cd lang/$(LANG)/tpl; temploc2 -macros macros.mtt -output ../tmp/ *.mtt */*.mtt */*/*.mtt)
+	
+templates_php:
+	(cd lang/$(LANG)/tpl; temploc2 -php -macros macros.mtt -output ../tmp/ *.mtt */*.mtt */*/*.mtt)	
 
 deploy: 
 	#compile

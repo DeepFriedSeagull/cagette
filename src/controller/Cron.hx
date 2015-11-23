@@ -1,6 +1,10 @@
 package controller;
 import sugoi.db.Cache;
-
+#if neko
+import neko.Web;
+#else
+import php.Web;
+#end
 class Cron extends Controller
 {
 
@@ -17,13 +21,16 @@ class Cron extends Controller
 			
 			return true;
 		}else {
-			
-			if (neko.Web.isModNeko) {
+			#if php
+			return true;
+			#else
+			if (Web.isModNeko) {
 				Sys.print("only CLI.");
 				return false;
 			}else {
 				return true;
 			}
+			#end
 		}
 	}
 	
@@ -127,12 +134,12 @@ class Cron extends Controller
 		//groupe les commande par user 
 		var users = new Map< Int,  {user:db.User,distrib:db.Distribution,products:Array<db.UserContract>} >();
 		for (o in orders) {
-			var x = users.get(o.userId);
+			var x = users.get(o.user.id);
 			if (x == null) x = {user:o.user,distrib:null,products:[]};
 			
 			if (o.product.contract.type == db.Contract.TYPE_VARORDER) {
 				//commande variable
-				if (o.distributionId != distribsByContractId.get(o.product.contract.id).id) {
+				if (o.distribution.id != distribsByContractId.get(o.product.contract.id).id) {
 					//si cette commande ne correspond pas à cette distribution, on passe
 					continue;	
 				}
@@ -141,7 +148,7 @@ class Cron extends Controller
 			x.distrib = distribsByContractId.get(o.product.contract.id);
 			x.products.push(o);
 			
-			users.set(o.userId, x);
+			users.set(o.user.id, x);
 		}
 		
 		

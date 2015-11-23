@@ -4,7 +4,11 @@ import sugoi.form.elements.Hidden;
 import sugoi.form.elements.Input;
 import sugoi.form.Form;
 import sugoi.form.validators.EmailValidator;
+#if neko
 import neko.Web;
+#else
+import php.Web;
+#end
 
 enum LoginError {
 	UserDoesntExists;
@@ -95,7 +99,7 @@ class User extends Controller
 		if (amaps.length == 0) throw "Vous ne faites partie d'aucun groupe";
 		if (amaps.length == 1) {
 			//qu'une amap
-			app.session.data.amapId = amaps.first().amapId;
+			app.session.data.amapId = amaps.first().amap.id;
 			throw Redirect('/');
 		}
 		

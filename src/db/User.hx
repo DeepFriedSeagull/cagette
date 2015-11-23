@@ -293,7 +293,7 @@ class User extends Object {
 	public static function getUsers_NoContracts(?index:Int,?limit:Int):List<db.User> {
 		var productsIds = App.current.user.getAmap().getProducts().map(function(x) return x.id);
 		var uc = UserContract.manager.search($productId in productsIds, false);
-		var uc2 = uc.map(function(x) return x.userId); //liste des userId avec un contrat dans cette amap
+		var uc2 = uc.map(function(x) return x.user.id); //liste des userId avec un contrat dans cette amap
 		//les gens qui sont dans cette amap et qui n'ont pas de contrat de cette amap
 		var ua = db.UserAmap.manager.unsafeObjects("select * from UserAmap where amapId=" + App.current.user.getAmap().id +" and userId NOT IN(" + uc2.join(",") + ")", false);						
 		return Lambda.map(ua, function(x) return x.user);	
@@ -329,7 +329,7 @@ class User extends Object {
 		//return out;
 		
 		var uas = db.UserAmap.manager.search($amap == App.current.user.amap, false);
-		var ids = Lambda.map(uas, function(x) return x.userId);
+		var ids = Lambda.map(uas, function(x) return x.user.id);
 		if (index == null && limit == null) {
 			return  db.User.manager.search($pass == db.User.EMPTY_PASS && ($id in ids), {orderBy:lastName} ,false);
 		}else {

@@ -48,7 +48,7 @@ class Main extends Controller {
 						//trace("CONTRAT "+contract.name+"-"+contract.type+"-"+contract.id);
 						
 						if (contract.type == db.Contract.TYPE_VARORDER) {
-							if (order.distributionId == d.id) {
+							if (order.distribution.id == d.id) {
 								//trace("VARY : "+order);
 								x.orders.push(order);								
 							}

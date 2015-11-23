@@ -1,9 +1,7 @@
 -lib dbadmin
 -lib templo
--lib weblog
 -lib sugoi
 -lib hxevents
--lib cagette-hosted
 -lib hscript
 -lib ufront-mail
 -cp common
@@ -11,8 +9,6 @@
 -php www/
 -D spod_macro
 -main App
--D debugip=localhost:18080
--D weblogid=cagette
 --next
 -dce no
 -cp common

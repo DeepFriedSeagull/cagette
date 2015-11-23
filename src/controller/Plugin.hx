@@ -1,7 +1,7 @@
 package controller;
 
 /**
- * ...
+ * Base controller for plugins
  * @author fbarbut<francois.barbut@gmail.com>
  */
 class Plugin extends sugoi.BaseController
@@ -11,6 +11,11 @@ class Plugin extends sugoi.BaseController
 	{
 		super();
 	}
+	
+	public function doDefault() {
+		
+	}
+	
 	#if plugins
 	//cagette-hosted
 	public function doHosted(d:haxe.web.Dispatch) {

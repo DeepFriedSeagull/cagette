@@ -1,12 +1,18 @@
 using Std;
 import Common;
+#if neko
+import neko.Web;
+#else
+import php.Web;
+#end
+
 
 class View extends sugoi.BaseView {
 	public function new() {
 		super();
 		this.Std = Std;
 		this.Date = Date;
-		this.Web = neko.Web;
+		this.Web = Web;
 	}
 	
 	public function count(i) {

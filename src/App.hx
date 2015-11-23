@@ -1,5 +1,10 @@
 import db.User;
- 
+#if neko
+import neko.Web;
+#else
+import php.Web;
+#end
+
 class App extends sugoi.BaseApp {
 
 	public static var current : App = null;
@@ -32,7 +37,7 @@ class App extends sugoi.BaseApp {
 	override function setCookie( oldCookie : String ) {
 	
 		if( session != null && session.sid != null && session.sid != oldCookie ) {
-			neko.Web.setHeader("Set-Cookie", cookieName+"=" + session.sid + "; path=/;");
+			Web.setHeader("Set-Cookie", cookieName+"=" + session.sid + "; path=/;");
 			//neko.Web.setHeader("Set-Cookie", cookieName+"="+session.sid+"; Domain=" + cookieDomain + "; path=/;");
 			//neko.Web.setCookie(cookieName, session.sid, new Date(1970,1,1,0,0,0), cookieDomain,"/"); //delete this fucking cookie .app.cagette.net //nope, sur IE, setter deux cookie foire tout
 		}
@@ -46,9 +51,11 @@ class App extends sugoi.BaseApp {
 	}
 	
 	public static function log(t:Dynamic) {
-		if(App.config.DEBUG) {
-			//neko.Web.logMessage(Std.string(t));
-			Weblog.log(t);
+		if (App.config.DEBUG) {
+			#if neko
+			Web.logMessage(Std.string(t));
+			#end
+			//Weblog.log(t);
 		}
 	}
 	

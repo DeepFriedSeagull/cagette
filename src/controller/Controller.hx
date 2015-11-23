@@ -1,5 +1,9 @@
 package controller;
-
+#if neko
+import neko.Web;
+#else
+import php.Web;
+#end
 /**
  * 
  * @author fbarbut
@@ -20,8 +24,8 @@ class Controller extends sugoi.BaseController
 	function setCsvData(data:Array<Dynamic>,headers:Array<String>,fileName:String) {
 		
 		app.setTemplate('empty.mtt');
-		neko.Web.setHeader("Content-type", "text.csv");
-		neko.Web.setHeader('Content-disposition', 'attachment;filename='+fileName+'.csv');
+		Web.setHeader("Content-type", "text.csv");
+		Web.setHeader('Content-disposition', 'attachment;filename='+fileName+'.csv');
 		
 		Sys.println(Lambda.map(headers,function(t) return App.t._(t)).join(","));
 		
