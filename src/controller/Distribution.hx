@@ -203,8 +203,9 @@ class Distribution extends Controller
 		view.contract = contract;
 
 		var doodle = new Map<Int,{user:db.User,planning:Map<Int,Bool>}>();
+		var distribs = contract.getDistribs(true, 150);
 		
-		for ( d in contract.getDistribs(20) ) {
+		for ( d in distribs ) {
 			for (u in [d.distributor1, d.distributor2, d.distributor3, d.distributor4]) {
 				if (u != null) {
 					
@@ -218,6 +219,7 @@ class Distribution extends Controller
 			}
 			
 		}
+		view.distribs = distribs;
 		view.doodle = doodle;
 		
 	}

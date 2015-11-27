@@ -9,7 +9,7 @@
 		</p>
 		
 		
-		::set distribs = contract.getDistribs(true,20)::
+		
 		<div style="overflow-x:scroll;">
 		<table class="table table-bordered">
 			<tr>

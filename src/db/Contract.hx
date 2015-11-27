@@ -111,12 +111,12 @@ class Contract extends Object
 		return Lambda.array(ucs);
 	}
 	
-	public function getDistribs(excludeOld = true,?limit=5):List<Distribution> {
+	public function getDistribs(excludeOld = true,?limit=999):List<Distribution> {
 		if (excludeOld) {
 			//still include deliveries which just expired in last 24h
 			return Distribution.manager.search($end > DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24) && $contract == this, { orderBy:date,limit:limit } );
 		}else{
-			return Distribution.manager.search( $contract == this, { orderBy:date } );
+			return Distribution.manager.search( $contract == this, { orderBy:date,limit:limit } );
 		}
 	}
 	

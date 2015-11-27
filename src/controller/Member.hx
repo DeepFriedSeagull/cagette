@@ -196,23 +196,26 @@ class Member extends Controller
 				throw Error("/member/edit/" + member.id, "Attention, Cet email ou ce nom existe déjà dans une autre fiche : "+Lambda.map(sim,function(u) return "<a href='/member/view/"+u.id+"'>"+u.getCoupleName()+"</a>").join(","));
 			}
 			
-			//verif changement d'email
-			if (form.getValueOf("email") != member.email) {
-				var mail = new sugoi.mail.MandrillApiMail();
-				mail.setSender("noreply@cagette.net");
-				mail.setRecipient(member.email);
-				mail.setSubject("Changement d'email sur votre compte Cagette.net");
-				mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email") } );			
-				mail.send();	
+			if (!App.config.DEBUG) {
+				//verif changement d'email
+				if (form.getValueOf("email") != member.email) {
+					var mail = new sugoi.mail.MandrillApiMail();
+					mail.setSender("noreply@cagette.net");
+					mail.setRecipient(member.email);
+					mail.setSubject("Changement d'email sur votre compte Cagette.net");
+					mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email") } );			
+					mail.send();	
+				}
+				if (form.getValueOf("email2") != member.email2 && member.email2!=null) {
+					var mail = new sugoi.mail.MandrillApiMail();
+					mail.setSender("noreply@cagette.net");
+					mail.setRecipient(member.email2);
+					mail.setSubject("Changement d'email sur votre compte Cagette.net");
+					mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2") } );			
+					mail.send();	
+				}	
 			}
-			if (form.getValueOf("email2") != member.email2 && member.email2!=null) {
-				var mail = new sugoi.mail.MandrillApiMail();
-				mail.setSender("noreply@cagette.net");
-				mail.setRecipient(member.email2);
-				mail.setSubject("Changement d'email sur votre compte Cagette.net");
-				mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2") } );			
-				mail.send();	
-			}
+			
 			
 			//update model
 			form.toSpod(member); 
