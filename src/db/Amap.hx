@@ -26,18 +26,23 @@ class Amap extends Object
 	public var membershipRenewalDate : SNull<SDate>;
 	public var membershipPrice : SNull<STinyInt>;
 	
+	@hideInForms 
 	public var vatRates : SData<Map<String,Float>>;
 	
 	public var flags:SFlags<AmapFlags>;
 	
-	@:relation(imageId)
+	@hideInForms @:relation(imageId)
 	public var image : SNull<sugoi.db.File>;
+	
+	@hideInForms
+	public var cdate : SDateTime;
 	
 	public function new() 
 	{
 		super();
 		flags = cast 0;
 		vatRates = ["TVA Alimentaire 5,5%" => 5.5, "TVA 20%" => 20];
+		cdate = Date.now();
 		
 	}
 	
