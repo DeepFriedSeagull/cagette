@@ -39,7 +39,7 @@ class Place extends Controller
 	function doEdit(d:db.Place) {
 		
 		var f = sugoi.form.Form.fromSpod(d);
-		f.removeElement( f.getElement("amapId") );
+		
 			
 		if (f.isValid()) {
 		

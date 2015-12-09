@@ -48,8 +48,12 @@ class Contract extends Object
 		super();
 	}
 	
+	/**
+	 * the user can order if the flag is on, and the end date is not passed
+	 * @return
+	 */
 	public function isUserOrderAvailable():Bool {
-		return flags.has(UsersCanOrder);
+		return flags.has(UsersCanOrder) && Date.now().getTime() < this.endDate.getTime();
 	}
 	public function hasPercentageOnOrders():Bool {
 		return flags.has(PercentageOnOrders) && percentageValue!=null && percentageValue!=0;

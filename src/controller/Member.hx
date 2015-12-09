@@ -556,13 +556,16 @@ class Member extends Controller
 				ua.insert();	
 				
 				if (form.getValueOf("warnAmapManager") == "1") {
+					
+					try{
 					var m = new sugoi.mail.MandrillApiMail();
 					m.setSubject(app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName());
 					m.setSender(app.user.email);
 					m.setRecipient(app.user.getAmap().contact.email);
-					var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://www.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
+					var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://app.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
 					m.setHtmlBody('mail/message.mtt', { text:text } );
 					m.send();
+					}catch(e:Dynamic){}
 				}
 				
 				throw Ok('/member/','Cette personne a bien été enregistrée');

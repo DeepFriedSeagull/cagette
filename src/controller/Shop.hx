@@ -134,12 +134,9 @@ class Shop extends sugoi.BaseController
 					//throw "pas trouvé la distribution du produit " + o.productId+" , contrat "+p.contract.name;
 					errors.push("Le produit \""+p.name+"\" n'ayant pas de livraison associée, il a été retiré de votre commande");
 				}else {
-					
 					//enregistre la commande
 					db.UserContract.make(app.user,o.quantity, o.productId, d);
-					
 				}
-				
 			}
 			
 			if(errors.length>0) app.session.addMessage(errors.join("<br/>"),true);

@@ -34,8 +34,8 @@ class Amap extends Object
 	@hideInForms @:relation(imageId)
 	public var image : SNull<sugoi.db.File>;
 	
-	@hideInForms
-	public var cdate : SDateTime;
+	@hideInForms public var cdate : SDateTime;
+	@hideInForms @:relation(placeId) public var mainPlace : SNull<db.Place>;
 	
 	public function new() 
 	{
@@ -44,6 +44,40 @@ class Amap extends Object
 		vatRates = ["TVA Alimentaire 5,5%" => 5.5, "TVA 20%" => 20];
 		cdate = Date.now();
 		
+	}
+	
+	/**
+	 * find the most common delivery place
+	 */
+	public function getMainPlace() {
+	
+		if (mainPlace != null && Std.random(100) != 0) {
+			return mainPlace;
+		}else {
+			this.lock();
+			//var cids = Lambda.map(getActiveContracts(), function(x) return x.id);
+			var places = getPlaces();
+			if (places.length == 1) {				
+				this.mainPlace = places.first();
+				this.update();				
+			}
+			
+			var pids = Lambda.map(places, function(x) return x.id);
+			
+			var res = sys.db.Manager.cnx.request("select placeId,count(placeId) as top from Distribution where placeId IN ("+pids.join(",")+") group by placeId order by top desc").results();
+			
+			var pid = Std.parseInt(res.first().placeId);
+			
+			
+			if (pid != 0 && pid != null) {
+				var p = db.Place.manager.get(pid, false);
+				this.mainPlace = p;
+				this.update();
+				return p;
+			}else {
+				return null;	
+			}
+		}
 	}
 	
 	
@@ -73,7 +107,7 @@ class Amap extends Object
 	}
 	
 	public function getContracts() {
-		return Contract.manager.select($amap == this, false);
+		return Contract.manager.search($amap == this, false);
 	}
 	
 	/**

@@ -328,7 +328,7 @@ class Contract extends Controller
 		var d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 		var d2 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
 				
-		var cids = Lambda.map(app.user.amap.getActiveContracts(), function(c) return c.id);
+		var cids = Lambda.map(app.user.amap.getActiveContracts(true), function(c) return c.id);
 		var distribs = db.Distribution.manager.search(($contractId in cids) && $date >= d1 && $date <=d2 , false);
 		var orders = db.UserContract.manager.search($userId==app.user.id && $distributionId in Lambda.map(distribs,function(d)return d.id)  );
 		view.orders = db.UserContract.prepare(orders);
@@ -345,7 +345,9 @@ class Contract extends Controller
 					var pid = Std.parseInt(k.substr("product".length));
 					var order = Lambda.find(orders, function(uo) return uo.product.id == pid);
 					if (order == null) throw "Erreur, impossible de retrouver la commande";
-					var quantity = Std.int(Math.abs(Std.parseInt(param)));
+					
+					var q = Std.parseInt(param);
+					var quantity = Std.int(Math.abs( q==null?0:q ));
 
 					if (!order.paid && order.product.contract.isUserOrderAvailable()) {
 						//met a jour la commande

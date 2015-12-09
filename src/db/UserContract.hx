@@ -122,7 +122,6 @@ class UserContract extends Object
 			
 			x.contractId = c.id;
 			x.contractName = c.name;
-			
 			x.canModify = c.isUserOrderAvailable() && !o.paid; //on peut modifier si ça na pas deja été payé + commande encore ouvertes
 			
 			out.push(x);

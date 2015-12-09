@@ -175,10 +175,10 @@ class Distribution extends Controller
 		var form = sugoi.form.Form.fromSpod(d);
 		form.removeElement(form.getElement("contractId"));
 		form.removeElement(form.getElement("startHour"));
-		var x = new sugoi.form.elements.HourDropDowns("startHour", "Heure de début",d.startHour);
+		var x = new sugoi.form.elements.HourDropDowns("startHour", "Heure de début",d.startHour,true);
 		form.addElement(x, 5);
 		form.removeElement(form.getElement("endHour"));
-		var x = new sugoi.form.elements.HourDropDowns("endHour", "Heure de fin",d.endHour);
+		var x = new sugoi.form.elements.HourDropDowns("endHour", "Heure de fin",d.endHour,true);
 		form.addElement(x, 6);
 		
 		if (form.isValid()) {
