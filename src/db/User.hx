@@ -352,6 +352,8 @@ class User extends Object {
 			group = App.current.user.amap;	
 		}
 		
+		if (group == null) throw "cet utilisateur n'est affilié à aucun groupe";
+		
 		//store token
 		var k = sugoi.db.Session.generateId();
 		sugoi.db.Cache.set("validation" + k, this.id, 60 * 60 * 24 * 7); //expire dans une semaine
@@ -368,6 +370,30 @@ class User extends Object {
 		App.getMailer().send(e);
 		
 		
+	}
+	
+	/**
+	 * cleaning before saving
+	 */
+	override public function insert() {
+		clean();
+		super.insert();
+	}
+	
+	override public function update() {
+		clean();
+		super.update();
+	}
+	
+	function clean() {
+		
+		//emails
+		this.email = this.email.toLowerCase();
+		if (this.email2 != null) this.email2 = this.email2.toLowerCase();
+		
+		//lastname
+		this.lastName = this.lastName.toUpperCase();
+		if (this.lastName2 != null) this.lastName2 = this.lastName2.toUpperCase();
 	}
 	
 	

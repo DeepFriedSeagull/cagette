@@ -182,10 +182,11 @@ class Distribution extends Controller
 		form.addElement(x, 6);
 		
 		if (form.isValid()) {
+			
+			
 			form.toSpod(d); //update model
 			d.contract = contract;
 			d.insert();
-			
 			db.DistributionCycle.updateChilds(d);
 			throw Ok('/contractAdmin/distributions/'+d.contract.id,'La distribution a été enregistrée');
 		}

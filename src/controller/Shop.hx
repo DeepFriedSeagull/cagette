@@ -75,7 +75,7 @@ class Shop extends sugoi.BaseController
 		var pids = Lambda.map(order.products, function(p) return p.productId);
 		var products = db.Product.manager.search($id in pids, false);
 		var _cids = Lambda.map(products, function(p) return p.contract.id);
-		var distribs = db.Distribution.manager.search(($contractId in _cids) && $date >= Date.now(), { orderBy:date, limit:5 }, false);
+		var distribs = db.Distribution.manager.search(($contractId in _cids) && $date >= Date.now(), { orderBy:date }, false);
 		
 		//dedups cids
 		var cids = new Map<Int,Int>();
@@ -117,7 +117,7 @@ class Shop extends sugoi.BaseController
 			//collecte quelle distrib choisie pour quel contrat
 			var cd = new Map<Int,Int>();  //contract id -> distrib id
 			for (e in form.elements) {
-				if (e.name == null) continue;
+				if (e.name == null) continue;//Html form element has no name
 				if (e.name.substr(0, 7) == "distrib") {
 					cd.set(Std.parseInt(e.name.substr(7)), Std.parseInt(e.value));
 				}
@@ -139,7 +139,11 @@ class Shop extends sugoi.BaseController
 				}
 			}
 			
-			if(errors.length>0) app.session.addMessage(errors.join("<br/>"),true);
+			if (errors.length > 0) {
+				app.session.addMessage(errors.join("<br/>"), true);
+				app.logError("params : "+App.current.params.toString()+"\n \n"+errors.join("\n"));
+				
+			}
 			
 			app.session.data.order = null;
 			throw Ok("/contract", "Votre commande a bien été enregistrée");

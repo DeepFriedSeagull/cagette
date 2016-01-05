@@ -36,6 +36,11 @@ class User extends Controller
 		
 		if (args != null) {
 			
+			//cleaning
+			args.name = StringTools.trim(args.name).toLowerCase();
+			args.pass = StringTools.trim(args.pass);
+		
+			
 			//user exists ?
 			var user = db.User.manager.select( $email == StringTools.trim(args.name) || $email2 == StringTools.trim(args.name) , true);
 			if (user == null) {
@@ -82,7 +87,7 @@ class User extends Controller
 		user.ldate = Date.now();
 		user.update();
 		App.current.session.setUser(user);
-		App.current.session.data.whichUser = (email == user.email) ? 0 : 1; //qui est connecté, monsieur ou madame ?	
+		App.current.session.data.whichUser = (email == user.email) ? 0 : 1; //qui est connecté, user1 ou user2 ?	
 		
 	}
 	

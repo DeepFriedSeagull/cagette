@@ -73,7 +73,8 @@ class Member extends Controller
 			
 		}else {
 			if (app.params.exists("csv")) {
-				setCsvData(Lambda.array(db.User.manager.search( $id in uids, {orderBy:lastName}, false)), ["firstName", "lastName", "email"], "Adherents");
+				var headers = ["firstName", "lastName", "email","phone", "firstName2", "lastName2","email2","phone2", "address1","address2","zipCode","city"];
+				setCsvData(Lambda.array(db.User.manager.search( $id in uids, {orderBy:lastName}, false)), headers, "Adherents");
 				return;
 			}else {
 				//default display
@@ -219,14 +220,6 @@ class Member extends Controller
 			
 			//update model
 			form.toSpod(member); 
-			
-			//lower / upper case
-			member.lastName = member.lastName.toUpperCase();
-			if (member.lastName2 != null) member.lastName2 = member.lastName2.toUpperCase();
-			//member.email = member.email.toLowerCase();
-			//if(member.email2
-			
-			
 			member.update();
 			throw Ok('/member/view/'+member.id,'Ce membre a été mis à jour');
 		}
@@ -346,15 +339,15 @@ class Member extends Controller
 				if (user[0] == null || user[1] == null) throw "Vous devez remplir le nom et prénom de la personne. <br/>Cette ligne est incomplète : " + user;
 				if (user[2] == null) throw "Chaque personne doit avoir un email, sinon elle ne pourra pas se connecter. "+user[0]+" "+user[1]+" n'en a pas.";
 				//uppercase du nom
-				if(user[1]!=null) user[1] = user[1].toUpperCase();
+				if (user[1] != null) user[1] = user[1].toUpperCase();
 				if (user[5] != null) user[5] = user[5].toUpperCase();
-				
-				App.log(user);
+				//lowercase email
+				if (user[2] != null) user[2] = user[2].toLowerCase();
+				if (user[6] != null) user[6] = user[6].toLowerCase();
 			}
 			
 			//utf-8 check
 			for ( row in unregistred.copy()) {
-				
 				
 				for ( i in 0...row.length) {
 					var t = row[i];
@@ -545,8 +538,6 @@ class Member extends Controller
 				var u = new db.User();
 				form.toSpod(u); 
 				u.lang = "fr";
-				u.lastName = u.lastName.toUpperCase();
-				if (u.lastName2 != null) u.lastName2 = u.lastName2.toUpperCase();
 				u.insert();
 				
 				//insert userAmap

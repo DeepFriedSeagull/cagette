@@ -33,7 +33,6 @@ class Main extends Controller {
 			//les distribs dans lesquelles j'ai des produits a prendre
 			var distribs = Distribution.manager.search( ($contractId in contractIds) && $end > Date.now(),{orderBy:date,limit:10}, false );
 			
-			
 			/**
 			 * HashMap de jours ( ie "2014-11-01" ), contenant les différentes distrib, pouvant impliquer plusieurs produits (userContracts)
 			 */

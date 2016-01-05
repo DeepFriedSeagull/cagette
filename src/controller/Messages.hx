@@ -17,13 +17,28 @@ class Messages extends Controller
 	@tpl("messages/default.mtt")
 	function doDefault() {
 		
-		var form = new Form("msg");
+		var form = new Form("msg");		
+		
+		var senderName = "";
+		var senderMail = "";
+		
+		if (App.current.session.data.whichUser == 1 && app.user.email2 != null) {
+			senderMail = app.user.email2;
+			senderName = app.user.firstName2 + " " + app.user.lastName2;
+			
+		}else {				
+			senderMail = app.user.email;
+			senderName = app.user.firstName + " " + app.user.lastName;
+		}
+		
+		view.senderName = senderName;
+		view.senderMail = senderMail;
+		form.addElement( new sugoi.form.elements.Html(senderName+" <i>" + senderMail + "</i>", "Expéditeur"));
+		
 		var lists = getLists();
 		form.addElement( new Selectbox("list", "Destinataires",lists,null,false,null,"style='width:500px;'"));
 		form.addElement( new Input("subject", "Sujet :","",false,null,"style='width:500px;'") );
 		form.addElement( new TextArea("text", "Message :", "", false, null, "style='width:500px;height:350px;'") );
-		
-		
 		
 		if (form.checkToken()) {
 			
@@ -37,32 +52,18 @@ class Messages extends Controller
 				if (d.email2 != null) mails.push(d.email2);
 			}
 			
-			//mails
-			//for( m in mails) mail.addRecipient(m);
-			//mail.setSender(app.user.email, app.user.firstName+" "+app.user.lastName);
-			//mail.title = form.getElement("subject").value;
-			//var text :String = form.getElement("text").value;
-			//mail.setHtmlBody('mail/message.mtt', { text:text } );
-			
 			
 			//send mail confirmation link
 			var e = new ufront.mail.Email();		
 			e.setSubject(form.getValueOf("subject"));
 			e.bcc(Lambda.map(mails, function(m) return new ufront.mail.EmailAddress(m)));
 			
-			if (App.current.session.data.whichUser == 1 && app.user.email2!=null) {
-				e.from(new ufront.mail.EmailAddress("noreply@cagette.net",app.user.firstName2 + " " + app.user.lastName2));		
-				e.replyTo(new ufront.mail.EmailAddress(app.user.email2, app.user.firstName2 + " " + app.user.lastName2));
-			}else {				
-				e.from(new ufront.mail.EmailAddress("noreply@cagette.net",app.user.firstName+" " + app.user.lastName));		
-				e.replyTo(new ufront.mail.EmailAddress(app.user.email, app.user.firstName+" " + app.user.lastName));		
-			}
+			e.from(new ufront.mail.EmailAddress("noreply@cagette.net",senderName));		
+			e.replyTo(new ufront.mail.EmailAddress(senderMail, senderName));
 			
 			var text :String = form.getValueOf("text");
 			var html = app.processTemplate("mail/message.mtt", { text:text,group:app.user.amap,list:getListName(listId) });		
 			e.setHtml(html);
-			
-			
 			
 			var event = new event.MessageEvent();
 			event.id = "sendMessage";

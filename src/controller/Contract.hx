@@ -94,7 +94,6 @@ class Contract extends Controller
 		form.getElement("userId").required = true;
 		
 		if (form.checkToken()) {
-			
 			form.toSpod(c);
 			c.amap = app.user.amap;
 			
