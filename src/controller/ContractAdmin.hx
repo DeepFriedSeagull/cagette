@@ -57,6 +57,13 @@ class ContractAdmin extends Controller
 		checkToken();
 	}
 
+	
+	
+	
+	/**
+	 *  - hidden page -
+	 * copy products from a contract to an other
+	 */
 	@admin @tpl("form.mtt")
 	function doCopyProducts(contract:db.Contract) {
 		view.title = "Copier des produits dans : "+contract.name;
@@ -139,6 +146,83 @@ class ContractAdmin extends Controller
 		
 		view.orders = orders;
 	}
+	
+	/**
+	 *  Duplicate a contract
+	 */
+	@tpl("form.mtt")
+	function doDuplicate(contract:db.Contract) {
+		if (!app.user.isAmapManager()) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
+		
+		view.title = "Dupliquer le contrat '"+contract.name+"'";
+		var form = new Form("duplicate");
+		
+		form.addElement(new Input("name","Nom du nouveau contrat : ",contract.name+" - copie "));
+		form.addElement(new Checkbox("copyProducts","Copier les produits",true));
+		form.addElement(new Checkbox("copyDeliveries","Copier les livraisons",true));
+		
+		if (form.checkToken()) {
+			
+			var nc = new db.Contract();
+			nc.name = form.getValueOf("name");
+			nc.startDate = contract.startDate;
+			nc.endDate = contract.endDate;
+			nc.amap = contract.amap;
+			nc.contact = contract.contact;
+			nc.description = contract.description;
+			nc.distributorNum = contract.distributorNum;
+			nc.flags = contract.flags;
+			nc.type = contract.type;
+			nc.vendor = contract.vendor;
+			nc.percentageName = contract.percentageName;
+			nc.percentageValue = nc.percentageValue;
+			nc.insert();
+			
+			if (form.getValueOf("copyProducts") == "1") {
+				var prods = contract.getProducts();
+				for ( source_p in prods) {
+					var p = new db.Product();
+					p.name = source_p.name;
+					p.price = source_p.price;
+					p.type = source_p.type;
+					p.contract = nc;
+					p.image = source_p.image;
+					p.desc = source_p.desc;
+					p.ref = source_p.ref;
+					p.stock = source_p.stock;
+					p.vat = source_p.vat;
+					p.insert();
+				}
+			}
+			
+			if (form.getValueOf("copyDeliveries") == "1") {
+				for ( ds in contract.getDistribs()) {
+					var d = new db.Distribution();
+					d.contract = nc;
+					d.date = ds.date;
+					d.distributor1Id = ds.distributor1Id;
+					d.distributor2Id = ds.distributor2Id;
+					d.distributor3Id = ds.distributor3Id;
+					d.distributor4Id = ds.distributor4Id;
+					d.end = ds.end;
+					d.place = ds.place;
+					d.text = ds.text;
+					d.insert();
+				}
+				
+				
+			}
+			
+			throw Ok("/contractAdmin/view/" + nc.id, "Contrat dupliqué");
+			
+			
+		}
+		
+		
+		view.form = form;
+	}
+	
+	
 	
 	/**
 	 * Commandes groupées par produit.

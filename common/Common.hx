@@ -5,7 +5,7 @@
 //utilisé dans le shop
 @:keep
 typedef Order = {
-	token:String,
+	
 	products:Array<{productId:Int,quantity:Int}>
 }
 

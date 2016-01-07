@@ -1,14 +1,25 @@
 ::use 'design.mtt'::
 <div class="col-md-9">
 	<div class="article">
+		
 	<h2>::c.name::</h2>
-	<div>
-		Du ::hDate(c.startDate):: au ::hDate(c.endDate)::<br/>
-		Producteur : <b>::c._vendor.name::</b>
-	</div>
+		
+	<div class="row">	
+		<div class="col-md-6">
+			<b>Dates :</b> du ::hDate(c.startDate):: au ::hDate(c.endDate)::<br/>
+			<b>Producteur :</b> ::c._vendor.name::<br/>
+			
+		</div>
+		<div class="col-md-6">
+			::if c.description!=null::
+			<b>Description :</b>	::raw nl2br(c.description)::
+			::end::
+		</div>
 
-	<hr/>
+	</div>
 	
+	<hr/>	
+		
 	<div class="row">
 		::foreach p c.getProducts()::
 		<div class="col-md-4" id="product::p.id::">

@@ -24,7 +24,16 @@
 				<td>::hDate(contract.endDate)::</td>
 			</tr>
 		</table>
+
+		<div>
+			$$edit(Modifier,/contract/edit/::c.id::)
+			
+			::if user.isAmapManager()::
+			$$edit(Dupliquer ce contrat,/contractAdmin/duplicate/::c.id::)
+			::end::
+		</div>
 		
+		<hr/>
 		
 		<h4>Producteur</h4>
 		<table class="table table-bordered" style="width:400px;">
@@ -44,17 +53,18 @@
 		
 		
 		<h4><a href="/contractAdmin/products/::c.id::">Produits</a></h4>
-		<table class="table table-bordered" style="width:400px;">
-			::foreach p contract.getProducts()::
-			<tr>
-				<td><img src="::p.getImage()::" style="width:32px;height:32px;" />	</td>
-				<td>::p.name::</td>
-				<td>::formatNum(p.price)::&nbsp;&euro;</td>					
-			</tr>
-			::end::
-		</table>
-			
-	
-	
+		<div style="max-height:400px;overflow:auto;">
+			<table class="table table-bordered" style="width:400px;">
+				::foreach p contract.getProducts()::
+				<tr>
+					<td><img src="::p.getImage()::" style="width:32px;height:32px;" />	</td>
+					<td>::p.name::</td>
+					<td>::formatNum(p.price)::&nbsp;&euro;</td>					
+				</tr>
+				::end::
+			</table>
+		</div>
+		
+		
 
 ::end::

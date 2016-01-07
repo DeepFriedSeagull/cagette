@@ -321,7 +321,13 @@ class Contract extends Controller
 		
 		//comment on sait si on peut encore modifier la commande ?
 		// la date de livraison doit etre dans le futur
-		if (Date.now().getTime() > date.getTime()) throw Error("/contract", "Cette livraison a déjà eu lieu, vous ne pouvez plus modifier la commande.");
+		if (Date.now().getTime() > date.getTime()) {
+			
+			var msg = "Cette livraison a déjà eu lieu, vous ne pouvez plus modifier la commande.";
+			if (app.user.isContractManager()) msg += "<br/>En tant que gestionnaire de contrat vous pouvez modifier une commande depuis la page de gestion des commandes dans <a href='/contractAdmin'>Gestion contrats</a> ";
+			
+			throw Error("/contract", msg);
+		}
 		
 		// Il faut regarder le contrat de chaque produit et verifier si le contrat est toujours ouvert à la commande.		
 		var d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);

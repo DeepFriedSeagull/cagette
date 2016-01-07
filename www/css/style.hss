@@ -212,6 +212,13 @@ table.product{
 
 
 //in shop page
+
+#cartContainer.scrolled{
+	
+		position:fixed;
+		top:125px;
+}
+
 .cartDiv{
 	margin-bottom:16px;
 	background:#007700;

@@ -16,12 +16,12 @@
 	
 	<div class="row">
 		::foreach p products::
-		<div class="col-md-4" id="product::p.id::">
+		<div class="col-xs-12 col-sm-6 col-lg-4" id="product::p.id::">
 			
 			<table class="product">
 				<tr>
 					<td style="vertical-align:top;">
-						<a onclick="_.overlay('/shop/productInfo/::p.id::')"><img src="::p.image::" style="width:64px;height:64px;" />	</a>
+						<a onclick="_.overlay('/shop/productInfo/::p.id::')" data-toggle="tooltip" data-placement="top" title="En savoir plus"><img src="::p.image::" style="width:64px;height:64px;" />	</a>
 					</td>
 					<td>
 						<h4>
@@ -30,9 +30,16 @@
 						<span class="price">::formatNum(p.price):: €</span>
 											
 						<div>
+							<form class="form-inline">
+							<!--<span class="vat">Qté. </span>-->
+							<input id="productQt::p.id::" type="text" value="" placeHolder="1" style="height: 22px;width:40px;" class="form-control input-sm" maxlength="2"  data-toggle="tooltip" data-placement="top" title="Quantité"/>
 							<a class="btn btn-default btn-xs" onclick="cart.add(::p.id::)">Commander</a>
-							<a class="btn btn-default btn-xs" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	
+							<!--<a class="btn btn-default btn-xs" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	-->
+							</form>
 						</div>
+						
+						
+						
 						
 					</td>
 				</tr>
@@ -47,43 +54,47 @@
 	
 	</div>
 </div>
-<div class="col-md-3">
+	
+<div >	
+<div class="col-md-3" id="cartContainer">
 	
 	
-	<div class="cartDiv">
-		
-		<h2>
-			<span class="glyphicon glyphicon-shopping-cart"></span>
-			Commande
-		</h2>
-		<div id="cart">
+		<div class="cartDiv">
+			
+			<h2>
+				<span class="glyphicon glyphicon-shopping-cart"></span>
+				Commande
+				<img id="loader" src="/img/loader.gif"/>
+			</h2>
+			<div id="cart">
+				
+			</div>
+			
+			<a onClick="cart.submit();" class="btn btn-default">Valider</a>
+			
+			<a class="infos" href='/contract'>Vous pouvez consulter vos commandes en cours sur votre page "mon compte"</a>
+
 			
 		</div>
 		
-		<a onClick="cart.submit();" class="btn btn-default">Valider</a>
-		
-		<a class="infos" href='/contract'>Vous pouvez consulter vos commandes en cours sur votre page "mon compte"</a>
-
-		
-	</div>
+		<div class="article">
+			<span class="tag active" id="tag0" onclick="cart.filter(0);" style="cursor:pointer;"><span class="glyphicon glyphicon-ok"></span> Tout</span><br/>
+			
+			::foreach g user._amap.getCategoryGroups()::
+				<div>
+					<h4>::g.name::</h4>
+					
+					::foreach c g.getCategories()::
+						<span class="tag" id="tag::c.id::" onclick="cart.filter(::c.id::);" style="background-color: ::c.getColor()::;cursor:pointer;">::c.name::</span><br/>
+					::end::
+				</div>
+			::end::
+			
+		</div>
 	
-	<div class="article">
-		<span class="tag active" id="tag0" onclick="cart.filter(0);" style="cursor:pointer;"><span class="glyphicon glyphicon-ok"></span> Tout</span><br/>
-		
-		::foreach g user._amap.getCategoryGroups()::
-			<div>
-				<h4>::g.name::</h4>
-				
-				::foreach c g.getCategories()::
-					<span class="tag" id="tag::c.id::" onclick="cart.filter(::c.id::);" style="background-color: ::c.getColor()::;cursor:pointer;">::c.name::</span><br/>
-				::end::
-			</div>
-		::end::
-		
-	</div>
 		
 </div>
-
+</div>
 
 
 ::end::

@@ -56,7 +56,7 @@
 							<!--de ::d.distrib._contract._vendor.name::-->
 							<div class="row">
 							::foreach c d.orders::
-							<div class="col-md-4">
+							<div class="col-xs-12 col-sm-6 col-lg-4">
 							<table>
 								<tr>
 									<td>

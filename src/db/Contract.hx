@@ -32,6 +32,9 @@ class Contract extends Object
 	
 	public var startDate:SDate;
 	public var endDate :SDate;
+	
+	public var description:SNull<SText>;
+	
 	@:relation(amapId) public var amap:Amap;
 	public var distributorNum:STinyInt;
 	public var flags : SFlags<ContractFlags>;

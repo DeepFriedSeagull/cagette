@@ -10,11 +10,19 @@ class Shop extends sugoi.BaseController
 	}
 	
 	/**
-	 * full product list in AJAX
+	 * prints the full product list and current cart in JSON
 	 */
-	public function doProducts() {
+	public function doInit() {
+		
+		//init order serverside if needed		
+		var order :Order = app.session.data.order; 
+		if ( order == null) {
+			app.session.data.order = order = { products:new Array<{productId:Int,quantity:Int}>() };
+		}
+		
+		//
 		var products = getProducts();
-		Sys.print( haxe.Json.stringify( products ) );
+		Sys.print( haxe.Json.stringify( {products:products,order:order} ) );
 	}
 	
 	/**
@@ -23,11 +31,18 @@ class Shop extends sugoi.BaseController
 	public function getProducts():Array<ProductInfo> {
 		var contracts = db.Contract.getActiveContracts(app.user.amap);
 		
-		//que les contrats a commande variables
+		
 		for (c in Lambda.array(contracts)) {
+			//que les contrats a commande variables
 			if (c.type != db.Contract.TYPE_VARORDER) {
 				contracts.remove(c);
 			}
+			
+			//only open to order
+			if (!c.isUserOrderAvailable()) {
+				contracts.remove(c);
+			}
+			
 		}
 		var products = db.Product.manager.search($contractId in Lambda.map(contracts, function(c) return c.id), { orderBy:name }, false);
 		
@@ -42,6 +57,9 @@ class Shop extends sugoi.BaseController
 		return Lambda.array(Lambda.map(products, function(p) return p.infos()));
 	}
 	
+	/**
+	 * Overlay window loaded by Ajax for product Infos
+	 */
 	@tpl('shop/productInfo.mtt')
 	public function doProductInfo(p:db.Product) {
 		view.p = p.infos();
@@ -56,6 +74,39 @@ class Shop extends sugoi.BaseController
 		
 		var order : Order = haxe.Json.parse(app.params.get("data"));
 		app.session.data.order = order;
+		
+	}
+	
+	/**
+	 * add a product to the cart
+	 */
+	public function doAdd(productId:Int, quantity:Int) {
+	
+		var order :Order =  app.session.data.order;
+		if ( order == null) order = { products:new Array<{productId:Int,quantity:Int}>() };
+		
+		order.products.push( { productId:productId, quantity:quantity } );
+		
+		Sys.print( haxe.Json.stringify( {success:true} ) );
+		
+	}
+	
+	/**
+	 * remove a product from cart 
+	 */
+	public function doRemove(pid:Int) {
+	
+		var order :Order =  app.session.data.order;
+		if ( order == null) return;
+		
+		for ( p in order.products.copy()) {
+			if (p.productId == pid) {
+				order.products.remove(p);
+			}
+			
+		}
+		
+		Sys.print( haxe.Json.stringify( { success:true } ) );
 		
 	}
 	
