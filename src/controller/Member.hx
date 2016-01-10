@@ -122,7 +122,7 @@ class Member extends Controller
 		
 		view.member = member;
 		var userAmap = db.UserAmap.get(member, app.user.amap);
-		if (userAmap == null) throw Error("/member", "Cette personne ne fait pas partie de votre AMAP");
+		if (userAmap == null) throw Error("/member", "Cette personne ne fait pas partie de votre groupe");
 		
 		view.userAmap = userAmap; 
 		
@@ -159,6 +159,11 @@ class Member extends Controller
 		
 	}	
 	
+	/**
+	 * Admin : Log in as this user for debugging purpose
+	 * @param	user
+	 * @param	amap
+	 */
 	@admin
 	function doLoginas(user:db.User, amap:db.Amap) {
 	
@@ -169,6 +174,9 @@ class Member extends Controller
 		throw Redirect("/member/view/" + user.id );
 	}
 	
+	/**
+	 * Edit a Member
+	 */
 	@tpl('form.mtt')
 	function doEdit(member:db.User) {
 		
@@ -184,18 +192,31 @@ class Member extends Controller
 		form.getElement("email").addValidator(new EmailValidator());
 		form.getElement("email2").addValidator(new EmailValidator());
 		
-		
-		
 		if (form.checkToken()) {
 			
-			//vérifie si mails pas déjà 
+			//update model
+			form.toSpod(member); 
+			
+			//check that the given emails are not already used elsewhere
 			var sim = db.User.getSimilar(form.getValueOf("firstName"), form.getValueOf("lastName"), form.getValueOf("email"), form.getValueOf("firstName2"), form.getValueOf("lastName2"), form.getValueOf("email2"));
 			for ( s in sim) {				
 				if (s.id == member.id) sim.remove(s);
 			}
-			if (sim.length>0) {
-				throw Error("/member/edit/" + member.id, "Attention, Cet email ou ce nom existe déjà dans une autre fiche : "+Lambda.map(sim,function(u) return "<a href='/member/view/"+u.id+"'>"+u.getCoupleName()+"</a>").join(","));
-			}
+			if (sim.length > 0) {
+				
+				//Let's merge the 2 users if it has no orders.
+				var id = sim.first().id;
+				if (UserContract.manager.search( $userId == id || $userId2 == id , false).length == 0) {
+					//merge
+					member.merge( sim.first() );
+					app.session.addMessage("Cet email était utilisé dans une autre fiche de membre, comme cette fiche etait inutilisée, elle a été fusionnée avec la fiche courante.");
+					
+				} else {
+					throw Error("/member/edit/" + member.id, "Attention, Cet email ou ce nom existe déjà dans une autre fiche : "+Lambda.map(sim,function(u) return "<a href='/member/view/"+u.id+"'>"+u.getCoupleName()+"</a>. Ces deux fiches ne peuvent pas être fusionnées car cette personne a des commandes enregistrées dans l'autre fiche").join(","));	
+				}
+			}			
+			
+			member.update();
 			
 			if (!App.config.DEBUG) {
 				//verif changement d'email
@@ -217,10 +238,6 @@ class Member extends Controller
 				}	
 			}
 			
-			
-			//update model
-			form.toSpod(member); 
-			member.update();
 			throw Ok('/member/view/'+member.id,'Ce membre a été mis à jour');
 		}
 		

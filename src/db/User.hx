@@ -256,6 +256,57 @@ class User extends Object {
 	}
 	
 	/**
+	 * Merge fields of 2 users, then delete the second (u2)
+	 * Be carefull : check before calling this function that u2 can be safely deleted !
+	 */
+	public function merge(u2:db.User) {
+		
+		this.lock();
+		u2.lock();
+		
+		var m = function(a, b) {
+			return a == null || a=="" ? b : a;
+		}
+		
+		this.address1 = m(this.address1, u2.address1);
+		this.address2 = m(this.address2, u2.address2);
+		this.zipCode = m(this.zipCode, u2.zipCode);
+		this.city = m(this.city, u2.city);
+		
+		//find how to merge the 2 names in each account
+		if (this.email == u2.email) {
+			
+			this.firstName = m(this.firstName, u2.firstName);
+			this.lastName = m(this.lastName, u2.lastName);
+			this.phone = m(this.phone, u2.phone);
+			
+		} else if (this.email == u2.email2) {
+			
+			this.firstName = m(this.firstName, u2.firstName2);
+			this.lastName = m(this.lastName, u2.lastName2);
+			this.phone = m(this.phone, u2.phone2);
+		} 
+		
+		if (this.email2 == u2.email) {
+			
+			this.firstName2 = m(this.firstName2, u2.firstName);
+			this.lastName2 = m(this.lastName2, u2.lastName);
+			this.phone2 = m(this.phone2, u2.phone);
+			
+		} else if (this.email2 == u2.email2) {
+			
+			this.firstName2 = m(this.firstName2, u2.firstName2);
+			this.lastName2 = m(this.lastName2, u2.lastName2);
+			this.phone2 = m(this.phone2, u2.phone2);
+			
+		}
+		
+		u2.delete();
+		this.update();
+		
+	}
+	
+	/**
 	 * recherche des users similaires 
 	 * @param	amapId
 	 * @param	firstName

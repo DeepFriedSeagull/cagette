@@ -32,7 +32,7 @@
 			$$edit(Dupliquer ce contrat,/contractAdmin/duplicate/::c.id::)
 			::end::
 		</div>
-		
+
 		<hr/>
 		
 		<h4>Producteur</h4>

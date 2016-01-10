@@ -47,11 +47,26 @@ class ContractAdmin extends Controller
 		checkToken();
 	}
 
-	
+	/**
+	 * Manage products
+	 */
 	@tpl("contractadmin/products.mtt")
 	function doProducts(contract:db.Contract) {
 		if (!app.user.canManageContract(contract)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
 		view.c = contract;
+		
+		//checks
+		if (app.user.amap.hasShopMode()) {
+		
+			for ( p in contract.getProducts()) {
+				if (p.getCategories().length == 0) {
+					app.session.addMessage("Attention, un ou plusieurs produits n'ont pas de catégories, <a href='/product/categorize/"+contract.id+"'>cliquez ici pour en ajouter</a>", true);
+					break;
+				}
+			}
+			
+		}
+		
 		
 		//generate a token
 		checkToken();
@@ -337,7 +352,6 @@ class ContractAdmin extends Controller
 	function doView(contract:db.Contract) {
 		if (!app.user.canManageContract(contract)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
 		view.c = view.contract = contract;
-		
 	}
 	
 	
