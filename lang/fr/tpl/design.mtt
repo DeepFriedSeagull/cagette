@@ -81,6 +81,10 @@
 							<li ::attr class if(category=="amapadmin" ) 'active' ::><a href="/amapadmin" ::cond user.isAmapManager()::>Gestion ::wAmap()::</a></li>
 							<li ><a href="/admin" ::cond user.isAdmin()::>Admin</a></li>
 						</ul>
+						
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="http://www.cagette.net/aviva" target="_blank">Votez pour Cagette.net !</a></li>
+						</ul>
 
 					</div>
 				
