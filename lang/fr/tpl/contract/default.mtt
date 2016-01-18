@@ -135,6 +135,40 @@
 		</p>
 		$$edit(Modifier,/account/edit)
 	</div>
+	
+	
+	::if user.isAmapManager()::
+	<h3>Tutoriels</h3>
+	<div class="article">
+		
+		<table class="table">
+			
+			::foreach t tutos::
+				<tr>
+					<td>::t.name::</td>
+					<td>  
+						::if t.completion==null::
+							<a href="/contract/?startTuto=::t.key::" class="btn btn-default btn-xs" ::attr disabled !tutoEnabled::>Commencer</a>
+						::else::
+							<div class="progress">
+							  <div class="progress-bar progress-bar-success" role="progressbar" style="width: ::(t.completion*100)::%"></div>
+							</div>	
+						::end::
+					</td>
+				</tr>
+			::end::
+			
+		</table>
+		::if tutoEnabled::
+		$$edit(Désactiver les tutoriels,/contract?tutos=0)
+		::else::
+		$$edit(Activer les tutoriels,/contract?tutos=1)
+		::end::
+		
+	</div>	
+	::end::
+	
+	
 </div>
 
 

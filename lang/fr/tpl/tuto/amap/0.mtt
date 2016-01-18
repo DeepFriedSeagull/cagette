@@ -1,0 +1,33 @@
+<h2>Bienvenue !</h2>
+	
+<p>
+	<img src="/img/tomato.png" style="float:left;" />
+	
+	Vous venez de créer votre compte administrateur pour <b>::user._amap.name::</b>.
+	<br/>
+	Je vous propose de faire vos premiers pas avec moi ! <br/>
+	Souhaitez vous qu'on configure ensemble <b>un premier contrat</b> ?
+</p>
+<p>
+	
+	<a class="btn btn-default" onclick="nextStep('/tuto/amap/1')"><span class="glyphicon glyphicon-ok"></span> C'est parti !</a> 
+	<a class="btn btn-default" onclick="nextStep('/tuto/cancel')"><span class="glyphicon glyphicon-remove"></span> Non merci</a> 
+</p>
+	
+	
+<script>
+var nextStep = function(url){
+
+	$('#myModal').on('hidden.bs.modal', function (e) {
+		//open next step
+		_.overlay(url,"Découverte de Cagette.net",false);
+		//reset event 
+		$('#myModal').off('hidden.bs.modal'); 
+	})
+
+	$("#myModal").modal("hide");
+	
+
+}
+
+</script>	

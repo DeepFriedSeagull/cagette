@@ -125,6 +125,15 @@ class View extends sugoi.BaseView {
 		return Std.string(e).substr(2).toLowerCase()+".png";
 	}
 	
+	
+	public function popTutoWindow(tuto:String,step:Int) {
+		this.popTuto = true;
+		this.tutoName = tuto;
+		this.tutoStep = step;
+		
+		
+	}
+	
 	/**
 	 * renvoie 0 si c'est user.firstName qui est connecté,
 	 * renvoie 1 si c'est user.firstName2 qui est connecté

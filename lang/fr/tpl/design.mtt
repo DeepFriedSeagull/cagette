@@ -72,14 +72,14 @@
 				
 					<div class="collapse navbar-collapse" id="cagette-navbar">
 						<ul class="nav navbar-nav">
-							<li ::attr class if(category=="home" ) 'active' ::><a href="/">Accueil</a></li>
-							<li ::attr class if(category=="contract" ) 'active' ::><a href="/contract">Mon compte</a></li>
-							<li ::attr class if(category=="amap" ) 'active' ::><a href="/amap">Mon ::wAmap()::</a></li>
-							<li ::attr class if(category=="members" ) 'active' ::><a href="/member" ::cond user.canAccessMembership()::>Gestion adhérents</a></li>
-							<li ::attr class if(category=="contractadmin" ) 'active' ::><a href="/contractAdmin" ::cond user.isContractManager(null)::>Gestion contrats</a></li>
-							<li ::attr class if(category=="messages" ) 'active' ::><a href="/messages" ::cond user.canAccessMessages()::>Messagerie</a></li>
-							<li ::attr class if(category=="amapadmin" ) 'active' ::><a href="/amapadmin" ::cond user.isAmapManager()::>Gestion ::wAmap()::</a></li>
-							<li ><a href="/admin" ::cond user.isAdmin()::>Admin</a></li>
+							<li class="home" ::attr class if(category=="home" ) 'active' ::><a href="/">Accueil</a></li>
+							<li class="contract"::attr class if(category=="contract" ) 'active' ::><a href="/contract">Mon compte</a></li>
+							<li class="amap"::attr class if(category=="amap" ) 'active' ::><a href="/amap">Mon ::wAmap()::</a></li>
+							<li class="members"::attr class if(category=="members" ) 'active' ::><a href="/member" ::cond user.canAccessMembership()::>Gestion adhérents</a></li>
+							<li class="contractadmin"::attr class if(category=="contractadmin" ) 'active' ::><a href="/contractAdmin" ::cond user.isContractManager(null)::>Gestion contrats</a></li>
+							<li class="messages"::attr class if(category=="messages" ) 'active' ::><a href="/messages" ::cond user.canAccessMessages()::>Messagerie</a></li>
+							<li class="amapadmin"::attr class if(category=="amapadmin" ) 'active' ::><a href="/amapadmin" ::cond user.isAmapManager()::>Gestion ::wAmap()::</a></li>
+							<li class="admin"><a href="/admin" ::cond user.isAdmin()::>Admin</a></li>
 						</ul>
 						
 						<ul class="nav navbar-nav navbar-right">
@@ -97,15 +97,21 @@
 				<div class="block">
 				<div class="row">
 					<div class="col-md-1"></div>
-					<div class="col-md-3">
+					<div class="col-md-1">
+						<img src="/img/tomato.png" style="width:50px;width:50px;" />
 						
-						<img src="/img/tomato.jpg" style="width:50px;width:50px;" /> <b>Tutoriel "Découverte de Cagette"</b>
+					</div>
+					<div class="col-md-3">
+						<b>Tutoriel "Découverte de Cagette"</b>
+						
+						
 					</div>
 					<div class="col-md-2">	
 						
-						<a href="" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">Revoir les instructions</a>
+						<a href="#" class="btn btn-default btn-xs" onclick="_.overlay('tuto/amap/1','Découverte de Cagette',false)" >Revoir les instructions</a>
+				
 					</div>
-					<div class="col-md-5" style="text-align:center;">
+					<div class="col-md-4" style="text-align:center;">
 						
 							
 							<div class="progress">
@@ -122,26 +128,28 @@
 			</div>	
 		</div>
 		
-		
+		::if popTuto::
+		<script>_.overlay("/tuto/::tutoName::/::tutoStep::",null,false)</script>
+		::end::
 		
 		<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h2 class="modal-title" id="myModalLabel"></h2>
+			  </div>
+			  <div class="modal-body">
+				...
+			  </div>
+			  <div class="modal-footer" style="clear:both;">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+				
+			  </div>
+			</div>
+		  </div>
+		</div>
 		
 		
 		
