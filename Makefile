@@ -33,6 +33,14 @@ bundle:
 	scp cagette.tar www-data@cagette.net:/data/cagetteSite/www/
 	rm cagette.tar
 	
+bundle_php:
+	@make LANG=fr templates_php
+	haxe cagette-php.hxml
+	tar -cvf cagette-php.tar www config.xml.dist lang
+	scp cagette-php.tar www-data@cagette.net:/data/cagetteSite/www/
+	rm cagette-php.tar
+		
+	
 	
 
 	

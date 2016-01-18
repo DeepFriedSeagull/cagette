@@ -53,7 +53,7 @@
 		</script>
 
 		::set url = "?like="+like+(if(u!=null)";user="+u.id else "")+";page="::
-		$$browse(::browser::,::url::)
+		<!-- browse(::browser::,::url::) -->
 		<table class="table table-bordered table-striped table-condensed table-hover">
 			<tr>
 				<th>id</th>
@@ -86,7 +86,7 @@
 				<td>::r.url::</td>
 			</tr>
 		</table>
-		$$browse(::browser::,::url::)
+		<!-- browse(::browser::,::url::) -->
 </div>
 </div>
 ::end::
