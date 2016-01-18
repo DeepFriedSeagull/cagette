@@ -43,8 +43,8 @@
 		</div>
 		
 		<!--$$edit(Modifier,/db/Member/edit/::member.id::)-->
-		$$edit(Modifier,/member/edit/::member.id::)<br/>
-		$$delete(Supprimer,/member/delete/::member.id::?token=::token::)
+		$$edit(Modifier,::"/member/edit/"+member.id::)<br/>
+		$$delete(Supprimer,::"/member/delete/"+member.id+"?token="+token::)
 		
 		::if isAdmin::
 		<a href="/member/loginas/::member.id::/::userAmap._amap.id::" class="btn btn-default btn-sm">Se connecter sur ce compte</a>

@@ -15,14 +15,6 @@
 	<macro name="img(id,?def)"><img src="$$file(::id::,::def::)"/></macro>
 	
 
-	<macro name="browse(b,url)">$$browseCustom(::b::,::url::,Page ::b.page:: ::if b.pages::/ ::b.pages::::end::)</macro>
-
-	<macro name="browseCustom(b,url,custom)">
-		&lt; ::if b.prev::<a href="::url::/?page=::b.prev::">Précédent</a>::else::Précédent::end::
-		| ::custom:: |
-		::if b.next::<a href="::url::/?page=::b.next::">Suivant</a>::else::Suivant::end:: &gt;
-	</macro>
-	
 	<macro name="swf(file,id,width,height,vars,?wmode)">
 		<div id="swf_::id::" class="swf::if wmode:: ::wmode::::end::" style="width : ::width::px; height : ::height::px"></div>
 		<script type="text/javascript">

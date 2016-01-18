@@ -68,7 +68,7 @@
 	<div>
 		
 		<a href="/member/insert" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Nouvel adhérent</a>	
-		$$export(::Web.getURI()+"?"+Web.getParamsString()::&csv=1)
+		$$export(::Web.getURI()+"?"+Web.getParamsString()+"&csv=1"::)
 
 	</div>
 	

@@ -4,5 +4,5 @@
 	RewriteRule (.*)/js/[a-z0-9]+/(.*) /js/$2 [L]
 
     	RewriteCond %{REQUEST_URI} !\.(png|gif|jpg|ico|swf|css|js|dat)$
-    	RewriteRule (.*) /index.n
+    	RewriteRule (.*) /index.php
 </FilesMatch>
