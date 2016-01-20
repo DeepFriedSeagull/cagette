@@ -101,7 +101,9 @@ class Distribution extends Controller
 		throw Ok("/contractAdmin/distributions/" + cid, "la distribution a bien été effacée");
 	}
 	
-	
+	/**
+	 * Edit a delivery
+	 */
 	@tpl('form.mtt')
 	function doEdit(d:db.Distribution) {
 		
@@ -114,6 +116,11 @@ class Distribution extends Controller
 		var x = new sugoi.form.elements.HourDropDowns("end", "heure de fin",d.end);
 		form.addElement(x, 4);
 		
+		if (d.contract.type == db.Contract.TYPE_VARORDER ) {
+			form.addElement(new sugoi.form.elements.DatePicker("orderStartDate", App.t._("orderStartDate"), d.orderStartDate));	
+			form.addElement(new sugoi.form.elements.DatePicker("orderEndDate", App.t._("orderEndDate"), d.orderEndDate));
+		}
+		
 		if (form.isValid()) {
 			form.toSpod(d); //update model
 			//var days = Math.floor( d.date.getTime() / 1000 / 60 / 60 / 24 );
@@ -123,7 +130,7 @@ class Distribution extends Controller
 		}
 		
 		view.form = form;
-		view.title = "Modifier une distribution";
+		view.title = "Modifier une livraison";
 	}
 	
 	@tpl('form.mtt')
@@ -151,7 +158,12 @@ class Distribution extends Controller
 		form.removeElement(form.getElement("distributionCycleId"));
 		form.removeElement(form.getElement("end"));
 		var x = new sugoi.form.elements.HourDropDowns("end", "heure de fin");
-		form.addElement(x,4);
+		form.addElement(x, 4);
+		
+		if (contract.type == db.Contract.TYPE_VARORDER ) {
+			form.addElement(new sugoi.form.elements.DatePicker("orderStartDate", App.t._("orderStartDate")));	
+			form.addElement(new sugoi.form.elements.DatePicker("orderEndDate", App.t._("orderEndDate")));
+		}
 		
 		if (form.isValid()) {
 			form.toSpod(d); //update model

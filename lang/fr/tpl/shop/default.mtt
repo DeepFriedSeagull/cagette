@@ -6,7 +6,6 @@
 	<script language="javascript">
 	var cart;
 	$(function(){
-
 		cart = _.getCart();
 		cart.init();
 	});
@@ -31,10 +30,14 @@
 											
 						<div>
 							<form class="form-inline">
-							<!--<span class="vat">Qté. </span>-->
-							<input id="productQt::p.id::" type="text" value="" placeHolder="1" style="height: 22px;width:40px;" class="form-control input-sm" maxlength="2"  data-toggle="tooltip" data-placement="top" title="Quantité"/>
+							
+							::if p.orderable::	
+							<input id="productQt::p.id::" type="text" value="1" style="height: 22px;width:40px;" class="form-control input-sm" maxlength="2"  data-toggle="tooltip" data-placement="top" title="Quantité"/>
 							<a class="btn btn-default btn-xs" onclick="cart.add(::p.id::)">Commander</a>
-							<!--<a class="btn btn-default btn-xs" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	-->
+							::else::
+							<span style="color:#AAA;">Commande fermée</span>
+							::end::
+							
 							</form>
 						</div>
 						

@@ -7,6 +7,7 @@ class View extends sugoi.BaseView {
 		this.Std = Std;
 		this.Date = Date;
 		this.Web = neko.Web;
+		this.VERSION = App.VERSION.toString();
 	}
 	
 	public function count(i) {

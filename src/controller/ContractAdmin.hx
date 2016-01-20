@@ -45,6 +45,9 @@ class ContractAdmin extends Controller
 		
 		//set a token for delete buttons
 		checkToken();
+		
+		
+		
 	}
 
 	/**
@@ -114,6 +117,70 @@ class ContractAdmin extends Controller
 		
 		
 		view.form = form;
+	}
+	
+	/**
+	 * displays a calendar of the current month 
+	 * with all events ( contracts start and end, deliveries... )
+	 */
+	@tpl('contractAdmin/calendar.mtt')
+	public function doCalendar() {
+		
+		var contracts = db.Contract.getActiveContracts(app.user.amap, true, false);	
+		
+		//Events of the month in a calendar
+		var cal = Calendar.getMonthViewMap();
+		
+		for ( c in contracts) {
+			var start = c.startDate.toString().substr(0,10);
+			var end = c.endDate.toString().substr(0,10);
+			if (cal.exists( start )) {
+				var v = cal.get(start);
+				v.push( { name: "Début contrat " + c.name,  color:Calendar.COLOR_CONTRACT } );
+				cal.set( start, v );
+			}
+			if (cal.exists( end )) {
+				var v = cal.get(end);
+				v.push(		{ name: "Fin contrat "  +c.name,  color:Calendar.COLOR_CONTRACT } );
+				cal.set( end, v );
+			}
+			
+			//deliveries
+			for ( d in c.getDistribs(false)) {
+				var start = d.date.toString().substr(0,10);
+				
+				if (cal.exists( start )) {
+					var v = cal.get( start );
+					v.push(		{ name: "Livraison "  +d.contract.name,  color:Calendar.COLOR_DELIVERY } );
+					cal.set( start, v );
+				}
+				
+				if ( d.orderStartDate != null && d.orderStartDate != null ) {
+					var k = d.orderStartDate.toString().substr(0,10);
+					if (cal.exists( k )) {
+						var v = cal.get( k );
+						v.push(		{ name: "Ouverture commandes "  +d.contract.name,  color:Calendar.COLOR_ORDER } );
+						cal.set( k , v );
+					}
+					
+					var k = d.orderEndDate.toString().substr(0,10);
+					if (cal.exists( k )) {
+						var v = cal.get( k );
+						v.push(		{ name: "Fin commandes "  +d.contract.name,  color:Calendar.COLOR_ORDER } );
+						cal.set( k , v );
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		var n = Date.now();
+		view.now = new Date(n.getFullYear(),n.getMonth(),n.getDate(),0,0,0).getTime();
+		view.calendar = Calendar.mapToArray( cal );
+		
+		
 	}
 	
 	 

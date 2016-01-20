@@ -69,7 +69,8 @@ class Product extends Object
 			contractTax : contract.percentageValue,
 			contractTaxName : contract.percentageName,
 			desc : desc,
-			categories : Lambda.array(Lambda.map(getCategories(), function(c) return c.id))
+			categories : Lambda.array(Lambda.map(getCategories(), function(c) return c.id)),
+			orderable : this.contract.isUserOrderAvailable()
 		}
 	}
 	

@@ -23,6 +23,7 @@ typedef ProductInfo = {
 	contractTaxName : String,	//label pour la commission : ex: "frais divers"
 	desc : String,
 	categories : Array<Int>,	//tags
+	orderable : Bool,			//can be currently ordered
 }
 
 @:keep

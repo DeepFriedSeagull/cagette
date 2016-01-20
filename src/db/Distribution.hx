@@ -17,8 +17,15 @@ class Distribution extends Object
 	
 	public var text : SNull<SString<1024>>;
 	
-	public var date : SDateTime; //debut
-	public var end : SDateTime;	//fin
+	//start and end date for open orders
+	@hideInForms public var orderStartDate : SNull<SDateTime>; 
+	@hideInForms public var orderEndDate : SNull<SDateTime>;
+	
+	//start and end date for delivery
+	public var date : SDateTime; 
+	public var end : SDateTime;
+	//public var deliveryStartDate : SDateTime; 
+	//public var deliveryEndDate : SDateTime;
 	
 	@:relation(distributionCycleId) public var distributionCycle : SNull<DistributionCycle>;
 	#if neko 

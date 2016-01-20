@@ -45,9 +45,12 @@
 	::end::
 	<a href="/contractAdmin?old=1" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-folder-close"></span> Contrats anciens</a>
 	<a href="/distribution/listByDate" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Liste d'émargement globale</a>
+		<a href="/contractAdmin/calendar" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-calendar"></span> Calendrier</a>
 	</div>
 	
 </div>
+
+
 
 <div class="col-md-6">
 	<div class="article" ::cond user.isAmapManager()::>

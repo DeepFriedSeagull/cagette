@@ -33,13 +33,12 @@ class Shop extends sugoi.BaseController
 		
 		
 		for (c in Lambda.array(contracts)) {
-			//que les contrats a commande variables
+			//only varying contracts
 			if (c.type != db.Contract.TYPE_VARORDER) {
 				contracts.remove(c);
 			}
 			
-			//only open to order
-			if (!c.isUserOrderAvailable()) {
+			if (!c.isVisibleInShop()) {
 				contracts.remove(c);
 			}
 			
@@ -122,11 +121,12 @@ class Shop extends sugoi.BaseController
 		if (order == null || order.products == null || order.products.length == 0) {
 			throw Error("/shop", "Vous devez réaliser votre commande avant de valider.");
 		}
-		
+		var now = Date.now();
 		var pids = Lambda.map(order.products, function(p) return p.productId);
 		var products = db.Product.manager.search($id in pids, false);
 		var _cids = Lambda.map(products, function(p) return p.contract.id);
-		var distribs = db.Distribution.manager.search(($contractId in _cids) && $date >= Date.now(), { orderBy:date }, false);
+		//available deliveries
+		var distribs = db.Distribution.manager.search(($contractId in _cids) && $orderStartDate <= now && $orderEndDate >= now, { orderBy:date }, false);
 		
 		//dedups cids
 		var cids = new Map<Int,Int>();

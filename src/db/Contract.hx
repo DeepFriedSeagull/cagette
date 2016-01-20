@@ -46,21 +46,53 @@ class Contract extends Object
 	@:skip public static var TYPE_CONSTORDERS = 0; 	//à commande fixes
 	@:skip public static var TYPE_VARORDER = 1;		//à commandes variables
 	
+	@:skip var cache_hasActiveDistribs : Bool;
+	
 	public function new() 
 	{
 		super();
 	}
 	
 	/**
-	 * the user can order if the flag is on, and the end date is not passed
-	 * @return
+	 * The products can be ordered currently ?
 	 */
 	public function isUserOrderAvailable():Bool {
-		return flags.has(UsersCanOrder) && Date.now().getTime() < this.endDate.getTime();
+		
+		if (type == TYPE_CONSTORDERS ) {
+			
+			// constant orders
+			return isVisibleInShop();
+		}else {
+		
+			if ( cache_hasActiveDistribs != null ) return cache_hasActiveDistribs;
+			
+			//for varying orders, we need to know if there are some available deliveries
+			var n = Date.now();
+			
+			var d = db.Distribution.manager.count( $orderStartDate <= n && $orderEndDate >= n && $contractId==this.id);
+			//tmp : add the "old" deliveries which have a null orderStartDate
+			d += db.Distribution.manager.count( $orderStartDate == null && $date > n  && $contractId == this.id );
+			
+			cache_hasActiveDistribs = d > 0;
+			return cache_hasActiveDistribs && isVisibleInShop();
+		}
+		
 	}
+	
+	/**
+	 * The products can be displayed in a shop ?
+	 */
+	public function isVisibleInShop():Bool {
+		
+		//yes if the contract is active and the 'UsersCanOrder' flag is checked
+		var n = Date.now().getTime();
+		return flags.has(UsersCanOrder) && n < this.endDate.getTime() && n > this.startDate.getTime();
+	}
+	
 	public function hasPercentageOnOrders():Bool {
 		return flags.has(PercentageOnOrders) && percentageValue!=null && percentageValue!=0;
 	}
+	
 	public function hasStockManagement():Bool {
 		return flags.has(StockManagement);
 	}
