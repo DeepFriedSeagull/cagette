@@ -6,6 +6,7 @@ import sugoi.form.elements.Input;
 import sugoi.form.elements.Selectbox;
 import sugoi.form.Form;
 import db.Contract;
+import Common;
 using Std;
 
 class Contract extends Controller
@@ -58,17 +59,18 @@ class Contract extends Controller
 		}
 		
 		//struct finale
-		var varOrders2 = new Array<{date:Date,orders:Array<db.UserContract>}>();
+		var varOrders2 = new Array<{date:Date,orders:Array<UserOrder>}>();
 		for ( k in varOrders.keys()) {
-			var d = new Date(k.split("-")[0].parseInt(), k.split("-")[1].parseInt()-1, k.split("-")[2].parseInt(), 0, 0, 0);
-			varOrders2.push({date:d,orders:varOrders[k]});
+			var d = new Date(k.split("-")[0].parseInt(), k.split("-")[1].parseInt() - 1, k.split("-")[2].parseInt(), 0, 0, 0);
+			
+			var orders = db.UserContract.prepare( Lambda.list(varOrders[k]) );
+			
+			varOrders2.push({date:d,orders:orders});
 			
 		}
 		
 		
 		//trier la map par ordre chrono desc
-		
-		
 		varOrders2.sort(function(b, a) {
 			return Math.round(a.date.getTime()/1000)-Math.round(b.date.getTime()/1000);
 		});
@@ -353,7 +355,7 @@ class Contract extends Controller
 					
 					var quantity = Math.abs( q==null?0:q );
 
-					if (!order.paid && order.product.contract.isUserOrderAvailable()) {
+					if ( order.distribution.canOrder() ) {
 						//met a jour la commande
 						db.UserContract.edit(order, quantity);
 					}

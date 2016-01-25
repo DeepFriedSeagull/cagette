@@ -98,6 +98,25 @@ class Contract extends Object
 	}
 	
 	/**
+	 * computes a 'percentage' fee or a 'margin' fee 
+	 * depending on the group settings
+	 * 
+	 * @param	basePrice
+	 */
+	public function computeFees(basePrice:Float) {
+		if (!hasPercentageOnOrders()) return 0.0;
+		
+		if (amap.flags.has(ComputeMargin)) {
+			//commercial margin
+			return (basePrice / ((100 - percentageValue) / 100)) - basePrice;
+			
+		}else {
+			//add a percentage
+			return percentageValue / 100 * basePrice;
+		}
+	}
+	
+	/**
 	 * 
 	 * @param	amap
 	 * @param	large = false	Si true, montre les contrats terminés depuis moins d'un mois

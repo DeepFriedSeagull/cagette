@@ -111,8 +111,9 @@ class UserContract extends Object
 			x.quantity = o.quantity;
 			x.subTotal = o.quantity * o.product.price;
 			var c = o.product.contract;
+			
 			if (c.hasPercentageOnOrders()) {
-				x.fees = c.percentageValue/100 * x.subTotal;
+				x.fees = c.computeFees(x.subTotal);
 				x.percentageName = c.percentageName;
 				x.percentageValue = c.percentageValue;
 				x.total = x.subTotal + x.fees;
@@ -141,8 +142,14 @@ class UserContract extends Object
 		var can = false;
 		if (this.product.contract.type == db.Contract.TYPE_VARORDER) {
 			
-			var n = Date.now().getTime();
-			can = n > this.distribution.orderStartDate.getTime() && n < this.distribution.orderEndDate.getTime();
+			if (this.distribution.orderStartDate == null) {
+				can = true;
+			}else {
+				var n = Date.now().getTime();
+				can = n > this.distribution.orderStartDate.getTime() && n < this.distribution.orderEndDate.getTime();
+				
+			}
+			
 			
 		}else {
 		

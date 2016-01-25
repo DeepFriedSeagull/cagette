@@ -65,7 +65,7 @@ class Product extends Object
 			type : Type.createEnumIndex(ProductType, type),
 			image : getImage(),
 			contractId : contract.id,
-			price : contract.percentageValue!=null ? price*(contract.percentageValue/100+1) : price, //prix total incluant com de contrat
+			price : price + contract.computeFees(price),
 			vat : vat,
 			vatValue: (vat != 0 && vat != null) ? (  this.price - (this.price / (vat/100+1))  )  : null,
 			contractTax : contract.percentageValue,

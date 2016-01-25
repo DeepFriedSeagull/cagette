@@ -150,4 +150,5 @@ class View extends sugoi.BaseView {
 		return App.current.user.amap.flags.has(db.Amap.AmapFlags.IsAmap)?"Paysan":"Fournisseur";
 	}
 	
+	
 }

@@ -3,9 +3,10 @@ import sys.db.Object;
 import sys.db.Types;
 
 enum AmapFlags {
-	HasMembership; //gestion des adhésions
-	ShopMode; //mode boutique
-	IsAmap; //Amap / groupement d'achat
+	HasMembership; 	//gestion des adhésions
+	ShopMode; 		//mode boutique
+	IsAmap; 		//Amap / groupement d'achat
+	ComputeMargin;	//compute margin instead of percentage
 }
 
 /**
@@ -24,7 +25,7 @@ class Amap extends Object
 	public var txtDistrib:SNull<SText>; //sur liste d'emargement
 	
 	public var membershipRenewalDate : SNull<SDate>;
-	public var membershipPrice : SNull<STinyInt>;
+	@hideInForms  public var membershipPrice : SNull<STinyInt>;
 	
 	@hideInForms 
 	public var vatRates : SData<Map<String,Float>>;
