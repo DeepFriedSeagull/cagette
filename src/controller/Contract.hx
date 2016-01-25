@@ -269,34 +269,23 @@ class Contract extends Controller
 					var pid = Std.parseInt(k.substr("product".length));
 					var uo = Lambda.find(userOrders, function(uo) return uo.product.id == pid);
 					if (uo == null) throw "Impossible de retrouver le produit " + pid;
-					var q = Std.parseInt(param);
 					
-					//var order = new db.UserContract();
+					
+					var q = 0.0;
+					if (uo.product.hasFloatQt ) {
+						param = StringTools.replace(param, ",", ".");
+						q = Std.parseFloat(param);
+					}else {
+						q = Std.parseInt(param);
+					}
+					
+					
 					if (uo.order != null) {
-						//record existant
-						//order = uo.order;
-						//if (q == 0) {
-							//order.lock();
-							//order.delete();
-						//}else {
-							//order.lock();
-							//order.paid = (q==order.quantity && order.paid); //si deja payé et quantité inchangée
-							//order.quantity = q;						
-							//order.update();	
-						//}
+					
 						db.UserContract.edit(uo.order, q);
 						
-						
 					}else {
-						////nouveau record
-						//if (q != 0) {
-							//order.user = app.user;
-							//order.product = uo.product;
-							//order.quantity = q;
-							//order.paid = false;
-							//order.distribution = distrib;
-							//order.insert();	
-						//}
+					
 						db.UserContract.make(app.user, q, uo.product.id, distrib!=null ? distrib.id : null);
 					}
 				}
@@ -351,8 +340,15 @@ class Contract extends Controller
 					var order = Lambda.find(orders, function(uo) return uo.product.id == pid);
 					if (order == null) throw "Erreur, impossible de retrouver la commande";
 					
-					var q = Std.parseInt(param);
-					var quantity = Std.int(Math.abs( q==null?0:q ));
+					var q = 0.0;
+					if (order.product.hasFloatQt ) {
+						param = StringTools.replace(param, ",", ".");
+						q = Std.parseFloat(param);
+					}else {
+						q = Std.parseInt(param);
+					}
+					
+					var quantity = Math.abs( q==null?0:q );
 
 					if (!order.paid && order.product.contract.isUserOrderAvailable()) {
 						//met a jour la commande

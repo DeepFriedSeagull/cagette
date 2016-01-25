@@ -20,11 +20,13 @@ class Product extends Object
 	public var vat : SFloat;
 	
 	public var desc : SNull<SText>;
-	public var stock : SNull<SInt>;
+	public var stock : SNull<SFloat>; //if qantity can be float, stock should be float
 	
 	public var type : SInt;	//icones
 	@:relation(imageId)
 	public var image : SNull<sugoi.db.File>;
+	
+	public var hasFloatQt:SBool; //this product can be ordered in "float" quantity
 	
 	public function new() 
 	{
@@ -70,7 +72,9 @@ class Product extends Object
 			contractTaxName : contract.percentageName,
 			desc : desc,
 			categories : Lambda.array(Lambda.map(getCategories(), function(c) return c.id)),
-			orderable : this.contract.isUserOrderAvailable()
+			orderable : this.contract.isUserOrderAvailable(),
+			stock : contract.hasStockManagement() ? this.stock : null,
+			hasFloatQt : hasFloatQt
 		}
 	}
 	

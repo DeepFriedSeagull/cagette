@@ -123,6 +123,8 @@ class App extends sugoi.BaseApp {
 		out.set("price", "prix TTC");
 		out.set("uname", "Nom");
 		out.set("pname", "Produit");
+		out.set("hasFloatQt", "Autoriser quantités \"à virgule\"");
+		
 		out.set("membershipRenewalDate", "Adhésions : Date de renouvellement");
 		out.set("membershipPrice", "Adhésions : Coût de l'adhésion");
 		out.set("UsersCanOrder", "Les adhérents peuvent saisir leur commande en ligne");

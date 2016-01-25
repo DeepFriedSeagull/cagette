@@ -25,6 +25,9 @@ class Product extends Controller
 		var pt = new form.ProductTypeRadioGroup("type", "type",Std.string(d.type));
 		f.addElement( pt );
 		
+		//stock mgmt ?
+		if (!d.contract.hasStockManagement()) f.removeElementByName('stock');		
+		
 		//vat selector
 		f.removeElement( f.getElement('vat') );		
 		var data = [];
@@ -62,6 +65,8 @@ class Product extends Controller
 		f.removeElementByName("contractId");
 		f.getElement("price").addFilter(new sugoi.form.filters.FloatFilter());
 		
+		//stock mgmt ?
+		if (!contract.hasStockManagement()) f.removeElementByName('stock');
 		
 		//vat selector
 		f.removeElement( f.getElement('vat') );

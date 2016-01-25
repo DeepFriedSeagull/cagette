@@ -17,7 +17,7 @@ class Shop extends sugoi.BaseController
 		//init order serverside if needed		
 		var order :Order = app.session.data.order; 
 		if ( order == null) {
-			app.session.data.order = order = { products:new Array<{productId:Int,quantity:Int}>() };
+			app.session.data.order = order = { products:new Array<{productId:Int,quantity:Float}>() };
 		}
 		
 		//
@@ -46,12 +46,11 @@ class Shop extends sugoi.BaseController
 		var products = db.Product.manager.search($contractId in Lambda.map(contracts, function(c) return c.id), { orderBy:name }, false);
 		
 		//retire les produits avec un stock à zero
-		for (p in products) {
+		/*for (p in products) {
 			if (p.contract.hasStockManagement() && p.stock <= 0) {
 				products.remove(p);
 			}
-			
-		}
+		}*/
 		
 		return Lambda.array(Lambda.map(products, function(p) return p.infos()));
 	}
@@ -82,7 +81,7 @@ class Shop extends sugoi.BaseController
 	public function doAdd(productId:Int, quantity:Int) {
 	
 		var order :Order =  app.session.data.order;
-		if ( order == null) order = { products:new Array<{productId:Int,quantity:Int}>() };
+		if ( order == null) order = { products:new Array<{productId:Int,quantity:Float}>() };
 		
 		order.products.push( { productId:productId, quantity:quantity } );
 		
@@ -208,7 +207,7 @@ class Shop extends sugoi.BaseController
 	/**
 	 * valider la commande et selectionner les distributions
 	 */
-	@tpl('shop/validate.mtt')
+	/*@tpl('shop/validate.mtt')
 	public function ___doValidate() {
 		
 		//pêche aux datas
@@ -266,5 +265,5 @@ class Shop extends sugoi.BaseController
 		view.form = form;
 		view.out = out;
 		
-	}
+	}*/
 }

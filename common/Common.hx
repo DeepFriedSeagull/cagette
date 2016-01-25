@@ -6,7 +6,7 @@
 @:keep
 typedef Order = {
 	
-	products:Array<{productId:Int,quantity:Int}>
+	products:Array<{productId:Int,quantity:Float}>
 }
 
 @:keep
@@ -24,6 +24,8 @@ typedef ProductInfo = {
 	desc : String,
 	categories : Array<Int>,	//tags
 	orderable : Bool,			//can be currently ordered
+	stock: Null<Float>,			//available stock
+	hasFloatQt : Bool
 }
 
 @:keep
@@ -72,7 +74,7 @@ typedef UserOrder = {
 	productPrice:Float,
 	productImage:String,
 	
-	quantity:Int,
+	quantity:Float,
 	subTotal:Float,
 	fees:Float,
 	percentageName:String,

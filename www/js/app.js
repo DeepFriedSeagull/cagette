@@ -59,9 +59,13 @@ Cart.prototype = {
 		var _g = this;
 		this.loader.show();
 		var q = js.JQuery("#productQt" + pid).val();
-		var qt = Std.parseInt(q);
+		var qt = 0.0;
+		var p = this.products.h[pid];
+		if(p.hasFloatQt) {
+			q = StringTools.replace(q,",",".");
+			qt = parseFloat(q);
+		} else qt = Std.parseInt(q);
 		if(qt == null) qt = 1;
-		haxe_Log.trace("qté : " + qt,{ fileName : "Cart.hx", lineNumber : 40, className : "Cart", methodName : "add"});
 		var r = new haxe_Http("/shop/add/" + pid + "/" + qt);
 		r.onData = function(data) {
 			_g.loader.hide();

@@ -30,12 +30,21 @@
 											
 						<div>
 							<form class="form-inline">
+							::if p.stock!=null && p.stock==0::
+								<span style="color:#AAA;">Stock épuisé</span>
+								
+							::elseif !p.orderable::	
 							
-							::if p.orderable::	
-							<input id="productQt::p.id::" type="text" value="1" style="height: 22px;width:40px;" class="form-control input-sm" maxlength="2"  data-toggle="tooltip" data-placement="top" title="Quantité"/>
-							<a class="btn btn-default btn-xs" onclick="cart.add(::p.id::)">Commander</a>
+								<span style="color:#AAA;">Commande fermée</span>
+								
 							::else::
-							<span style="color:#AAA;">Commande fermée</span>
+								::if p.stock!=null && p.stock>0 && p.stock<=10::
+								<div style="color:#900;font-weight:bold;">Plus que ::p.stock:: en stock</div>
+								::end::
+							
+								<input id="productQt::p.id::" type="text" value="1" style="height: 22px;width:40px;" class="form-control input-sm" maxlength="4"  data-toggle="tooltip" data-placement="top" title="Quantité"/>
+								<a class="btn btn-default btn-xs" onclick="cart.add(::p.id::)">Commander</a>
+								
 							::end::
 							
 							</form>

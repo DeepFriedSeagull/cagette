@@ -2,10 +2,10 @@ package db;
 import sys.db.Object;
 import sys.db.Types;
 import Common;
-/**
- * Commande récurrente d'un produit
- */
 
+/**
+ * a product order 
+ */
 class UserContract extends Object
 {
 
@@ -21,7 +21,7 @@ class UserContract extends Object
 	@formPopulate("populate") @:relation(userId2)
 	public var user2 : SNull<User>;
 	
-	public var quantity : SInt;
+	public var quantity : SFloat;
 	
 	@formPopulate("populateProducts") @:relation(productId)
 	public var product : Product;
@@ -138,7 +138,7 @@ class UserContract extends Object
 	 * @param	quantity
 	 * @param	productId
 	 */
-	public static function make(user:db.User, quantity:Int, productId:Int, ?distribId:Int,?paid:Bool) {
+	public static function make(user:db.User, quantity:Float, productId:Int, ?distribId:Int,?paid:Bool) {
 		
 		//checks
 		if (quantity <= 0) return;
@@ -208,12 +208,12 @@ class UserContract extends Object
 	
 	
 	/**
-	 * Modifie une commande (la quantité)
+	 * Edit an order (quantity)
 	 */
-	public static function edit(order:db.UserContract, newquantity:Int, ?paid:Bool) {
+	public static function edit(order:db.UserContract, newquantity:Float, ?paid:Bool) {
 		
 		
-		if (order.distribution != null && order.distribution.date.getTime() < Date.now().getTime()) throw "Impossible de modifier une commande pour une date de livraison échue.";
+		
 		
 		order.lock();
 		

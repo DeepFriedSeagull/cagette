@@ -33,11 +33,19 @@ class Cart
 		loader.show();
 		
 		var q = App.j('#productQt' + pid).val();
-		var qt = Std.parseInt(q);		
+		var qt = 0.0;
+		var p = products.get(pid);
+		if (p.hasFloatQt) {
+			q = StringTools.replace(q, ",", ".");
+			qt = Std.parseFloat(q);
+		}else {
+			qt = Std.parseInt(q);			
+		}
+		
 		if (qt == null) {
 			qt = 1;
 		}
-		trace("qté : "+qt);
+		//trace("qté : "+qt);
 		
 		//add server side
 		var r = new haxe.Http('/shop/add/$pid/$qt');
@@ -60,7 +68,7 @@ class Cart
 	}
 	
 	
-	function subAdd(pid, qt ) {
+	function subAdd(pid, qt:Float ) {
 	
 		for ( p in order.products) {
 			if (p.productId == pid) {
