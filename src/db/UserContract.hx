@@ -83,7 +83,8 @@ class UserContract extends Object
 	public static function prepare(orders:List<db.UserContract>):Array<UserOrder> {
 		var out = new Array<UserOrder>();
 		var orders = Lambda.array(orders);
-		//tri par nom de famille
+		
+		//order by lastname
 		orders.sort(function(a, b) {
 			if (a.user.lastName+a.user.id > b.user.lastName+b.user.id ) {
 				return 1;
@@ -122,7 +123,7 @@ class UserContract extends Object
 			
 			x.contractId = c.id;
 			x.contractName = c.name;
-			x.canModify = c.isUserOrderAvailable() && !o.paid; //on peut modifier si ça na pas deja été payé + commande encore ouvertes
+			x.canModify = o.canModify(); 
 			
 			out.push(x);
 			
@@ -130,6 +131,27 @@ class UserContract extends Object
 		
 		
 		return out;
+	}
+	
+	/**
+	 * On peut modifier si ça na pas deja été payé + commande encore ouvertes
+	 */
+	function canModify():Bool {
+	
+		var can = false;
+		if (this.product.contract.type == db.Contract.TYPE_VARORDER) {
+			
+			var n = Date.now().getTime();
+			can = n > this.distribution.orderStartDate.getTime() && n < this.distribution.orderEndDate.getTime();
+			
+		}else {
+		
+			can = this.product.contract.isUserOrderAvailable();
+			
+		}
+		
+		return can && !this.paid;
+		
 	}
 	
 	/**

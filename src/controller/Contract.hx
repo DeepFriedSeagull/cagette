@@ -231,6 +231,10 @@ class Contract extends Controller
 		view.c = view.contract = c;
 		if (c.type == db.Contract.TYPE_VARORDER) {
 			view.distribution = args.d;
+			
+			
+			if ( !args.d.canOrder() ) throw Error("/contract", "Les commandes sont fermées pour cette livraison, impossible de modifier la commande.");
+			
 		}else {
 			view.distributions = c.getDistribs(false);
 		}
@@ -308,8 +312,7 @@ class Contract extends Controller
 	@tpl("contract/orderByDate.mtt")
 	function doEditOrderByDate(date:Date) {
 		
-		//comment on sait si on peut encore modifier la commande ?
-		// la date de livraison doit etre dans le futur
+		// cannot edit order if date is in the past
 		if (Date.now().getTime() > date.getTime()) {
 			
 			var msg = "Cette livraison a déjà eu lieu, vous ne pouvez plus modifier la commande.";
@@ -321,7 +324,7 @@ class Contract extends Controller
 		// Il faut regarder le contrat de chaque produit et verifier si le contrat est toujours ouvert à la commande.		
 		var d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 		var d2 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
-				
+
 		var cids = Lambda.map(app.user.amap.getActiveContracts(true), function(c) return c.id);
 		var distribs = db.Distribution.manager.search(($contractId in cids) && $date >= d1 && $date <=d2 , false);
 		var orders = db.UserContract.manager.search($userId==app.user.id && $distributionId in Lambda.map(distribs,function(d)return d.id)  );
