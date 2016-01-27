@@ -8,7 +8,8 @@
 		::end::
 		<hr/>
 		<p>
-			Tant que les commandes sont ouvertes, vous pouvez revenir sur cette page et modifier votre commande.
+			Tant que les commandes sont ouvertes, vous pouvez revenir sur cette page et modifier votre commande.<br/>
+			Vous pouvez consulter à tout moment vos commandes en cours sur la page <a href="/contract">mon compte</a>.
 		</p>
 		
 		<form name="order" id="order" method="POST" action="">
@@ -35,7 +36,8 @@
 					<a href="#" onclick="_.overlay('/shop/productInfo/::uo.product.id::')">::uo.product.name::	</a>
 				</td>
 				<td>
-					::uo.product.price:: &euro;
+					::set price = uo.product.price + uo.product._contract.computeFees(uo.product.price)::
+					::formatNum(price)::&nbsp;&euro;
 				</td>
 				<td>
 					::if uo.order==null::
@@ -44,39 +46,21 @@
 						::set q = uo.order.quantity::
 					::end::
 					
-					::set total = total+(q*uo.product.price)::
+					::set total = total+(q*price)::
 					<input type="text" class="" name="product::uo.product.id::" id="product::uo.product.id::" value="::q::" />
 				</td>
 			</tr>
 				
 			::end::
 			
-			::set extra = 0::
 			
-			::if c.hasPercentageOnOrders()::
-				<tr>
-					<th></th>
-					<th>Total commande</th>
-					<th>::total::€</th>
-					<th></th>
-				</tr>
-				<tr>
-					<th></th>
-					<td>::c.percentageName:: (::c.percentageValue::%)</td>
-					::set extra = total*(c.percentageValue/100)::
-					<td>::roundTo(extra,2)::€</td>
-					<th></th>
-				</tr>
 				
-				::end::
-				
-				
-				<tr>
-					<th></th>
-					<th>Total</th>
-					<th>::roundTo(total+extra,2)::€</th>
-					<th></th>
-				</tr>
+			<tr>
+				<th></th>
+				<th>Total</th>
+				<th>::formatNum(total)::&nbsp;€</th>
+				<th></th>
+			</tr>
 		</table>
 		
 		
@@ -107,7 +91,7 @@
 			<p>
 				<b>::distributions.length:: distributions</b>
 				<br/>
-				pour un prix total de ::distributions.length*(total+extra)::€	(::distributions.length:: x ::(total+extra)::€)
+				pour un prix total de ::distributions.length*(total)::€	(::distributions.length:: x ::(total)::€)
 			</p>
 			<p>
 				<ul>

@@ -218,7 +218,7 @@ class Contract extends Controller
 	}
 	
 	/**
-	 * Faire ou modifier une commande 
+	 * make an order by contract 
 	 */
 	@tpl("contract/order.mtt")
 	function doOrder(c:db.Contract, args: { ?d:db.Distribution } ) {
@@ -296,11 +296,11 @@ class Contract extends Controller
 					}
 				}
 			}
-			if (distrib != null) {
-				throw Ok("/contract/order/" + c.id+"?d="+distrib.id, "Votre commande a été mise à jour");	
-			}else {
-				throw Ok("/contract/order/" + c.id, "Votre commande a été mise à jour");	
-			}
+			//if (distrib != null) {
+				//throw Ok("/contract/order/" + c.id+"?d="+distrib.id, "Votre commande a été mise à jour");	
+			//}else {
+				throw Ok("/contract/", "Votre commande a été mise à jour");	
+			//}
 			
 		}
 		

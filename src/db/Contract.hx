@@ -136,8 +136,18 @@ class Contract extends Object
 		
 	}
 	
-	public function getProducts():List<Product> {
-		return Product.manager.search($contract==this,false);
+	/**
+	 * get products in this contract
+	 * @param	onlyActive = true
+	 * @return
+	 */
+	public function getProducts(?onlyActive = true):List<Product> {
+		if (onlyActive) {
+			return Product.manager.search($contract==this && $active==true,false);	
+		}else {
+			return Product.manager.search($contract==this,false);	
+		}
+		
 	}
 	
 		

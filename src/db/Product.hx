@@ -27,10 +27,12 @@ class Product extends Object
 	public var image : SNull<sugoi.db.File>;
 	
 	public var hasFloatQt:SBool; //this product can be ordered in "float" quantity
+	public var active : SBool; 	//if false, product disabled, not visible on front office
 	
 	public function new() 
 	{
 		super();
+		active = true;
 	}
 	
 	/**

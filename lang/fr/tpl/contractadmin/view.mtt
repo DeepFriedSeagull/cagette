@@ -55,7 +55,7 @@
 		<h4><a href="/contractAdmin/products/::c.id::">Produits</a></h4>
 		<div style="max-height:400px;overflow:auto;">
 			<table class="table table-bordered" style="width:400px;">
-				::foreach p contract.getProducts()::
+				::foreach p contract.getProducts(true)::
 				<tr>
 					<td><img src="::p.getImage()::" style="width:32px;height:32px;" />	</td>
 					<td>::p.name::</td>

@@ -99,6 +99,7 @@ class App extends sugoi.BaseApp {
 		out.set("orderEndDate", "Date fermeture des commandes");	
 		
 		out.set("date", "Date de distribution");	
+		out.set("active", "actif");	
 		
 		out.set("contact", "Reponsable");
 		out.set("vendor", "Producteur");

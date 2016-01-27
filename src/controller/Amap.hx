@@ -17,11 +17,7 @@ class Amap extends Controller
 			if (c.endDate.getTime() < Date.now().getTime() ) contracts.remove(c);
 		}
 		view.contracts = contracts;
-		
-		
 	}
-	
-	
 	
 	
 	@tpl("form.mtt")
@@ -30,13 +26,11 @@ class Amap extends Controller
 		if (!app.user.isAmapManager()) throw "Vous n'avez pas accès a cette section";
 		
 		var form = Form.fromSpod(app.user.amap);
-		//form.removeElement(form.getElement("vatRates"));
-		//form.removeElement(form.getElement("imageId"));
 	
 		if (form.checkToken()) {
 			form.toSpod(app.user.amap);
 			app.user.amap.update();
-			throw Ok("/amap", "Amap mise à jour.");
+			throw Ok("/amapadmin", "Groupe mis à jour.");
 		}
 		
 		view.form = form;

@@ -24,8 +24,14 @@
 			<th></th>
 			<th></th>
 		</tr>
-		::foreach p c.getProducts()::
-		<tr>
+		::foreach p c.getProducts(false)::
+		
+		::if p.active==false:: 
+		::set opacity=0.4::
+		::else::
+		::set opacity=1::
+		::end::
+		<tr style="opacity: ::opacity::">
 			<td>
 				
 				<img src="::p.getImage()::" style="width:64px;height:64px;" />

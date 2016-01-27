@@ -96,7 +96,7 @@ Cart.prototype = {
 		c.empty();
 		c.append(Lambda.map(this.order.products,function(x) {
 			var p = _g.products.h[x.productId];
-			if(p == null) js_Browser.alert("Cant find product " + x.productId + " in " + _g.products.toString());
+			if(p == null) return "";
 			var btn = "<a onClick='cart.remove(" + p.id + ")' class='btn btn-default btn-xs' data-toggle='tooltip' data-placement='top' title='Retirer de la commande'><span class='glyphicon glyphicon-remove'></span></a>&nbsp;";
 			return "<div class='row'> \r\n\t\t\t\t<div class = 'order col-md-9' > <b> " + x.quantity + " </b> x " + p.name + " </div>\r\n\t\t\t\t<div class = 'col-md-3'> " + btn + "</div>\t\t\t\r\n\t\t\t</div>";
 		}).join("\n"));
@@ -107,6 +107,7 @@ Cart.prototype = {
 			var p1 = _g11[_g1];
 			++_g1;
 			var pinfo = this.products.h[p1.productId];
+			if(pinfo == null) continue;
 			total += p1.quantity * pinfo.price;
 		}
 		var ffilter = new sugoi_form_filters_FloatFilter();

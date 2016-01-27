@@ -43,7 +43,7 @@ class Shop extends sugoi.BaseController
 			}
 			
 		}
-		var products = db.Product.manager.search($contractId in Lambda.map(contracts, function(c) return c.id), { orderBy:name }, false);
+		var products = db.Product.manager.search(($contractId in Lambda.map(contracts, function(c) return c.id)) && $active==true, { orderBy:name }, false);
 		
 		//retire les produits avec un stock à zero
 		/*for (p in products) {

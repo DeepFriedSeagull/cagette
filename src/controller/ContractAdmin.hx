@@ -61,7 +61,7 @@ class ContractAdmin extends Controller
 		//checks
 		if (app.user.amap.hasShopMode()) {
 		
-			for ( p in contract.getProducts()) {
+			for ( p in contract.getProducts(false)) {
 				if (p.getCategories().length == 0) {
 					app.session.addMessage("Attention, un ou plusieurs produits n'ont pas de catégories, <a href='/product/categorize/"+contract.id+"'>cliquez ici pour en ajouter</a>", true);
 					break;
