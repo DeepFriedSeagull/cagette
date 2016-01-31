@@ -42,7 +42,6 @@ class Messages extends Controller
 		
 		if (form.checkToken()) {
 			
-			//var mail = new sugoi.mail.MandrillApiMail();
 			var listId = form.getElement("list").value;
 			var dest = getSelection(listId);
 		
@@ -58,7 +57,7 @@ class Messages extends Controller
 			e.setSubject(form.getValueOf("subject"));
 			e.bcc(Lambda.map(mails, function(m) return new ufront.mail.EmailAddress(m)));
 			
-			e.from(new ufront.mail.EmailAddress("noreply@cagette.net",senderName));		
+			e.from(new ufront.mail.EmailAddress(App.config.get("default_email"),senderName));		
 			e.replyTo(new ufront.mail.EmailAddress(senderMail, senderName));
 			
 			var text :String = form.getValueOf("text");

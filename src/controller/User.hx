@@ -5,6 +5,7 @@ import sugoi.form.elements.Input;
 import sugoi.form.Form;
 import sugoi.form.validators.EmailValidator;
 import neko.Web;
+import ufront.mail.*;
 
 enum LoginError {
 	UserDoesntExists;
@@ -148,21 +149,28 @@ class User extends Controller
 			if (user == null) throw Error(url, "Cet email n'est lié à aucun compte connu");
 			
 			
-			var m = new sugoi.mail.MandrillApiMail();
-			m.setSender("noreply@cagette.net");
-			m.addRecipient(user.email, user.name, user.id);
-			m.title = App.config.NAME+" : Changement de mot de passe";
-			m.setHtmlBody('mail/forgottenPassword.mtt', { user:user, link:'http://' + App.config.HOST + '/user/forgottenPassword/'+m.getKey()+"/"+user.id } );
-			m.send();
+			//var m = new sugoi.mail.MandrillApiMail();
+			//m.setSender(App.config.get("default_email"));
+			//m.addRecipient(user.email, user.name, user.id);
+			//m.title = App.config.NAME+" : Changement de mot de passe";
+			//m.setHtmlBody('mail/forgottenPassword.mtt',  );
+			//m.send();
+			
+			var m = new Email();
+			m.from(new EmailAddress(App.config.get("default_email")));					
+			m.to(new EmailAddress(user.email, user.name));					
+			m.setSubject( App.config.NAME+" : Changement de mot de passe" );
+			m.setHtml( app.processTemplate('mail/forgottenPassword.mtt', { user:user, link:'http://' + App.config.HOST + '/user/forgottenPassword/'+getKey(user)+"/"+user.id }) );
+				
+			
+			
 		}
 		
 		if (key != null && u!=null) {
 			//check key and propose to change pass
 			step = 3;
 			
-			var m = new sugoi.mail.MandrillApiMail();
-			m.addRecipient(u.email, u.name, u.id);
-			if (m.getKey() == key) {
+			if (getKey(u) == key) {
 				view.form = chpassform;
 			}else {
 				error = "bad request";
@@ -195,6 +203,14 @@ class User extends Controller
 		view.step = step;
 		view.error = error;
 
+	}
+	
+	
+	/**
+	 * generate a custom key for transactionnal emails, valid during the current day
+	 */
+	function getKey(m:db.User) {
+		return haxe.crypto.Md5.encode(App.config.get("key")+m.email+(Date.now().getDate())).substr(0,12);
 	}
 	
 	

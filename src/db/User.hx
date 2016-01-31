@@ -413,7 +413,7 @@ class User extends Object {
 		var e = new ufront.mail.Email();		
 		e.setSubject("Invitation "+group.name);
 		e.to(new ufront.mail.EmailAddress(this.email,this.getName()));
-		e.from(new ufront.mail.EmailAddress("noreply@cagette.net","Cagette.net"));			
+		e.from(new ufront.mail.EmailAddress(App.config.get("default_email"),"Cagette.net"));			
 		
 		var html = App.current.processTemplate("mail/invitation.mtt", { email:email, email2:email2, group:group.name,name:firstName,k:k } );		
 		e.setHtml(html);

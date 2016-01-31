@@ -6,6 +6,7 @@ import sugoi.form.Form;
 import sugoi.form.validators.EmailValidator;
 import neko.Web;
 import sugoi.tools.Utils;
+import ufront.mail.*;
 
 
 class Member extends Controller
@@ -221,20 +222,37 @@ class Member extends Controller
 			if (!App.config.DEBUG) {
 				//verif changement d'email
 				if (form.getValueOf("email") != member.email) {
-					var mail = new sugoi.mail.MandrillApiMail();
-					mail.setSender("noreply@cagette.net");
-					mail.setRecipient(member.email);
-					mail.setSubject("Changement d'email sur votre compte Cagette.net");
-					mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email") } );			
-					mail.send();	
+					//var mail = new sugoi.mail.MandrillApiMail();
+					//mail.setSender(App.config.get("default_email"));
+					//mail.setRecipient(member.email);
+					//mail.setSubject("Changement d'email sur votre compte Cagette.net");
+					//mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email") } );			
+					//mail.send();	
+					
+					var m = new Email();
+					m.from(new EmailAddress(App.config.get("default_email")));
+					m.to(new EmailAddress(member.email));
+					m.setSubject("Changement d'email sur votre compte Cagette.net");
+					m.setHtml( app.processTemplate("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email")  } ) );
+					App.getMailer().send(m);
+					
 				}
 				if (form.getValueOf("email2") != member.email2 && member.email2!=null) {
-					var mail = new sugoi.mail.MandrillApiMail();
-					mail.setSender("noreply@cagette.net");
-					mail.setRecipient(member.email2);
-					mail.setSubject("Changement d'email sur votre compte Cagette.net");
-					mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2") } );			
-					mail.send();	
+					//var mail = new sugoi.mail.MandrillApiMail();
+					//mail.setSender(App.config.get("default_email"));
+					//mail.setRecipient(member.email2);
+					//mail.setSubject("Changement d'email sur votre compte Cagette.net");
+					//mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2") } );			
+					//mail.send();
+					
+					var m = new Email();
+					m.from(new EmailAddress(App.config.get("default_email")));
+					m.to(new EmailAddress(member.email2));
+					m.setSubject("Changement d'email sur votre compte Cagette.net");
+					m.setHtml( app.processTemplate("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2")  } ) );
+					App.getMailer().send(m);
+					
+					
 				}	
 			}
 			
@@ -566,13 +584,22 @@ class Member extends Controller
 				if (form.getValueOf("warnAmapManager") == "1") {
 					
 					try{
-					var m = new sugoi.mail.MandrillApiMail();
-					m.setSubject(app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName());
-					m.setSender(app.user.email);
-					m.setRecipient(app.user.getAmap().contact.email);
+					//var m = new sugoi.mail.MandrillApiMail();
+					//m.setSubject(app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName());
+					//m.setSender(app.user.email);
+					//m.setRecipient(app.user.getAmap().contact.email);
+					//var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://app.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
+					//m.setHtmlBody('mail/message.mtt', { text:text } );
+					//m.send();
+					
+					var m = new Email();
+					m.from(new EmailAddress(App.config.get("default_email")));					
+					m.to(new EmailAddress(app.user.getAmap().contact.email));					
+					m.setSubject( app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName() );
 					var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://app.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
-					m.setHtmlBody('mail/message.mtt', { text:text } );
-					m.send();
+					m.setHtml( app.processTemplate("mail/message.mtt", { text:text } ) );
+				
+					
 					}catch(e:Dynamic){}
 				}
 				
