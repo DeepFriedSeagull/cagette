@@ -230,7 +230,7 @@ class Member extends Controller
 					//mail.send();	
 					
 					var m = new Email();
-					m.from(new EmailAddress(App.config.get("default_email")));
+					m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));
 					m.to(new EmailAddress(member.email));
 					m.setSubject("Changement d'email sur votre compte Cagette.net");
 					m.setHtml( app.processTemplate("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email")  } ) );
@@ -246,7 +246,7 @@ class Member extends Controller
 					//mail.send();
 					
 					var m = new Email();
-					m.from(new EmailAddress(App.config.get("default_email")));
+					m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));
 					m.to(new EmailAddress(member.email2));
 					m.setSubject("Changement d'email sur votre compte Cagette.net");
 					m.setHtml( app.processTemplate("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2")  } ) );
@@ -593,12 +593,12 @@ class Member extends Controller
 					//m.send();
 					
 					var m = new Email();
-					m.from(new EmailAddress(App.config.get("default_email")));					
+					m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));					
 					m.to(new EmailAddress(app.user.getAmap().contact.email));					
 					m.setSubject( app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName() );
 					var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://app.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
 					m.setHtml( app.processTemplate("mail/message.mtt", { text:text } ) );
-				
+					App.getMailer().send(m);
 					
 					}catch(e:Dynamic){}
 				}

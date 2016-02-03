@@ -64,7 +64,7 @@ class Cron extends Controller
 			//mail.send();	
 			
 			var m = new Email();
-			m.from(new EmailAddress(App.config.get("default_email")));
+			m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));
 			m.to(new EmailAddress(App.config.get("webmaster_email")));
 			m.setSubject(App.config.NAME+" Errors");
 			m.setHtml( app.processTemplate("mail/message.mtt", { text:report.toString() } ) );
@@ -187,15 +187,18 @@ class Cron extends Controller
 					
 					
 					var m = new Email();
-					m.from(new EmailAddress(App.config.get("default_email")));					
+					m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));					
 					m.to(new EmailAddress(u.user.email, u.user.getName()));					
 					if(u.user.email2!=null) m.cc(new EmailAddress(u.user.email2));
 					m.setSubject( group+" : Distribution à " + app.view.hDate(u.distrib.date) );
 					m.setHtml( app.processTemplate("mail/message.mtt", { text:text } ) );
 					
-					try{
+					try {
+						
 						App.getMailer().send(m);
+						
 					}catch (e:Dynamic) {
+						
 						app.logError(e);
 					}
 					

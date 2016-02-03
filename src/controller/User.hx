@@ -157,11 +157,11 @@ class User extends Controller
 			//m.send();
 			
 			var m = new Email();
-			m.from(new EmailAddress(App.config.get("default_email")));					
+			m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));					
 			m.to(new EmailAddress(user.email, user.name));					
 			m.setSubject( App.config.NAME+" : Changement de mot de passe" );
 			m.setHtml( app.processTemplate('mail/forgottenPassword.mtt', { user:user, link:'http://' + App.config.HOST + '/user/forgottenPassword/'+getKey(user)+"/"+user.id }) );
-				
+			App.getMailer().send(m);	
 			
 			
 		}
