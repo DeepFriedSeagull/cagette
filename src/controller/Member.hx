@@ -352,7 +352,11 @@ class Member extends Controller
 	
 	
 	@tpl('member/import.mtt')
-	function doImport(?args:{confirm:Bool}) {
+	function doImport(?args: { confirm:Bool } ) {
+		
+		var e = new event.Event();
+		e.id = "displayMemberImport";
+		App.current.eventDispatcher.dispatch(e);
 			
 		var step = 1;
 		var request = Utils.getMultipart(1024 * 1024 * 4); //4mb
@@ -363,9 +367,6 @@ class Member extends Controller
 			
 			var csv = new sugoi.tools.Csv();
 			var unregistred = csv.importDatas(data);
-			
-			/*var t = new sugoi.helper.Table("table");
-			trace(t.toString(unregistred));*/
 			
 			//cleaning
 			for ( user in unregistred.copy() ) {
@@ -409,25 +410,7 @@ class Member extends Controller
 				
 				var us = db.User.getSimilar(firstName, lastName, email, firstName2, lastName2, email2);
 				
-				
-				/*var us = db.User.manager.search(
-					(
-					
-						($firstName.like(firstName) && $lastName.like(lastName)) || 
-						($firstName2!=null && $firstName2.like(firstName) && $lastName2.like(lastName)) ||
-						
-						($firstName.like(firstName2) && $lastName.like(lastName2)) || 
-						($firstName2!=null && $firstName2.like(firstName2) && $lastName2.like(lastName2)) ||
-						
-						($email.like(r[2])) ||
-						($email2!=null && $email2.like(r[2])) ||
-						($email.like(r[6])) ||
-						($email2!=null && $email2.like(r[6]))
-					)
-					
-				,false);*/
 				if (us.length > 0) {
-					//trace(r[0]+" "+r[1]+" existe deja : "+us);
 					unregistred.remove(r);
 					registred.push(r);
 				}
@@ -583,22 +566,14 @@ class Member extends Controller
 				
 				if (form.getValueOf("warnAmapManager") == "1") {
 					
-					try{
-					//var m = new sugoi.mail.MandrillApiMail();
-					//m.setSubject(app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName());
-					//m.setSender(app.user.email);
-					//m.setRecipient(app.user.getAmap().contact.email);
-					//var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://app.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
-					//m.setHtmlBody('mail/message.mtt', { text:text } );
-					//m.send();
-					
-					var m = new Email();
-					m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));					
-					m.to(new EmailAddress(app.user.getAmap().contact.email));					
-					m.setSubject( app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName() );
-					var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://app.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
-					m.setHtml( app.processTemplate("mail/message.mtt", { text:text } ) );
-					App.getMailer().send(m);
+					try{					
+						var m = new Email();
+						m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));					
+						m.to(new EmailAddress(app.user.getAmap().contact.email));					
+						m.setSubject( app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName() );
+						var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://app.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
+						m.setHtml( app.processTemplate("mail/message.mtt", { text:text } ) );
+						App.getMailer().send(m);
 					
 					}catch(e:Dynamic){}
 				}

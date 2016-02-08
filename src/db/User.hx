@@ -62,6 +62,9 @@ class User extends Object {
 		return rights.has(Admin) || id==1;
 	}
 	
+	/**
+	 * is this user the manager of the current group
+	 */
 	public function isAmapManager() {
 		//if (getAmap().contact == null) throw "Cette AMAP n'a pas de responsable général.";
 		var ua = getUserAmap(getAmap());

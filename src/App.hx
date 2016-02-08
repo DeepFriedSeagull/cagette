@@ -35,13 +35,6 @@ class App extends sugoi.BaseApp {
 		super.mainLoop();
 	}
 	
-	override function setCookie( oldCookie : String ) {
-	
-		if( session != null && session.sid != null && session.sid != oldCookie ) {
-			neko.Web.setHeader("Set-Cookie", cookieName+"=" + session.sid + "; path=/;");			
-		}
-	}
-	
 	public function getPlugin(name:String):plugin.IPlugIn {
 		for (p in plugins) {
 			if (p.getName() == name) return p;
@@ -135,7 +128,7 @@ class App extends sugoi.BaseApp {
 		out.set("percentageValue", "Pourcentage des frais");
 		out.set("percentageName", "Libellé pour ces frais");
 		out.set("fees", "frais");
-		out.set("AmapAdmin", "Accès à la gestion d'Amap");
+		out.set("AmapAdmin", "Administrateur du groupe");
 		out.set("Membership", "Accès à la gestion des adhérents");
 		out.set("Messages", "Accès à la messagerie");
 		out.set("vat", "TVA");

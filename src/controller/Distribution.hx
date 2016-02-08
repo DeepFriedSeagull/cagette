@@ -113,7 +113,7 @@ class Distribution extends Controller
 		form.removeElement(form.getElement("contractId"));
 		form.removeElement(form.getElement("end"));
 		form.removeElement(form.getElement("distributionCycleId"));
-		var x = new sugoi.form.elements.HourDropDowns("end", "heure de fin",d.end);
+		var x = new sugoi.form.elements.HourDropDowns("end", "heure de fin",d.end,true);
 		form.addElement(x, 4);
 		
 		if (d.contract.type == db.Contract.TYPE_VARORDER ) {
@@ -123,6 +123,9 @@ class Distribution extends Controller
 		
 		if (form.isValid()) {
 			form.toSpod(d); //update model
+			
+			if (d.contract.type == db.Contract.TYPE_VARORDER ) checkDistrib(d);
+			
 			//var days = Math.floor( d.date.getTime() / 1000 / 60 / 60 / 24 );
 			d.end = new Date(d.date.getFullYear(), d.date.getMonth(), d.date.getDate(), d.end.getHours(), d.end.getMinutes(), 0);
 			d.update();
@@ -166,18 +169,33 @@ class Distribution extends Controller
 		}
 		
 		if (form.isValid()) {
+			
 			form.toSpod(d); //update model
-			d.contract = contract;
+			d.contract = contract;			
 			var days = Math.floor( d.date.getTime() / 1000 / 60 / 60 / 24 );			
 			if (d.end == null) d.end = DateTools.delta(d.date, 1000.0 * 60 * 60);
 			d.end = new Date(d.date.getFullYear(), d.date.getMonth(), d.date.getDate(), d.end.getHours(), d.end.getMinutes(), 0);
+			
+			if (contract.type == db.Contract.TYPE_VARORDER ) checkDistrib(d);
 			d.insert();
-			//Weblog.debug(d);
 			throw Ok('/contractAdmin/distributions/'+d.contract.id,'La distribution a été enregistrée');
 		}
 	
 		view.form = form;
 		view.title = "Programmer une nouvelle distribution";
+	}
+	
+	/**
+	 * checks if dates are correct
+	 * @param	d
+	 */
+	function checkDistrib(d:db.Distribution) {
+		
+		if (d.date.getTime() < d.orderEndDate.getTime() ) throw Error('/contractAdmin/distributions/' + d.contract.id, "La date de livraison doit être postérieure à la date de fermeture des commandes");
+		if (d.date.getTime() < d.orderStartDate.getTime() ) throw Error('/contractAdmin/distributions/' + d.contract.id, "La date de livraison doit être postérieure à la date d'ouverture des commandes");
+		if (d.orderStartDate.getTime() > d.orderEndDate.getTime() ) throw Error('/contractAdmin/distributions/' + d.contract.id, "La date de fermeture des commandes doit être postérieure à la date d'ouverture des commandes !");
+		
+		
 	}
 	
 	@tpl("form.mtt")

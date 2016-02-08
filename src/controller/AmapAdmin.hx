@@ -111,35 +111,6 @@ class AmapAdmin extends Controller
 
 	}
 	
-	/*@admin
-	public function doMigrateRights() {
-		var users = new Map<Int,db.User>();
-		var amaps = db.Amap.manager.all();
-		for ( amap in amaps) {
-			for ( c in amap.getActiveContracts()) {
-				if (c.contact != null) {
-					var ua = db.UserAmap.get(c.contact, amap, true);
-					ua.giveRight(ContractAdmin(c.id));
-					ua.giveRight(Messages);
-					ua.giveRight(Membership);
-					ua.update();
-				}
-			}
-			
-		}
-		
-		for ( a in amaps) {
-			var ua = db.UserAmap.get(a.contact, a, true);
-			ua.rights = [AmapAdmin, Messages, ContractAdmin(), Membership];
-			ua.update();
-		}
-		
-		//for ( u in users) {
-			//var ua = db.UserAmap.get(a.contact, a, true);
-		//}
-		
-		
-	}*/
 	
 	@tpl("form.mtt")
 	public function doEditRight(?u:db.User) {
@@ -191,21 +162,18 @@ class AmapAdmin extends Controller
 			}
 		}
 		
-		//var r = new haxe.Http("http://www.sfs.chapatiz.com/index/imagepost");
-		//r.setPostData("img=" + imgData);
-		//r.onData = function(s) trace(s);
-		//r.onError = function(s) throw s;
-		//r.onStatus = function(s:Int) trace("status " + s);
 
 		form.addElement( new sugoi.form.elements.CheckboxGroup("rights", "Gestion contrats", data, populate, true, true) );
 		
-		if(form.checkToken()) {
+		if (form.checkToken()) {
+			
+			var wasManager = app.user.isAmapManager();
 			
 			if (u == null) {				
 				ua = db.UserAmap.manager.select($userId == Std.parseInt(form.getValueOf("user")) && $amapId == app.user.amap.id, true);
 			}
 			ua.rights = [];
-			//Sys.print(Type.getClass(form.getElement("rights").value));
+
 			var arr : Array<String> = cast form.getElement("rights").value;
 			for ( r in arr) {
 				if (r.substr(0, 8) == "contract") {
@@ -218,8 +186,23 @@ class AmapAdmin extends Controller
 				}else {
 					ua.rights.push( db.UserAmap.Right.createByName(r) );	
 				}
-				
 			}
+			
+			//avoid "cut my own hands" problem
+			if (ua.user.id == app.user.id && wasManager ) {
+				var isManager = false;
+				for ( r in ua.rights) {
+					if (r.equals(db.UserAmap.Right.AmapAdmin)) {
+						isManager = true; 
+						break;
+					}
+				}
+				if (isManager == false) {
+					throw Error("/amapadmin/rights", "Par sécurité, vous ne pouvez pas vous enlevez vous même les droits de gestion du groupe.");
+				}
+			}
+			
+			
 			if (ua.rights.length == 0) ua.rights = null;
 			ua.update();
 			if (ua.rights == null) {
