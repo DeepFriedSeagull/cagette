@@ -8,17 +8,17 @@
 	webmaster_email = "mon_email@mon_domaine.fr"
 	
 	database="mysql://root:root@localhost/cagette"
-	sqllog="1"
+	sqllog="0"
 	
-	debug="1"
-	cache="0"
+	debug="0"
+	cache="1"
 	maintain="0"
 	cachetpl="0"
 	key="carotteMagique"
 	
 	smtp_host="smtp.mandrillapp.com"
 	smtp_port="587"
-	smtp_user="francois.barbut@gmail.com"
+	smtp_user="mon_email@mon_domaine.fr"
 	smtp_pass="blabla"
 
 	mt.net.form.Form.HTML5 = "1"
