@@ -1,6 +1,6 @@
 -lib dbadmin
 -lib templo
--lib weblog
+-lib thx.semver
 -lib sugoi
 -lib hxevents
 -lib cagette-hosted

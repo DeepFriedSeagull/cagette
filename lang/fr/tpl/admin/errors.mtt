@@ -59,7 +59,7 @@
 				<th>id</th>
 				<th>date</th>
 				<th>Error</th>
-				<th>IP</th>
+				<th>infos</th>				
 				<th>user id</th>
 				<th>URL</th>
 			</tr>
@@ -77,7 +77,13 @@
 						</div>
 					::end::
 				</td>
-				<td>::r.ip::</td>
+				<td>
+					<a href="#" onclick="$(this).next().toggle(); return false;">[infos]</a>
+						<div style="display:none;">
+							<b>IP: </b>::r.ip::<br/>
+							<b>User-Agent: </b>::r.userAgent::
+						</div>
+				</td>
 				<td>
 					<span ::cond r.uid!=null::>
 						::r._user.getName()::					

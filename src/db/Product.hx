@@ -20,15 +20,19 @@ class Product extends Object
 	public var vat : SFloat;
 	
 	public var desc : SNull<SText>;
-	public var stock : SNull<SInt>;
+	public var stock : SNull<SFloat>; //if qantity can be float, stock should be float
 	
 	public var type : SInt;	//icones
 	@:relation(imageId)
 	public var image : SNull<sugoi.db.File>;
 	
+	public var hasFloatQt:SBool; //this product can be ordered in "float" quantity
+	public var active : SBool; 	//if false, product disabled, not visible on front office
+	
 	public function new() 
 	{
 		super();
+		active = true;
 	}
 	
 	/**
@@ -63,13 +67,16 @@ class Product extends Object
 			type : Type.createEnumIndex(ProductType, type),
 			image : getImage(),
 			contractId : contract.id,
-			price : contract.percentageValue!=null ? price*(contract.percentageValue/100+1) : price, //prix total incluant com de contrat
+			price : price + contract.computeFees(price),
 			vat : vat,
 			vatValue: (vat != 0 && vat != null) ? (  this.price - (this.price / (vat/100+1))  )  : null,
 			contractTax : contract.percentageValue,
 			contractTaxName : contract.percentageName,
 			desc : desc,
-			categories : Lambda.array(Lambda.map(getCategories(), function(c) return c.id))
+			categories : Lambda.array(Lambda.map(getCategories(), function(c) return c.id)),
+			orderable : this.contract.isUserOrderAvailable(),
+			stock : contract.hasStockManagement() ? this.stock : null,
+			hasFloatQt : hasFloatQt
 		}
 	}
 	

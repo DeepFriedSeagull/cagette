@@ -18,6 +18,11 @@ class Vendor extends Object
 	public var zipCode:SString<32>;
 	public var city:SString<25>;
 	
+	public var desc : SNull<SText>;
+	
+	public var linkText:SNull<SString<256>>;
+	public var linkUrl:SNull<SString<256>>;
+	
 	//compte du producteur
 	//@:relation(userId) public var user : SNull<User>;
 	

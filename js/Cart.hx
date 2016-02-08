@@ -1,7 +1,8 @@
 import Common;
-
+import js.JQuery;
 /**
- * ...
+ * JS Shopping Cart
+ * 
  * @author fbarbut<francois.barbut@gmail.com>
  */
 class Cart
@@ -10,26 +11,74 @@ class Cart
 	public var products : Map<Int,ProductInfo>; //full product list
 	public var order : Order;
 	
+	var loader : JQuery; //ajax loader gif
+	
+	//for scroll mgmt
+	var cartTop : Int;
+	var cartLeft : Int;
+	var cartWidth : Int;
+	var jWindow : JQuery;
+	var cartContainer : JQuery;
+	
+	
 	public function new() 
 	{
 		products = new Map();
-		order = { token:"", products:[] };
+		order = { products:[] };
 	}
 	
 
 	
 	public function add(pid:Int) {
+		loader.show();
 		
+		var q = App.j('#productQt' + pid).val();
+		var qt = 0.0;
+		var p = products.get(pid);
+		if (p.hasFloatQt) {
+			q = StringTools.replace(q, ",", ".");
+			qt = Std.parseFloat(q);
+		}else {
+			qt = Std.parseInt(q);			
+		}
+		
+		if (qt == null) {
+			qt = 1;
+		}
+		//trace("qté : "+qt);
+		
+		//add server side
+		var r = new haxe.Http('/shop/add/$pid/$qt');
+		
+		r.onData = function(data:String) {
+			
+			loader.hide();
+			
+			var d = haxe.Json.parse(data);
+			if (!d.success) js.Browser.alert("Erreur : "+d);
+			
+			//add locally
+			subAdd(pid, qt);
+			render();
+			
+			
+		}
+		r.request();
+		
+	}
+	
+	
+	function subAdd(pid, qt:Float ) {
+	
 		for ( p in order.products) {
 			if (p.productId == pid) {
-				p.quantity++;
+				p.quantity += qt;
 				render();
 				return;
 			}
 		}
-		
-		order.products.push( { productId:pid, quantity:1 } );
-		render();
+			
+		order.products.push( { productId:pid, quantity:qt } );
 	}
 	
 	function render() {
@@ -38,9 +87,17 @@ class Cart
 		
 		c.append( Lambda.map(order.products, function( x ) {
 			var p = products.get(x.productId);
-			if (p == null) trace("cant find product " + x.productId + " in " + products);
-			var btn = "<a onClick='cart.remove(" + p.id + ")' class='btn btn-default btn-xs'><span class='glyphicon glyphicon-remove'></span></a>&nbsp;";
-			return "<div class='order'>"+btn + "<b>" + x.quantity + "</b> x " + p.name+" </div>";
+			if (p == null) {
+				//js.Browser.alert("Cant find product " + x.productId + " in " + products);
+				//the product may have been disabled by an admin
+				return "";
+			}
+			
+			var btn = "<a onClick='cart.remove(" + p.id + ")' class='btn btn-default btn-xs' data-toggle='tooltip' data-placement='top' title='Retirer de la commande'><span class='glyphicon glyphicon-remove'></span></a>&nbsp;";
+			return "<div class='row'> 
+				<div class = 'order col-md-9' > <b> " + x.quantity + " </b> x " + p.name+" </div>
+				<div class = 'col-md-3'> "+btn+"</div>			
+			</div>";
 		}).join("\n") );
 		
 		
@@ -48,6 +105,7 @@ class Cart
 		var total = 0.0;
 		for (p in order.products) {
 			var pinfo = products.get(p.productId);
+			if (pinfo == null) continue;
 			total += p.quantity * pinfo.price;
 		}
 		var ffilter = new sugoi.form.filters.FloatFilter();
@@ -67,6 +125,9 @@ class Cart
 		
 	}
 	
+	/**
+	 * filter products by category
+	 */
 	public function filter(cat:Int) {
 		
 		//icone sur bouton
@@ -86,39 +147,105 @@ class Cart
 		}
 		
 		
+		
+		
 	}
 	
+	/**
+	 * remove a product from cart
+	 * @param	pid
+	 */
 	public function remove(pid:Int ) {
-		for ( p in order.products.copy()) {
-			if (p.productId == pid) {
-				order.products.remove(p);
-				render();
-				return;
+		
+		loader.show();
+		
+		//add server side
+		var r = new haxe.Http('/shop/remove/$pid');
+		
+		r.onData = function(data:String) {
+			
+			loader.hide();
+			
+			var d = haxe.Json.parse(data);
+			if (!d.success) js.Browser.alert("Erreur : "+d);
+			
+			//remove locally
+			for ( p in order.products.copy()) {
+				if (p.productId == pid) {
+					order.products.remove(p);
+					render();
+					return;
+				}
 			}
+			render();
+			
+			
 		}
+		r.request();
+		
+		
+		
+		
 	}
 	
 	/**
 	 * loads products
 	 */
 	public function init() {
-		var req = new haxe.Http("/shop/products");
+		
+		loader = App.j("#cartContainer #loader");
+		
+		var req = new haxe.Http("/shop/init");
 		req.onData = function(data) {
-			//broken in haxe 3.2rc , "Reflect is not defined"			
-			//var pr : Array<ProductInfo> = haxe.Unserializer.run(data);
-			//trace(pr);
-			////for (p in products) {
-				////trace(p);
-			////}
+			loader.hide();
 			
-			var list : Array<ProductInfo> = haxe.Json.parse(data);
-			for (p in list) {
+			var data : { products:Array<ProductInfo>,order:Order } = haxe.Json.parse(data);
+			for (p in data.products) {
 				var id : Int = p.id;
 				products.set(id, p);
 			}
-			trace(products);
+			
+			for ( p in data.order.products) {
+				subAdd(p.productId,p.quantity );
+			}
+			render();
+			
 		}
 		req.request();
+		
+		//scroll mgmt
+		/*jWindow = App.j(js.Browser.window);
+		cartContainer = App.j("#cartContainer");
+		//cartTop = cartContainer.position().top;
+		cartLeft = cartContainer.position().left;
+		cartWidth = cartContainer.width();
+		jWindow.scroll(onScroll);*/
+		
+	}
+	
+	/**
+	 * keep the cart on top when scrolling
+	 * @param	e
+	 */
+	public function onScroll(e:Dynamic) {
+		
+		//cart container top position		
+		
+		if (jWindow.scrollTop() > cartTop) {
+			//trace("absolute !");
+			cartContainer.addClass("scrolled");
+			cartContainer.css('left', Std.string(cartLeft) + "px");			
+			cartContainer.css('top', Std.string(cartTop) + "px");
+			cartContainer.css('width', Std.string(cartWidth) + "px");
+			
+		}else {
+			cartContainer.removeClass("scrolled");
+			cartContainer.css('left',"");
+			cartContainer.css('top', "");
+			cartContainer.css('width', "");
+		}
+		
+		
 		
 	}
 	

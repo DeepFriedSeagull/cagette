@@ -32,6 +32,9 @@ class Contract extends Object
 	
 	public var startDate:SDate;
 	public var endDate :SDate;
+	
+	public var description:SNull<SText>;
+	
 	@:relation(amapId) public var amap:Amap;
 	public var distributorNum:STinyInt;
 	public var flags : SFlags<ContractFlags>;
@@ -43,19 +46,74 @@ class Contract extends Object
 	@:skip public static var TYPE_CONSTORDERS = 0; 	//à commande fixes
 	@:skip public static var TYPE_VARORDER = 1;		//à commandes variables
 	
+	@:skip var cache_hasActiveDistribs : Bool;
+	
 	public function new() 
 	{
 		super();
 	}
 	
+	/**
+	 * The products can be ordered currently ?
+	 */
 	public function isUserOrderAvailable():Bool {
-		return flags.has(UsersCanOrder);
+		
+		if (type == TYPE_CONSTORDERS ) {
+			
+			// constant orders
+			return isVisibleInShop();
+		}else {
+		
+			if ( cache_hasActiveDistribs != null ) return cache_hasActiveDistribs;
+			
+			//for varying orders, we need to know if there are some available deliveries
+			var n = Date.now();
+			
+			var d = db.Distribution.manager.count( $orderStartDate <= n && $orderEndDate >= n && $contractId==this.id);
+			//tmp : add the "old" deliveries which have a null orderStartDate
+			d += db.Distribution.manager.count( $orderStartDate == null && $date > n  && $contractId == this.id );
+			
+			cache_hasActiveDistribs = d > 0;
+			return cache_hasActiveDistribs && isVisibleInShop();
+		}
+		
 	}
+	
+	/**
+	 * The products can be displayed in a shop ?
+	 */
+	public function isVisibleInShop():Bool {
+		
+		//yes if the contract is active and the 'UsersCanOrder' flag is checked
+		var n = Date.now().getTime();
+		return flags.has(UsersCanOrder) && n < this.endDate.getTime() && n > this.startDate.getTime();
+	}
+	
 	public function hasPercentageOnOrders():Bool {
 		return flags.has(PercentageOnOrders) && percentageValue!=null && percentageValue!=0;
 	}
+	
 	public function hasStockManagement():Bool {
 		return flags.has(StockManagement);
+	}
+	
+	/**
+	 * computes a 'percentage' fee or a 'margin' fee 
+	 * depending on the group settings
+	 * 
+	 * @param	basePrice
+	 */
+	public function computeFees(basePrice:Float) {
+		if (!hasPercentageOnOrders()) return 0.0;
+		
+		if (amap.flags.has(ComputeMargin)) {
+			//commercial margin
+			return (basePrice / ((100 - percentageValue) / 100)) - basePrice;
+			
+		}else {
+			//add a percentage
+			return percentageValue / 100 * basePrice;
+		}
 	}
 	
 	/**
@@ -78,8 +136,18 @@ class Contract extends Object
 		
 	}
 	
-	public function getProducts():List<Product> {
-		return Product.manager.search($contract==this,false);
+	/**
+	 * get products in this contract
+	 * @param	onlyActive = true
+	 * @return
+	 */
+	public function getProducts(?onlyActive = true):List<Product> {
+		if (onlyActive) {
+			return Product.manager.search($contract==this && $active==true,false);	
+		}else {
+			return Product.manager.search($contract==this,false);	
+		}
+		
 	}
 	
 		
@@ -111,12 +179,12 @@ class Contract extends Object
 		return Lambda.array(ucs);
 	}
 	
-	public function getDistribs(excludeOld = true,?limit=5):List<Distribution> {
+	public function getDistribs(excludeOld = true,?limit=999):List<Distribution> {
 		if (excludeOld) {
 			//still include deliveries which just expired in last 24h
 			return Distribution.manager.search($end > DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24) && $contract == this, { orderBy:date,limit:limit } );
 		}else{
-			return Distribution.manager.search( $contract == this, { orderBy:date } );
+			return Distribution.manager.search( $contract == this, { orderBy:date,limit:limit } );
 		}
 	}
 	

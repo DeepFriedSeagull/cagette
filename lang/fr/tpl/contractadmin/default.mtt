@@ -28,10 +28,10 @@
 					<td>::c._vendor.name::</td>
 					<td>
 						
-						$$edit(Gestion,/contractAdmin/view/::c.id::)
+						$$edit(Gestion,::"/contractAdmin/view/"+c.id::)
 						
 						::if user.isAmapManager()::
-						$$delete(Suppr.,/contract/delete/::c.id::?token=::token::)
+						$$delete(Suppr.,::"/contract/delete/"+c.id+"?token="+token::)
 						::end::
 
 						</td>
@@ -45,9 +45,12 @@
 	::end::
 	<a href="/contractAdmin?old=1" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-folder-close"></span> Contrats anciens</a>
 	<a href="/distribution/listByDate" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Liste d'émargement globale</a>
+		<a href="/contractAdmin/calendar" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-calendar"></span> Calendrier</a>
 	</div>
 	
 </div>
+
+
 
 <div class="col-md-6">
 	<div class="article" ::cond user.isAmapManager()::>
@@ -57,8 +60,8 @@
 				<tr>
 					<td><b>::v.name::</b></td>
 					<td>
-						$$edit(Modifier,/vendor/edit/::v.id::)
-						::if user.isAmapManager():: $$delete(Suppr.,/vendor/delete/::v.id::?token=::token::) ::end::
+						$$edit(Modifier,::"/vendor/edit/"+v.id::)
+						::if user.isAmapManager():: $$delete(Suppr.,::"/vendor/delete/"+v.id+"?token="+token::) ::end::
 					</td>
 				</tr>
 			::end::
@@ -76,8 +79,8 @@
 				<tr>
 					<td><b>::p.name::</b></td>
 					<td>
-						$$edit(Modifier,/place/edit/::p.id::)
-						::if user.isAmapManager():: $$delete(Suppr.,/place/delete/::p.id::?token=::token::) ::end::
+						$$edit(Modifier,::"/place/edit/"+p.id::)
+						::if user.isAmapManager():: $$delete(Suppr.,::"/place/delete/"+p.id+"?token="+token::) ::end::
 					</td>
 				</tr>
 			::end::

@@ -3,7 +3,7 @@
 -lib weblog
 -lib sugoi
 -lib hxevents
--lib cagette-hosted
+-lib thx.semver
 -lib hscript
 -lib ufront-mail
 -cp common

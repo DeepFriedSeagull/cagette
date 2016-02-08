@@ -50,6 +50,24 @@
 		<a href="/member/loginas/::member.id::/::userAmap._amap.id::" class="btn btn-default btn-sm">Se connecter sur ce compte</a>
 		::end::
 	</div>
+	
+	
+	::if user._amap.hasMembership()::
+	<h2>Cotisation</h2>
+	<div class="article">
+		::if userAmap.hasValidMembership()::
+			$$bool(true) Cotisation à jour 
+		::else::
+			$$bool(false) N'a pas cotisé 
+		::end::
+		pour la periode <b>::user._amap.getPeriodName(null)::</b>
+		<br/>
+		<a href="/membership/::member.id::" class="btn btn-default btn-sm">Gérer les cotisations</a>
+		
+	</div>
+	::end::
+
+	
 </div>
 
 <div class="col-md-8">
@@ -140,20 +158,7 @@
 	</div>
 </div>
 
-<div class="col-md-4" ::cond user._amap.hasMembership()::>
-	<h2>Cotisation</h2>
-	<div class="article">
-		::if userAmap.hasValidMembership()::
-			$$bool(true) Cotisation à jour 
-		::else::
-			$$bool(false) N'a pas cotisé 
-		::end::
-		pour la periode <b>::user._amap.getPeriodName(null)::</b>
-		<br/>
-		<a href="/membership/::member.id::" class="btn btn-default btn-sm">Gérer les cotisations</a>
-		
-	</div>
-</div>
+
 
 
 

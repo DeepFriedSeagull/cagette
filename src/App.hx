@@ -14,6 +14,12 @@ class App extends sugoi.BaseApp {
 	public var eventDispatcher :hxevents.Dispatcher<event.Event>;	
 	public var plugins : Array<plugin.IPlugIn>;
 	
+	/**
+	 * Version management
+	 * @doc https://github.com/fponticelli/thx.semver
+	 */ 
+	public static var VERSION : thx.semver.Version = [0,9,0];
+	
 	public static function main() {
 		
 		App.t = sugoi.form.Form.translator = new sugoi.i18n.translator.TMap(getTranslationArray(), "fr");
@@ -36,10 +42,8 @@ class App extends sugoi.BaseApp {
 	
 	override function setCookie( oldCookie : String ) {
 	
-		if( session != null && session.sid != null && session.sid != oldCookie ) {
-			Web.setHeader("Set-Cookie", cookieName+"=" + session.sid + "; path=/;");
-			//neko.Web.setHeader("Set-Cookie", cookieName+"="+session.sid+"; Domain=" + cookieDomain + "; path=/;");
-			//neko.Web.setCookie(cookieName, session.sid, new Date(1970,1,1,0,0,0), cookieDomain,"/"); //delete this fucking cookie .app.cagette.net //nope, sur IE, setter deux cookie foire tout
+		if ( session != null && session.sid != null && session.sid != oldCookie ) {
+			Web.setHeader("Set-Cookie", cookieName+"=" + session.sid + "; path=/;");			
 		}
 	}
 	
@@ -51,11 +55,11 @@ class App extends sugoi.BaseApp {
 	}
 	
 	public static function log(t:Dynamic) {
+
 		if (App.config.DEBUG) {
 			#if neko
 			Web.logMessage(Std.string(t));
 			#end
-			//Weblog.log(t);
 		}
 	}
 	
@@ -80,13 +84,13 @@ class App extends sugoi.BaseApp {
 		out.set("contract", "Contrat");
 		out.set("place", "Lieu");
 		out.set("name", "Nom");
-		out.set("cdate", "Date d'entrée dans l'Amap");
+		out.set("cdate", "Date d'entrée dans le groupe");
 		out.set("quantity", "Quantité");
 		out.set("paid", "Payé");
 		out.set("user2", "(facultatif) partagé avec ");
 		out.set("product", "Produit");
 		out.set("user", "Adhérent");
-		out.set("txtIntro", "Texte de présentation de l'Amap");
+		out.set("txtIntro", "Texte de présentation du groupe");
 		out.set("txtHome", "Texte en page d'accueil pour les adhérents connectés");
 		out.set("txtDistrib", "Texte à faire figurer sur les listes d'émargement lors des distributions");
 		out.set("distributor1", "Distributeur 1");
@@ -94,8 +98,16 @@ class App extends sugoi.BaseApp {
 		out.set("distributor3", "Distributeur 3");
 		out.set("distributor4", "Distributeur 4");
 		out.set("distributorNum", "Nbre de distributeurs nécéssaires (de 0 à 4)");
+		
 		out.set("startDate", "Date de début");
 		out.set("endDate", "Date de fin");
+		
+		out.set("orderStartDate", "Date ouverture des commandes");
+		out.set("orderEndDate", "Date fermeture des commandes");	
+		
+		out.set("date", "Date de distribution");	
+		out.set("active", "actif");	
+		
 		out.set("contact", "Reponsable");
 		out.set("vendor", "Producteur");
 		out.set("text", "Texte");
@@ -119,6 +131,8 @@ class App extends sugoi.BaseApp {
 		out.set("price", "prix TTC");
 		out.set("uname", "Nom");
 		out.set("pname", "Produit");
+		out.set("hasFloatQt", "Autoriser quantités \"à virgule\"");
+		
 		out.set("membershipRenewalDate", "Adhésions : Date de renouvellement");
 		out.set("membershipPrice", "Adhésions : Coût de l'adhésion");
 		out.set("UsersCanOrder", "Les adhérents peuvent saisir leur commande en ligne");
@@ -135,7 +149,11 @@ class App extends sugoi.BaseApp {
 		out.set("desc", "Description");
 		out.set("ShopMode", "Mode boutique");
 		out.set("IsAmap", "Votre groupe est une AMAP");
+		out.set("ComputeMargin", "Appliquer une marge à la place des pourcentages");
 		out.set("ref", "Référence");
+		out.set("linkText", "Intitulé du lien");
+		out.set("linkUrl", "URL du lien");
+		
 		return out;
 	}
 	

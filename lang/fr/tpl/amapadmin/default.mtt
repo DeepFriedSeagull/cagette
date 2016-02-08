@@ -8,6 +8,12 @@
 			<p>
 				<strong>::membersNum::</strong> foyers adhérents.<br/>
 				<strong>::contractsNum::</strong> contrats en cours.<br/>	
+				
+				<hr/>
+				
+				$$edit(Modifier les propriétés,/amap/edit)
+				
+				<a href="/amapadmin/addimage/" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-picture"></span>&nbsp;Définir un logo</a>
 			</p>
 			<p>
 				
@@ -21,12 +27,7 @@
 			<img src="::file(user._amap._image)::" style="width: 100%;" class="thumbnail" />
 			::end::
 		</div>
-		
-		<div class="col-md-12">
-			$$edit(Modifier les propriétés,/amap/edit)
-				
-			<a href="/amapadmin/addimage/" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-picture"></span>&nbsp;Définir un logo</a>
-		</div>
+
 	</div>
 
 

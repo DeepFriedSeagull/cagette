@@ -3,6 +3,15 @@
 		
 	<h3>Produits</h3>
 	
+	<div>
+		<p>
+		$$insert(Nouveau produit,::"/product/insert/"+c.id::)
+		<a href="/product/import/::c.id::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list-alt"></span> Import Excel/CSV</a>	
+		
+		<a ::cond c.type==1:: href="/product/categorize/::c.id::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-tag"></span> Catégories</a>	
+		</p>
+	</div>
+
 	<table class="table table-striped">
 		<tr>
 			<th></th>
@@ -13,25 +22,41 @@
 			<th>Stock</th>
 			::end::
 			<th></th>
+			<th></th>
 		</tr>
-		::foreach p c.getProducts()::
-		<tr>
+		::foreach p c.getProducts(false)::
+		
+		::if p.active==false:: 
+		::set opacity=0.4::
+		::else::
+		::set opacity=1::
+		::end::
+		<tr style="opacity: ::opacity::">
 			<td>
 				
 				<img src="::p.getImage()::" style="width:64px;height:64px;" />
 				
 			</td>
 			<td>$$nullSafe(::p.ref::)</td>
-			<td>::p.name::</td>
-			<td>::formatNum(p.price):: &euro;</td>
+			<td>
+				<b>::p.name::</b>
+				
+				<div>
+					::foreach c p.getCategories()::
+					<span class='tag' style='background-color: ::c.getColor()::;'>::c.name::</span>
+					::end::
+					
+				</div>
+				
+			</td>
+			<td>::formatNum(p.price)::&nbsp;&euro;</td>
 			<td>
 			::if c.hasStockManagement() ::
 				::if p.stock==null::
 					-
 				::else::
 					::if p.stock <= 10::
-						<span style="color:red;font-weight:bold;">
-							
+						<span style="color:red;font-weight:bold;">							
 							::p.stock::
 						</span>
 					::else::
@@ -45,20 +70,16 @@
 			::end::
 			</td>
 			<td>
-				$$edit(modifier,/product/edit/::p.id::)
+				$$edit(modifier,::"/product/edit/"+p.id::)
 				
 				<a href="/product/addImage/::p.id::" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-picture"></span> Photo</a>
 				
-				$$delete(Suppr.,/product/delete/::p.id::?token=::token::)
+				$$delete(Suppr.,::"/product/delete/"+p.id+"?token="+token::)
 			</td>
 
 		</tr>
 		::end::
 	</table>
-	$$insert(Nouveau produit,/product/insert/::c.id::)
-	<a href="/product/import/::c.id::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list-alt"></span> Import Excel/CSV</a>	
-	
-	<a ::cond c.type==1:: href="/product/categorize/::c.id::" class="btn btn-default btn-sm">Catégories</a>	
 	
 
 ::end::

@@ -31,7 +31,7 @@
   <haxelib>
     <library name="dbadmin" />
     <library name="templo" />
-    <library name="weblog" />
+    <library name="thx.semver" />
     <library name="sugoi" />
     <library name="hxevents" />
     <library name="cagette-hosted" />

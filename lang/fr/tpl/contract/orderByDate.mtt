@@ -31,16 +31,16 @@
 					</a>
 				</td>
 				<td>
-					::o.productPrice::&nbsp;&euro;
+					::formatNum(o.productPrice)::&nbsp;&euro;
 				</td>
 				<td>
-					::o.subTotal::&nbsp;&euro;
+					::formatNum(o.subTotal)::&nbsp;&euro;
 				</td>
 				<td>
-					$$nullSafe(::o.fees::)
+					$$nullSafe(::formatNum(o.fees)::)
 				</td>
 				<td>
-					::o.total::&nbsp;&euro;
+					::formatNum(o.total)::&nbsp;&euro;
 				</td>
 				<td>
 					::if o.canModify::

@@ -45,18 +45,43 @@ class ContractAdmin extends Controller
 		
 		//set a token for delete buttons
 		checkToken();
+		
+		
+		
 	}
 
-	
+	/**
+	 * Manage products
+	 */
 	@tpl("contractadmin/products.mtt")
 	function doProducts(contract:db.Contract) {
 		if (!app.user.canManageContract(contract)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
 		view.c = contract;
 		
+		//checks
+		if (app.user.amap.hasShopMode()) {
+		
+			for ( p in contract.getProducts(false)) {
+				if (p.getCategories().length == 0) {
+					app.session.addMessage("Attention, un ou plusieurs produits n'ont pas de catégories, <a href='/product/categorize/"+contract.id+"'>cliquez ici pour en ajouter</a>", true);
+					break;
+				}
+			}
+			
+		}
+		
+		
 		//generate a token
 		checkToken();
 	}
 
+	
+	
+	
+	/**
+	 *  - hidden page -
+	 * copy products from a contract to an other
+	 */
 	@admin @tpl("form.mtt")
 	function doCopyProducts(contract:db.Contract) {
 		view.title = "Copier des produits dans : "+contract.name;
@@ -92,6 +117,70 @@ class ContractAdmin extends Controller
 		
 		
 		view.form = form;
+	}
+	
+	/**
+	 * displays a calendar of the current month 
+	 * with all events ( contracts start and end, deliveries... )
+	 */
+	@tpl('contractAdmin/calendar.mtt')
+	public function doCalendar() {
+		
+		var contracts = db.Contract.getActiveContracts(app.user.amap, true, false);	
+		
+		//Events of the month in a calendar
+		var cal = Calendar.getMonthViewMap();
+		
+		for ( c in contracts) {
+			var start = c.startDate.toString().substr(0,10);
+			var end = c.endDate.toString().substr(0,10);
+			if (cal.exists( start )) {
+				var v = cal.get(start);
+				v.push( { name: "Début contrat " + c.name,  color:Calendar.COLOR_CONTRACT } );
+				cal.set( start, v );
+			}
+			if (cal.exists( end )) {
+				var v = cal.get(end);
+				v.push(		{ name: "Fin contrat "  +c.name,  color:Calendar.COLOR_CONTRACT } );
+				cal.set( end, v );
+			}
+			
+			//deliveries
+			for ( d in c.getDistribs(false)) {
+				var start = d.date.toString().substr(0,10);
+				
+				if (cal.exists( start )) {
+					var v = cal.get( start );
+					v.push(		{ name: "Livraison "  +d.contract.name,  color:Calendar.COLOR_DELIVERY } );
+					cal.set( start, v );
+				}
+				
+				if ( d.orderStartDate != null && d.orderStartDate != null ) {
+					var k = d.orderStartDate.toString().substr(0,10);
+					if (cal.exists( k )) {
+						var v = cal.get( k );
+						v.push(		{ name: "Ouverture commandes "  +d.contract.name,  color:Calendar.COLOR_ORDER } );
+						cal.set( k , v );
+					}
+					
+					var k = d.orderEndDate.toString().substr(0,10);
+					if (cal.exists( k )) {
+						var v = cal.get( k );
+						v.push(		{ name: "Fin commandes "  +d.contract.name,  color:Calendar.COLOR_ORDER } );
+						cal.set( k , v );
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		var n = Date.now();
+		view.now = new Date(n.getFullYear(),n.getMonth(),n.getDate(),0,0,0).getTime();
+		view.calendar = Calendar.mapToArray( cal );
+		
+		
 	}
 	
 	 
@@ -139,6 +228,83 @@ class ContractAdmin extends Controller
 		
 		view.orders = orders;
 	}
+	
+	/**
+	 *  Duplicate a contract
+	 */
+	@tpl("form.mtt")
+	function doDuplicate(contract:db.Contract) {
+		if (!app.user.isAmapManager()) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
+		
+		view.title = "Dupliquer le contrat '"+contract.name+"'";
+		var form = new Form("duplicate");
+		
+		form.addElement(new Input("name","Nom du nouveau contrat : ",contract.name+" - copie "));
+		form.addElement(new Checkbox("copyProducts","Copier les produits",true));
+		form.addElement(new Checkbox("copyDeliveries","Copier les livraisons",true));
+		
+		if (form.checkToken()) {
+			
+			var nc = new db.Contract();
+			nc.name = form.getValueOf("name");
+			nc.startDate = contract.startDate;
+			nc.endDate = contract.endDate;
+			nc.amap = contract.amap;
+			nc.contact = contract.contact;
+			nc.description = contract.description;
+			nc.distributorNum = contract.distributorNum;
+			nc.flags = contract.flags;
+			nc.type = contract.type;
+			nc.vendor = contract.vendor;
+			nc.percentageName = contract.percentageName;
+			nc.percentageValue = nc.percentageValue;
+			nc.insert();
+			
+			if (form.getValueOf("copyProducts") == "1") {
+				var prods = contract.getProducts();
+				for ( source_p in prods) {
+					var p = new db.Product();
+					p.name = source_p.name;
+					p.price = source_p.price;
+					p.type = source_p.type;
+					p.contract = nc;
+					p.image = source_p.image;
+					p.desc = source_p.desc;
+					p.ref = source_p.ref;
+					p.stock = source_p.stock;
+					p.vat = source_p.vat;
+					p.insert();
+				}
+			}
+			
+			if (form.getValueOf("copyDeliveries") == "1") {
+				for ( ds in contract.getDistribs()) {
+					var d = new db.Distribution();
+					d.contract = nc;
+					d.date = ds.date;
+					d.distributor1 = ds.distributor1;
+					d.distributor2 = ds.distributor2;
+					d.distributor3 = ds.distributor3;
+					d.distributor4 = ds.distributor4;
+					d.end = ds.end;
+					d.place = ds.place;
+					d.text = ds.text;
+					d.insert();
+				}
+				
+				
+			}
+			
+			throw Ok("/contractAdmin/view/" + nc.id, "Contrat dupliqué");
+			
+			
+		}
+		
+		
+		view.form = form;
+	}
+	
+	
 	
 	/**
 	 * Commandes groupées par produit.
@@ -253,7 +419,6 @@ class ContractAdmin extends Controller
 	function doView(contract:db.Contract) {
 		if (!app.user.canManageContract(contract)) throw Error("/", "Vous n'avez pas le droit de gérer ce contrat");
 		view.c = view.contract = contract;
-		
 	}
 	
 	

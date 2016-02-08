@@ -101,7 +101,9 @@ class Distribution extends Controller
 		throw Ok("/contractAdmin/distributions/" + cid, "la distribution a bien été effacée");
 	}
 	
-	
+	/**
+	 * Edit a delivery
+	 */
 	@tpl('form.mtt')
 	function doEdit(d:db.Distribution) {
 		
@@ -114,6 +116,11 @@ class Distribution extends Controller
 		var x = new sugoi.form.elements.HourDropDowns("end", "heure de fin",d.end);
 		form.addElement(x, 4);
 		
+		if (d.contract.type == db.Contract.TYPE_VARORDER ) {
+			form.addElement(new sugoi.form.elements.DatePicker("orderStartDate", App.t._("orderStartDate"), d.orderStartDate));	
+			form.addElement(new sugoi.form.elements.DatePicker("orderEndDate", App.t._("orderEndDate"), d.orderEndDate));
+		}
+		
 		if (form.isValid()) {
 			form.toSpod(d); //update model
 			//var days = Math.floor( d.date.getTime() / 1000 / 60 / 60 / 24 );
@@ -123,7 +130,7 @@ class Distribution extends Controller
 		}
 		
 		view.form = form;
-		view.title = "Modifier une distribution";
+		view.title = "Modifier une livraison";
 	}
 	
 	@tpl('form.mtt')
@@ -151,7 +158,12 @@ class Distribution extends Controller
 		form.removeElement(form.getElement("distributionCycleId"));
 		form.removeElement(form.getElement("end"));
 		var x = new sugoi.form.elements.HourDropDowns("end", "heure de fin");
-		form.addElement(x,4);
+		form.addElement(x, 4);
+		
+		if (contract.type == db.Contract.TYPE_VARORDER ) {
+			form.addElement(new sugoi.form.elements.DatePicker("orderStartDate", App.t._("orderStartDate")));	
+			form.addElement(new sugoi.form.elements.DatePicker("orderEndDate", App.t._("orderEndDate")));
+		}
 		
 		if (form.isValid()) {
 			form.toSpod(d); //update model
@@ -175,17 +187,18 @@ class Distribution extends Controller
 		var form = sugoi.form.Form.fromSpod(d);
 		form.removeElement(form.getElement("contractId"));
 		form.removeElement(form.getElement("startHour"));
-		var x = new sugoi.form.elements.HourDropDowns("startHour", "Heure de début",d.startHour);
+		var x = new sugoi.form.elements.HourDropDowns("startHour", "Heure de début",d.startHour,true);
 		form.addElement(x, 5);
 		form.removeElement(form.getElement("endHour"));
-		var x = new sugoi.form.elements.HourDropDowns("endHour", "Heure de fin",d.endHour);
+		var x = new sugoi.form.elements.HourDropDowns("endHour", "Heure de fin",d.endHour,true);
 		form.addElement(x, 6);
 		
 		if (form.isValid()) {
+			
+			
 			form.toSpod(d); //update model
 			d.contract = contract;
 			d.insert();
-			
 			db.DistributionCycle.updateChilds(d);
 			throw Ok('/contractAdmin/distributions/'+d.contract.id,'La distribution a été enregistrée');
 		}
@@ -203,8 +216,9 @@ class Distribution extends Controller
 		view.contract = contract;
 
 		var doodle = new Map<Int,{user:db.User,planning:Map<Int,Bool>}>();
+		var distribs = contract.getDistribs(true, 150);
 		
-		for ( d in contract.getDistribs(20) ) {
+		for ( d in distribs ) {
 			for (u in [d.distributor1, d.distributor2, d.distributor3, d.distributor4]) {
 				if (u != null) {
 					
@@ -218,6 +232,7 @@ class Distribution extends Controller
 			}
 			
 		}
+		view.distribs = distribs;
 		view.doodle = doodle;
 		
 	}

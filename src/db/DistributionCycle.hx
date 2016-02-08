@@ -48,7 +48,8 @@ class DistributionCycle extends Object
 	public static function updateChilds(dc:DistributionCycle) {
 		
 		var datePointer = dc.startDate;
-		var dayOfWeek = dc.startDate.getDay();
+		
+		//var dayOfWeek = dc.startDate.getDay();
 		if (dc.id == null) throw "this distributionCycle has not been recorded";
 		
 		//first distrib
@@ -57,8 +58,10 @@ class DistributionCycle extends Object
 		d.distributionCycle = dc;
 		d.place = dc.place;
 		d.date = new Date(datePointer.getFullYear(), datePointer.getMonth(), datePointer.getDate(), dc.startHour.getHours(), dc.startHour.getMinutes(), 0);
-		d.end = new Date(datePointer.getFullYear(), datePointer.getMonth(), datePointer.getDate(), dc.endHour.getHours(), dc.endHour.getMinutes(), 0);
+		d.end  = new Date(datePointer.getFullYear(), datePointer.getMonth(), datePointer.getDate(), dc.endHour.getHours()  , dc.endHour.getMinutes()  , 0);
 		d.insert();
+		
+		
 			
 		//iterations
 		for(i in 0...100) {
@@ -114,7 +117,7 @@ class DistributionCycle extends Object
 			
 			//applique heure de debut et fin
 			d.date = new Date(datePointer.getFullYear(), datePointer.getMonth(), datePointer.getDate(), dc.startHour.getHours(), dc.startHour.getMinutes(), 0);
-			d.end  = new Date(datePointer.getFullYear(), datePointer.getMonth(), datePointer.getDate(), dc.endHour.getHours(), dc.endHour.getMinutes(), 0);
+			d.end  = new Date(datePointer.getFullYear(), datePointer.getMonth(), datePointer.getDate(), dc.endHour.getHours(),   dc.endHour.getMinutes(),   0);
 			d.insert();
 		}
 	}

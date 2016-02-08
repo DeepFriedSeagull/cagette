@@ -42,27 +42,53 @@ App.prototype = {
 };
 var Cart = function() {
 	this.products = new haxe_ds_IntMap();
-	this.order = { token : "", products : []};
+	this.order = { products : []};
 };
 $hxClasses["Cart"] = Cart;
 Cart.__name__ = ["Cart"];
 Cart.prototype = {
 	products: null
 	,order: null
+	,loader: null
+	,cartTop: null
+	,cartLeft: null
+	,cartWidth: null
+	,jWindow: null
+	,cartContainer: null
 	,add: function(pid) {
+		var _g = this;
+		this.loader.show();
+		var q = js.JQuery("#productQt" + pid).val();
+		var qt = 0.0;
+		var p = this.products.h[pid];
+		if(p.hasFloatQt) {
+			q = StringTools.replace(q,",",".");
+			qt = parseFloat(q);
+		} else qt = Std.parseInt(q);
+		if(qt == null) qt = 1;
+		var r = new haxe_Http("/shop/add/" + pid + "/" + qt);
+		r.onData = function(data) {
+			_g.loader.hide();
+			var d = JSON.parse(data);
+			if(!d.success) js_Browser.alert("Erreur : " + Std.string(d));
+			_g.subAdd(pid,qt);
+			_g.render();
+		};
+		r.request();
+	}
+	,subAdd: function(pid,qt) {
 		var _g = 0;
 		var _g1 = this.order.products;
 		while(_g < _g1.length) {
 			var p = _g1[_g];
 			++_g;
 			if(p.productId == pid) {
-				p.quantity++;
+				p.quantity += qt;
 				this.render();
 				return;
 			}
 		}
-		this.order.products.push({ productId : pid, quantity : 1});
-		this.render();
+		this.order.products.push({ productId : pid, quantity : qt});
 	}
 	,render: function() {
 		var _g = this;
@@ -70,9 +96,9 @@ Cart.prototype = {
 		c.empty();
 		c.append(Lambda.map(this.order.products,function(x) {
 			var p = _g.products.h[x.productId];
-			if(p == null) haxe_Log.trace("cant find product " + x.productId + " in " + _g.products.toString(),{ fileName : "Cart.hx", lineNumber : 41, className : "Cart", methodName : "render"});
-			var btn = "<a onClick='cart.remove(" + p.id + ")' class='btn btn-default btn-xs'><span class='glyphicon glyphicon-remove'></span></a>&nbsp;";
-			return "<div class='order'>" + btn + "<b>" + x.quantity + "</b> x " + p.name + " </div>";
+			if(p == null) return "";
+			var btn = "<a onClick='cart.remove(" + p.id + ")' class='btn btn-default btn-xs' data-toggle='tooltip' data-placement='top' title='Retirer de la commande'><span class='glyphicon glyphicon-remove'></span></a>&nbsp;";
+			return "<div class='row'> \r\n\t\t\t\t<div class = 'order col-md-9' > <b> " + x.quantity + " </b> x " + p.name + " </div>\r\n\t\t\t\t<div class = 'col-md-3'> " + btn + "</div>\t\t\t\r\n\t\t\t</div>";
 		}).join("\n"));
 		var total = 0.0;
 		var _g1 = 0;
@@ -81,6 +107,7 @@ Cart.prototype = {
 			var p1 = _g11[_g1];
 			++_g1;
 			var pinfo = this.products.h[p1.productId];
+			if(pinfo == null) continue;
 			total += p1.quantity * pinfo.price;
 		}
 		var ffilter = new sugoi_form_filters_FloatFilter();
@@ -106,33 +133,66 @@ Cart.prototype = {
 		}
 	}
 	,remove: function(pid) {
-		var _g = 0;
-		var _g1 = this.order.products.slice();
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			if(p.productId == pid) {
-				HxOverrides.remove(this.order.products,p);
-				this.render();
-				return;
+		var _g = this;
+		this.loader.show();
+		var r = new haxe_Http("/shop/remove/" + pid);
+		r.onData = function(data) {
+			_g.loader.hide();
+			var d = JSON.parse(data);
+			if(!d.success) js_Browser.alert("Erreur : " + Std.string(d));
+			var _g1 = 0;
+			var _g2 = _g.order.products.slice();
+			while(_g1 < _g2.length) {
+				var p = _g2[_g1];
+				++_g1;
+				if(p.productId == pid) {
+					HxOverrides.remove(_g.order.products,p);
+					_g.render();
+					return;
+				}
 			}
-		}
+			_g.render();
+		};
+		r.request();
 	}
 	,init: function() {
-		var _g1 = this;
-		var req = new haxe_Http("/shop/products");
+		var _g = this;
+		this.loader = js.JQuery("#cartContainer #loader");
+		var req = new haxe_Http("/shop/init");
 		req.onData = function(data) {
-			var list = JSON.parse(data);
-			var _g = 0;
-			while(_g < list.length) {
-				var p = list[_g];
-				++_g;
+			_g.loader.hide();
+			var data1 = JSON.parse(data);
+			var _g1 = 0;
+			var _g2 = data1.products;
+			while(_g1 < _g2.length) {
+				var p = _g2[_g1];
+				++_g1;
 				var id = p.id;
-				_g1.products.h[id] = p;
+				_g.products.h[id] = p;
 			}
-			haxe_Log.trace(_g1.products.toString(),{ fileName : "Cart.hx", lineNumber : 119, className : "Cart", methodName : "init"});
+			var _g11 = 0;
+			var _g21 = data1.order.products;
+			while(_g11 < _g21.length) {
+				var p1 = _g21[_g11];
+				++_g11;
+				_g.subAdd(p1.productId,p1.quantity);
+			}
+			_g.render();
 		};
 		req.request();
+	}
+	,onScroll: function(e) {
+		if(this.jWindow.scrollTop() > this.cartTop) {
+			this.cartContainer.addClass("scrolled");
+			this.cartContainer.css("left",Std.string(this.cartLeft) + "px");
+			this.cartContainer.css("top",Std.string(this.cartTop) + "px");
+			this.cartContainer.css("width",Std.string(this.cartWidth) + "px");
+		} else {
+			this.cartContainer.removeClass("scrolled");
+			this.cartContainer.css("left","");
+			this.cartContainer.css("top","");
+			this.cartContainer.css("width","");
+		}
 	}
 	,__class__: Cart
 };

@@ -1,0 +1,56 @@
+::use 'design.mtt'::
+
+<!--
+<style>
+.calDiv{
+	width:14.28%;
+	background:grey;
+	padding:2px;
+	height:50px;
+	border:solid 1px black;
+	display:inline-block;
+}
+</style>
+<div class="col-md-12">
+	<div class="article">
+		
+		<h2>Calendrier</h2>
+		
+		<div class="calDiv"></div><div class="calDiv"></div><div class="calDiv"></div><div class="calDiv"></div><div class="calDiv"></div><div class="calDiv"></div><div class="calDiv"></div>
+		
+	</div>
+</div>
+-->
+
+<div class="col-md-12">
+	<div class="article">
+		
+		<h2>Calendrier</h2>
+		
+		<div style="-webkit-column-count: 3;-moz-column-count: 3;column-count: 3;">
+			
+		::foreach c calendar::
+			
+			::if c.d.getTime() < now::
+				::set col="0.3"::
+			::else::
+				::set col="1"::
+			::end::
+			
+			<div style="opacity: ::col::;margin-bottom:8px;">
+			
+			::hDate(c.d)::<br/>			
+			::foreach e c.events::
+			<div style="margin-left:16px;margin-right:16px;width:12px;height:8px;display:inline-block;background: ::intToHex(e.color,6)::;"></div><b> ::e.name:: </b><br/>
+			::end::
+			</div>
+			
+		::end::
+		</div>
+		
+		
+	</div>
+</div>
+
+
+::end::

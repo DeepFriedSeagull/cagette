@@ -68,7 +68,7 @@
 	::if count(varOrders)>0::
 	<div class="article">
 		::foreach d varOrders::
-			<h4>Commande du ::hDate(d.date)::</h4>
+			<h4>Commande livrée le ::hDate(d.date)::</h4>
 			<table class="table table-bordered table-condensed" >
 				<tr>
 					<th>Qté</th>
@@ -80,42 +80,39 @@
 					<!--<th>Contrat</th>-->
 				</tr>
 				::set total = 0::
-				::foreach p d.orders::
+				::foreach o d.orders::
 					<tr>
-						::set price = p._product.price*p.quantity::
-						<td>::p.quantity::</td>
-						<td>::p._product.name::</td>
-						<td>::formatNum(p._product.price)::&nbsp;€</td>
-						<td>::formatNum(price)::&nbsp;€</td>
 						<td>
-							<!-- frais -->
-							::if p._product._contract.percentageValue!=null && p._product._contract.percentageValue!=0::
-							<a href="#" data-toggle="tooltip" data-placement="top" title="::p._product._contract.percentageName:: : ::p._product._contract.percentageValue:: %">
-								::formatNum(price/100*p._product._contract.percentageValue)::&nbsp;€
+							::o.quantity::
+						</td>
+						<td>
+							<a href="#" onclick="_.overlay('/shop/productInfo/::o.productId::')">
+								<img src="::o.productImage::" style="width:32px;height:32px;" />
+								 ::o.productName::
 							</a>
-							::end::
 						</td>
 						<td>
-							<!-- total -->
-							::if p._product._contract.percentageValue!=null::
-								::formatNum(price + (price/100*p._product._contract.percentageValue))::&nbsp;€
-								::set total = total + price + (price/100*p._product._contract.percentageValue)::
-							::else::
-								::formatNum(price)::&nbsp;€
-								::set total = total + price::
-							::end::
+							::formatNum(o.productPrice)::&nbsp;&euro;
 						</td>
-						<!--<td>
-							<a href="/contract/view/::p._product._contract.id::">::p._product._contract.name::</a>
-						</td>-->
+						<td>
+							::formatNum(o.subTotal)::&nbsp;&euro;
+						</td>
+						<td>
+							
+							$$nullSafe(::formatNum(o.fees)::)
+						</td>
+						<td>
+							::formatNum(o.total)::&nbsp;&euro;
+							::set total = total + o.total::
+						</td>
 					
 					</tr>
 				::end::	
 				<tr>
-					<th colspan="4">
-						$$edit(Modifier cette commande,/contract/editOrderByDate/::d.date::)
+					<td colspan="4">
+						$$edit(Modifier cette commande,::"/contract/editOrderByDate/"+d.date::)
 						
-					</th>
+					</td>
 					<td>TOTAL</td>
 					<td><b>::formatNum(total)::&nbsp;€</b></td>
 				</tr>

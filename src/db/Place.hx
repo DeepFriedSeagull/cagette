@@ -11,7 +11,8 @@ class Place extends Object
 	public var zipCode:SString<32>;
 	public var city:SString<25>;
 	
-	@:relation(amapId) public var amap : Amap;
+	@hideInForms @:relation(amapId) public var amap : Amap;
+	
 	
 	public function new() 
 	{

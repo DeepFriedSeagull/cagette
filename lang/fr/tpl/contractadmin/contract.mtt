@@ -24,7 +24,7 @@
 				::foreach p c.getProducts()::
 				<tr>
 					<td>::p.name::</td>
-					<td>$$edit(modifier,/product/edit/::p.id::)</td>
+					<td>$$edit(modifier,"/product/edit/"+::p.id::)</td>
 				</tr>
 				::end::
 			</table>

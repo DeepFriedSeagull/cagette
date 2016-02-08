@@ -5,6 +5,8 @@ import neko.Web;
 #else
 import php.Web;
 #end
+import ufront.mail.*;
+
 class Cron extends Controller
 {
 
@@ -62,12 +64,19 @@ class Cron extends Controller
 				report.add("<div><pre>"+e.error + " at URL " + e.url + " ( user : " + (e.user!=null?e.user.toString():"none") + ", IP : " + e.ip + ")</pre></div><hr/>");
 			}
 			
-			var mail = new sugoi.mail.MandrillApiMail();
-			mail.setSender(App.config.get("webmaster_email"));
-			mail.setRecipient(App.config.get("webmaster_email"));
-			mail.setSubject(App.config.NAME+" ERRORS");
-			mail.setHtmlBody("mail/message.mtt",{text:report.toString()});
-			mail.send();	
+			//var mail = new sugoi.mail.MandrillApiMail();
+			//mail.setSender();
+			//mail.setRecipient(App.config.get("webmaster_email"));
+			//mail.setSubject(App.config.NAME+" Errors");
+			//mail.setHtmlBody("mail/message.mtt",{text:report.toString()});
+			//mail.send();	
+			
+			var m = new Email();
+			m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));
+			m.to(new EmailAddress(App.config.get("webmaster_email")));
+			m.setSubject(App.config.NAME+" Errors");
+			m.setHtml( app.processTemplate("mail/message.mtt", { text:report.toString() } ) );
+			App.getMailer().send(m);
 		}
 		
 	}
@@ -160,12 +169,12 @@ class Cron extends Controller
 			if (u.user.flags.has(flag) ) {
 				
 				if (u.user.email != null) {
-					var m = new sugoi.mail.MandrillApiMail();
+					//var m = new sugoi.mail.MandrillApiMail();
 					var group = u.distrib.contract.amap.name;
-					m.setSubject( group+" : Distribution à " + u.distrib.date.getHours() + ":" + u.distrib.date.getMinutes() );
-					m.setSender("noreply@cagette.net", "Cagette.net");
-					m.addRecipient(u.user.email, u.user.getName(), u.user.id);
-					if(u.user.email2!=null) m.addRecipient(u.user.email2);
+					//m.setSubject( group+" : Distribution à " + u.distrib.date.getHours() + ":" + u.distrib.date.getMinutes() );
+					//m.setSender(App.config.get("default_email"), "Cagette.net");
+					//m.addRecipient(u.user.email, u.user.getName(), u.user.id);
+					//if(u.user.email2!=null) m.addRecipient(u.user.email2);
 					var text = "N'oubliez pas la distribution : <b>" + view.hDate(u.distrib.date) + "</b><br>";
 					text += "Vos produits à récupérer :<br><ul>";
 					for ( p in u.products) {
@@ -177,11 +186,28 @@ class Cron extends Controller
 						text += "<b>ATTENTION : Vous ou votre conjoint(e) êtes distributeur ! N'oubliez pas d'imprimer la liste d'émargement.</b>";
 					}
 					
-					m.setHtmlBody("mail/message.mtt", { text:text } );
+					//m.setHtmlBody("mail/message.mtt", { text:text } );
+					//try {
+						//m.send();	
+					//}catch (e:Dynamic) {
+						//App.current.logError(e);
+					//}
+					
+					
+					var m = new Email();
+					m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));					
+					m.to(new EmailAddress(u.user.email, u.user.getName()));					
+					if(u.user.email2!=null) m.cc(new EmailAddress(u.user.email2));
+					m.setSubject( group+" : Distribution à " + app.view.hDate(u.distrib.date) );
+					m.setHtml( app.processTemplate("mail/message.mtt", { text:text } ) );
+					
 					try {
-						m.send();	
+						
+						App.getMailer().send(m);
+						
 					}catch (e:Dynamic) {
-						App.current.logError(e);
+						
+						app.logError(e);
 					}
 					
 					

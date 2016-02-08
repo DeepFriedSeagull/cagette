@@ -33,16 +33,16 @@
 						::end::
 					</td>
 					<td>
-						$$edit(modifier,/distribution/edit/::d.id::) 
-						$$delete(supprimer,/distribution/delete/::d.id::)
+						$$edit(modifier,::"/distribution/edit/"+d.id::) 
+						$$delete(supprimer,::"/distribution/delete/"+d.id::)
 						<a href="/distribution/list/::d.id::" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span>&nbsp;Liste d'émargement</a>
 					</td>
 				</tr>
 				
 				::end::
 			</table>				
-			$$insert(Nouvelle livraison,/distribution/insert/::c.id::)
-			$$insert(Livraisons récurrentes,/distribution/insertCycle/::c.id::) 
+			$$insert(Nouvelle livraison,::"/distribution/insert/"+c.id::)
+			$$insert(Livraisons récurrentes,::"/distribution/insertCycle/"+c.id::) 
 			<a href="/contractAdmin/distributionp/::c.id::" class="btn btn-default btn-sm">
 				<span class="glyphicon glyphicon-user"></span> Participations aux livraisons
 			</a>

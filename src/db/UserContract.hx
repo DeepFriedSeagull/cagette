@@ -2,10 +2,10 @@ package db;
 import sys.db.Object;
 import sys.db.Types;
 import Common;
-/**
- * Commande récurrente d'un produit
- */
 
+/**
+ * a product order 
+ */
 class UserContract extends Object
 {
 
@@ -21,7 +21,7 @@ class UserContract extends Object
 	@formPopulate("populate") @:relation(userId2)
 	public var user2 : SNull<User>;
 	
-	public var quantity : SInt;
+	public var quantity : SFloat;
 	
 	@formPopulate("populateProducts") @:relation(productId)
 	public var product : Product;
@@ -83,7 +83,8 @@ class UserContract extends Object
 	public static function prepare(orders:List<db.UserContract>):Array<UserOrder> {
 		var out = new Array<UserOrder>();
 		var orders = Lambda.array(orders);
-		//tri par nom de famille
+		
+		//order by lastname
 		orders.sort(function(a, b) {
 			if (a.user.lastName+a.user.id > b.user.lastName+b.user.id ) {
 				return 1;
@@ -110,8 +111,9 @@ class UserContract extends Object
 			x.quantity = o.quantity;
 			x.subTotal = o.quantity * o.product.price;
 			var c = o.product.contract;
+			
 			if (c.hasPercentageOnOrders()) {
-				x.fees = c.percentageValue/100 * x.subTotal;
+				x.fees = c.computeFees(x.subTotal);
 				x.percentageName = c.percentageName;
 				x.percentageValue = c.percentageValue;
 				x.total = x.subTotal + x.fees;
@@ -122,8 +124,7 @@ class UserContract extends Object
 			
 			x.contractId = c.id;
 			x.contractName = c.name;
-			
-			x.canModify = c.isUserOrderAvailable() && !o.paid; //on peut modifier si ça na pas deja été payé + commande encore ouvertes
+			x.canModify = o.canModify(); 
 			
 			out.push(x);
 			
@@ -134,18 +135,45 @@ class UserContract extends Object
 	}
 	
 	/**
+	 * On peut modifier si ça na pas deja été payé + commande encore ouvertes
+	 */
+	function canModify():Bool {
+	
+		var can = false;
+		if (this.product.contract.type == db.Contract.TYPE_VARORDER) {
+			
+			if (this.distribution.orderStartDate == null) {
+				can = true;
+			}else {
+				var n = Date.now().getTime();
+				can = n > this.distribution.orderStartDate.getTime() && n < this.distribution.orderEndDate.getTime();
+				
+			}
+			
+			
+		}else {
+		
+			can = this.product.contract.isUserOrderAvailable();
+			
+		}
+		
+		return can && !this.paid;
+		
+	}
+	
+	/**
 	 * Créer une commande
 	 * 
 	 * @param	quantity
 	 * @param	productId
 	 */
-	public static function make(user:db.User, quantity:Int, productId:Int, ?distribId:Int,?paid:Bool) {
+	public static function make(user:db.User, quantity:Float, productId:Int, ?distribId:Int,?paid:Bool) {
 		
 		//checks
 		if (quantity <= 0) return;
 		if (distribId != null) {
 			var d = db.Distribution.manager.get(distribId);
-			if (d.date.getTime() < Date.now().getTime()) throw "Impossible de modifier une commande pour une date de livraison échue.";	
+			if (d.date.getTime() < Date.now().getTime()) throw "Impossible de modifier une commande pour une date de livraison échue. (d"+d.id+")";	
 		}
 		
 		
@@ -209,12 +237,12 @@ class UserContract extends Object
 	
 	
 	/**
-	 * Modifie une commande (la quantité)
+	 * Edit an order (quantity)
 	 */
-	public static function edit(order:db.UserContract, newquantity:Int, ?paid:Bool) {
+	public static function edit(order:db.UserContract, newquantity:Float, ?paid:Bool) {
 		
 		
-		if (order.distribution != null && order.distribution.date.getTime() < Date.now().getTime()) throw "Impossible de modifier une commande pour une date de livraison échue.";
+		
 		
 		order.lock();
 		

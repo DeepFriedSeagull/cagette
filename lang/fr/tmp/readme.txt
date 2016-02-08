@@ -1,1 +1,0 @@
-here is the folder for precompiled templates

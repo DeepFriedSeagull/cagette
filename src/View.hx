@@ -13,6 +13,8 @@ class View extends sugoi.BaseView {
 		this.Std = Std;
 		this.Date = Date;
 		this.Web = Web;
+		this.VERSION = App.VERSION.toString();
+
 	}
 	
 	public function count(i) {
@@ -154,5 +156,6 @@ class View extends sugoi.BaseView {
 	public function wVendor() {
 		return App.current.user.amap.flags.has(db.Amap.AmapFlags.IsAmap)?"Paysan":"Fournisseur";
 	}
+	
 	
 }

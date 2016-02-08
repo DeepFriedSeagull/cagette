@@ -17,7 +17,7 @@
 	::elseif step==2::
 		<h4>Produits à importer</h4>
 		<div style="margin-bottom:24px;">
-			::if data!=null && data.length>0::
+			::if datas!=null && datas.length>0::
 			
 			<table class="table table-bordered" style="/*font-size:11px;*/background-color:#FFF;">
 				<tr>
@@ -26,8 +26,10 @@
 					<th>Référence</th>
 					<th>Description</th>
 					<th>Taux de TVA</th>
+					<th>Stock</th>
+					<th>numéro d'icone</th>
 				</tr>
-				::foreach d data::
+				::foreach d datas::
 				<tr>
 					::foreach r d::
 					<td>

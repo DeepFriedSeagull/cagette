@@ -10,6 +10,7 @@ import neko.Web;
 import php.Web;
 #end
 import sugoi.tools.Utils;
+import ufront.mail.*;
 
 
 class Member extends Controller
@@ -77,7 +78,8 @@ class Member extends Controller
 			
 		}else {
 			if (app.params.exists("csv")) {
-				setCsvData(Lambda.array(db.User.manager.search( $id in uids, {orderBy:lastName}, false)), ["firstName", "lastName", "email"], "Adherents");
+				var headers = ["firstName", "lastName", "email","phone", "firstName2", "lastName2","email2","phone2", "address1","address2","zipCode","city"];
+				setCsvData(Lambda.array(db.User.manager.search( $id in uids, {orderBy:lastName}, false)), headers, "Adherents");
 				return;
 			}else {
 				//default display
@@ -125,7 +127,7 @@ class Member extends Controller
 		
 		view.member = member;
 		var userAmap = db.UserAmap.get(member, app.user.amap);
-		if (userAmap == null) throw Error("/member", "Cette personne ne fait pas partie de votre AMAP");
+		if (userAmap == null) throw Error("/member", "Cette personne ne fait pas partie de votre groupe");
 		
 		view.userAmap = userAmap; 
 		
@@ -162,6 +164,11 @@ class Member extends Controller
 		
 	}	
 	
+	/**
+	 * Admin : Log in as this user for debugging purpose
+	 * @param	user
+	 * @param	amap
+	 */
 	@admin
 	function doLoginas(user:db.User, amap:db.Amap) {
 	
@@ -172,6 +179,9 @@ class Member extends Controller
 		throw Redirect("/member/view/" + user.id );
 	}
 	
+	/**
+	 * Edit a Member
+	 */
 	@tpl('form.mtt')
 	function doEdit(member:db.User) {
 		
@@ -187,48 +197,69 @@ class Member extends Controller
 		form.getElement("email").addValidator(new EmailValidator());
 		form.getElement("email2").addValidator(new EmailValidator());
 		
-		
-		
 		if (form.checkToken()) {
-			
-			//vérifie si mails pas déjà 
-			var sim = db.User.getSimilar(form.getValueOf("firstName"), form.getValueOf("lastName"), form.getValueOf("email"), form.getValueOf("firstName2"), form.getValueOf("lastName2"), form.getValueOf("email2"));
-			for ( s in sim) {				
-				if (s.id == member.id) sim.remove(s);
-			}
-			if (sim.length>0) {
-				throw Error("/member/edit/" + member.id, "Attention, Cet email ou ce nom existe déjà dans une autre fiche : "+Lambda.map(sim,function(u) return "<a href='/member/view/"+u.id+"'>"+u.getCoupleName()+"</a>").join(","));
-			}
-			
-			//verif changement d'email
-			if (form.getValueOf("email") != member.email) {
-				var mail = new sugoi.mail.MandrillApiMail();
-				mail.setSender("noreply@cagette.net");
-				mail.setRecipient(member.email);
-				mail.setSubject("Changement d'email sur votre compte Cagette.net");
-				mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email") } );			
-				mail.send();	
-			}
-			if (form.getValueOf("email2") != member.email2 && member.email2!=null) {
-				var mail = new sugoi.mail.MandrillApiMail();
-				mail.setSender("noreply@cagette.net");
-				mail.setRecipient(member.email2);
-				mail.setSubject("Changement d'email sur votre compte Cagette.net");
-				mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2") } );			
-				mail.send();	
-			}
 			
 			//update model
 			form.toSpod(member); 
 			
-			//lower / upper case
-			member.lastName = member.lastName.toUpperCase();
-			if (member.lastName2 != null) member.lastName2 = member.lastName2.toUpperCase();
-			//member.email = member.email.toLowerCase();
-			//if(member.email2
-			
+			//check that the given emails are not already used elsewhere
+			var sim = db.User.getSimilar(form.getValueOf("firstName"), form.getValueOf("lastName"), form.getValueOf("email"), form.getValueOf("firstName2"), form.getValueOf("lastName2"), form.getValueOf("email2"));
+			for ( s in sim) {				
+				if (s.id == member.id) sim.remove(s);
+			}
+			if (sim.length > 0) {
+				
+				//Let's merge the 2 users if it has no orders.
+				var id = sim.first().id;
+				if (UserContract.manager.search( $userId == id || $userId2 == id , false).length == 0) {
+					//merge
+					member.merge( sim.first() );
+					app.session.addMessage("Cet email était utilisé dans une autre fiche de membre, comme cette fiche etait inutilisée, elle a été fusionnée avec la fiche courante.");
+					
+				} else {
+					throw Error("/member/edit/" + member.id, "Attention, Cet email ou ce nom existe déjà dans une autre fiche : "+Lambda.map(sim,function(u) return "<a href='/member/view/"+u.id+"'>"+u.getCoupleName()+"</a>. Ces deux fiches ne peuvent pas être fusionnées car cette personne a des commandes enregistrées dans l'autre fiche").join(","));	
+				}
+			}			
 			
 			member.update();
+			
+			if (!App.config.DEBUG) {
+				//verif changement d'email
+				if (form.getValueOf("email") != member.email) {
+					//var mail = new sugoi.mail.MandrillApiMail();
+					//mail.setSender(App.config.get("default_email"));
+					//mail.setRecipient(member.email);
+					//mail.setSubject("Changement d'email sur votre compte Cagette.net");
+					//mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email") } );			
+					//mail.send();	
+					
+					var m = new Email();
+					m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));
+					m.to(new EmailAddress(member.email));
+					m.setSubject("Changement d'email sur votre compte Cagette.net");
+					m.setHtml( app.processTemplate("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email")  } ) );
+					App.getMailer().send(m);
+					
+				}
+				if (form.getValueOf("email2") != member.email2 && member.email2!=null) {
+					//var mail = new sugoi.mail.MandrillApiMail();
+					//mail.setSender(App.config.get("default_email"));
+					//mail.setRecipient(member.email2);
+					//mail.setSubject("Changement d'email sur votre compte Cagette.net");
+					//mail.setHtmlBody("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2") } );			
+					//mail.send();
+					
+					var m = new Email();
+					m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));
+					m.to(new EmailAddress(member.email2));
+					m.setSubject("Changement d'email sur votre compte Cagette.net");
+					m.setHtml( app.processTemplate("mail/message.mtt", { text:app.user.getName() + " vient de modifier votre email sur votre fiche Cagette.net.<br/>Votre email est maintenant : "+form.getValueOf("email2")  } ) );
+					App.getMailer().send(m);
+					
+					
+				}	
+			}
+			
 			throw Ok('/member/view/'+member.id,'Ce membre a été mis à jour');
 		}
 		
@@ -347,15 +378,15 @@ class Member extends Controller
 				if (user[0] == null || user[1] == null) throw "Vous devez remplir le nom et prénom de la personne. <br/>Cette ligne est incomplète : " + user;
 				if (user[2] == null) throw "Chaque personne doit avoir un email, sinon elle ne pourra pas se connecter. "+user[0]+" "+user[1]+" n'en a pas.";
 				//uppercase du nom
-				if(user[1]!=null) user[1] = user[1].toUpperCase();
+				if (user[1] != null) user[1] = user[1].toUpperCase();
 				if (user[5] != null) user[5] = user[5].toUpperCase();
-				
-				App.log(user);
+				//lowercase email
+				if (user[2] != null) user[2] = user[2].toLowerCase();
+				if (user[6] != null) user[6] = user[6].toLowerCase();
 			}
 			
 			//utf-8 check
 			for ( row in unregistred.copy()) {
-				
 				
 				for ( i in 0...row.length) {
 					var t = row[i];
@@ -546,8 +577,6 @@ class Member extends Controller
 				var u = new db.User();
 				form.toSpod(u); 
 				u.lang = "fr";
-				u.lastName = u.lastName.toUpperCase();
-				if (u.lastName2 != null) u.lastName2 = u.lastName2.toUpperCase();
 				u.insert();
 				
 				//insert userAmap
@@ -557,13 +586,25 @@ class Member extends Controller
 				ua.insert();	
 				
 				if (form.getValueOf("warnAmapManager") == "1") {
-					var m = new sugoi.mail.MandrillApiMail();
-					m.setSubject(app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName());
-					m.setSender(app.user.email);
-					m.setRecipient(app.user.getAmap().contact.email);
-					var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://www.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
-					m.setHtmlBody('mail/message.mtt', { text:text } );
-					m.send();
+					
+					try{
+					//var m = new sugoi.mail.MandrillApiMail();
+					//m.setSubject(app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName());
+					//m.setSender(app.user.email);
+					//m.setRecipient(app.user.getAmap().contact.email);
+					//var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://app.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
+					//m.setHtmlBody('mail/message.mtt', { text:text } );
+					//m.send();
+					
+					var m = new Email();
+					m.from(new EmailAddress(App.config.get("default_email"),"Cagette.net"));					
+					m.to(new EmailAddress(app.user.getAmap().contact.email));					
+					m.setSubject( app.user.amap.name+" - Nouvel inscrit : " + u.getCoupleName() );
+					var text = app.user.getName() + " vient de saisir la fiche d'une nouvelle personne  : <br/><strong>" + u.getCoupleName() + "</strong><br/> <a href='http://app.cagette.net/member/view/" + u.id + "'>voir la fiche</a> ";
+					m.setHtml( app.processTemplate("mail/message.mtt", { text:text } ) );
+					App.getMailer().send(m);
+					
+					}catch(e:Dynamic){}
 				}
 				
 				throw Ok('/member/','Cette personne a bien été enregistrée');

@@ -81,6 +81,10 @@
 							<li ::attr class if(category=="amapadmin" ) 'active' ::><a href="/amapadmin" ::cond user.isAmapManager()::>Gestion ::wAmap()::</a></li>
 							<li ><a href="/admin" ::cond user.isAdmin()::>Admin</a></li>
 						</ul>
+						
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="http://www.cagette.net/aviva" target="_blank">Votez pour Cagette.net !</a></li>
+						</ul>
 
 					</div>
 				
@@ -115,8 +119,10 @@
 					<a href="http://aide.cagette.net" target="_blank">Documentation</a> •
 					<a href="https://groups.google.com/forum/?hl=fr#!forum/cagette" target="_blank">Forum</a> •
 					<a href="https://cagette.uservoice.com" target="_blank">Suggérer une amélioration</a> •
-					<a href="https://www.facebook.com/cagette/" target="_blank"><img src="/img/facebook-16.png" align="middle" /> Cagette sur Facebook</a> •
-					<a href="http://www.cagette.net/legal"> Mentions légales</a>
+					<a href="http://www.cagette.net/legal"> Mentions légales</a> •
+					<a href="https://www.facebook.com/cagette" target="_blank"> Facebook</a> •
+					<a href="https://twitter.com/Cagettenet" target="_blank"> Twitter</a> •
+					v.::VERSION::
 				</div>
 			</div>
 		</div>

@@ -10,11 +10,19 @@ class Shop extends sugoi.BaseController
 	}
 	
 	/**
-	 * full product list in AJAX
+	 * prints the full product list and current cart in JSON
 	 */
-	public function doProducts() {
+	public function doInit() {
+		
+		//init order serverside if needed		
+		var order :Order = app.session.data.order; 
+		if ( order == null) {
+			app.session.data.order = order = { products:new Array<{productId:Int,quantity:Float}>() };
+		}
+		
+		//
 		var products = getProducts();
-		Sys.print( haxe.Json.stringify( products ) );
+		Sys.print( haxe.Json.stringify( {products:products,order:order} ) );
 	}
 	
 	/**
@@ -23,25 +31,33 @@ class Shop extends sugoi.BaseController
 	public function getProducts():Array<ProductInfo> {
 		var contracts = db.Contract.getActiveContracts(app.user.amap);
 		
-		//que les contrats a commande variables
+		
 		for (c in Lambda.array(contracts)) {
+			//only varying contracts
 			if (c.type != db.Contract.TYPE_VARORDER) {
 				contracts.remove(c);
 			}
-		}
-		var products = db.Product.manager.search($contractId in Lambda.map(contracts, function(c) return c.id), { orderBy:name }, false);
-		
-		//retire les produits avec un stock à zero
-		for (p in products) {
-			if (p.contract.hasStockManagement() && p.stock <= 0) {
-				products.remove(p);
+			
+			if (!c.isVisibleInShop()) {
+				contracts.remove(c);
 			}
 			
 		}
+		var products = db.Product.manager.search(($contractId in Lambda.map(contracts, function(c) return c.id)) && $active==true, { orderBy:name }, false);
+		
+		//retire les produits avec un stock à zero
+		/*for (p in products) {
+			if (p.contract.hasStockManagement() && p.stock <= 0) {
+				products.remove(p);
+			}
+		}*/
 		
 		return Lambda.array(Lambda.map(products, function(p) return p.infos()));
 	}
 	
+	/**
+	 * Overlay window loaded by Ajax for product Infos
+	 */
 	@tpl('shop/productInfo.mtt')
 	public function doProductInfo(p:db.Product) {
 		view.p = p.infos();
@@ -59,6 +75,39 @@ class Shop extends sugoi.BaseController
 		
 	}
 	
+	/**
+	 * add a product to the cart
+	 */
+	public function doAdd(productId:Int, quantity:Int) {
+	
+		var order :Order =  app.session.data.order;
+		if ( order == null) order = { products:new Array<{productId:Int,quantity:Float}>() };
+		
+		order.products.push( { productId:productId, quantity:quantity } );
+		
+		Sys.print( haxe.Json.stringify( {success:true} ) );
+		
+	}
+	
+	/**
+	 * remove a product from cart 
+	 */
+	public function doRemove(pid:Int) {
+	
+		var order :Order =  app.session.data.order;
+		if ( order == null) return;
+		
+		for ( p in order.products.copy()) {
+			if (p.productId == pid) {
+				order.products.remove(p);
+			}
+			
+		}
+		
+		Sys.print( haxe.Json.stringify( { success:true } ) );
+		
+	}
+	
 	
 	/**
 	 * valider la commande et selectionner les distributions
@@ -71,11 +120,12 @@ class Shop extends sugoi.BaseController
 		if (order == null || order.products == null || order.products.length == 0) {
 			throw Error("/shop", "Vous devez réaliser votre commande avant de valider.");
 		}
-		
+		var now = Date.now();
 		var pids = Lambda.map(order.products, function(p) return p.productId);
 		var products = db.Product.manager.search($id in pids, false);
 		var _cids = Lambda.map(products, function(p) return p.contract.id);
-		var distribs = db.Distribution.manager.search(($contractId in _cids) && $date >= Date.now(), { orderBy:date, limit:5 }, false);
+		//available deliveries
+		var distribs = db.Distribution.manager.search(($contractId in _cids) && $orderStartDate <= now && $orderEndDate >= now, { orderBy:date }, false);
 		
 		//dedups cids
 		var cids = new Map<Int,Int>();
@@ -117,7 +167,7 @@ class Shop extends sugoi.BaseController
 			//collecte quelle distrib choisie pour quel contrat
 			var cd = new Map<Int,Int>();  //contract id -> distrib id
 			for (e in form.elements) {
-				if (e.name == null) continue;
+				if (e.name == null) continue;//Html form element has no name
 				if (e.name.substr(0, 7) == "distrib") {
 					cd.set(Std.parseInt(e.name.substr(7)), Std.parseInt(e.value));
 				}
@@ -134,15 +184,16 @@ class Shop extends sugoi.BaseController
 					//throw "pas trouvé la distribution du produit " + o.productId+" , contrat "+p.contract.name;
 					errors.push("Le produit \""+p.name+"\" n'ayant pas de livraison associée, il a été retiré de votre commande");
 				}else {
-					
 					//enregistre la commande
 					db.UserContract.make(app.user,o.quantity, o.productId, d);
-					
 				}
-				
 			}
 			
-			if(errors.length>0) app.session.addMessage(errors.join("<br/>"),true);
+			if (errors.length > 0) {
+				app.session.addMessage(errors.join("<br/>"), true);
+				app.logError("params : "+App.current.params.toString()+"\n \n"+errors.join("\n"));
+				
+			}
 			
 			app.session.data.order = null;
 			throw Ok("/contract", "Votre commande a bien été enregistrée");
@@ -156,7 +207,7 @@ class Shop extends sugoi.BaseController
 	/**
 	 * valider la commande et selectionner les distributions
 	 */
-	@tpl('shop/validate.mtt')
+	/*@tpl('shop/validate.mtt')
 	public function ___doValidate() {
 		
 		//pêche aux datas
@@ -214,5 +265,5 @@ class Shop extends sugoi.BaseController
 		view.form = form;
 		view.out = out;
 		
-	}
+	}*/
 }

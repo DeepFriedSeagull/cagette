@@ -6,7 +6,7 @@ class App {
 	function new() {
 	}
 
-	public static inline function j(r:String) {
+	public static inline function j(r:Dynamic) {
 		return new JQuery(r);
 	}
 

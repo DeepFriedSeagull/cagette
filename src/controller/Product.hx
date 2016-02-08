@@ -25,6 +25,9 @@ class Product extends Controller
 		var pt = new form.ProductTypeRadioGroup("type", "type",Std.string(d.type));
 		f.addElement( pt );
 		
+		//stock mgmt ?
+		if (!d.contract.hasStockManagement()) f.removeElementByName('stock');		
+		
 		//vat selector
 		f.removeElement( f.getElement('vat') );		
 		var data = [];
@@ -62,6 +65,8 @@ class Product extends Controller
 		f.removeElementByName("contractId");
 		f.getElement("price").addFilter(new sugoi.form.filters.FloatFilter());
 		
+		//stock mgmt ?
+		if (!contract.hasStockManagement()) f.removeElementByName('stock');
 		
 		//vat selector
 		f.removeElement( f.getElement('vat') );
@@ -116,11 +121,12 @@ class Product extends Controller
 		if (request.get("file") != null) {
 			
 			var csv = new sugoi.tools.Csv();
+			csv.headers = ["Nom","Prix","Référence","Description","Taux de TVA","Stock","numéro d'icone"];
 			var datas = csv.importDatas(request.get("file"));
 			
 			app.session.data.csvImportedData = datas;
 
-			view.data = datas;
+			view.datas = datas;
 			
 			step = 2;
 		}
@@ -138,6 +144,10 @@ class Product extends Controller
 				product.ref = p[2];
 				product.desc = p[3];
 				product.vat = fv.filter(p[4]);
+				if (p[5] != null) product.stock = Std.parseInt(p[5]);
+				if (p[6] != null)	product.type = Std.parseInt(p[6]);
+				
+				
 				product.contract = c;
 				product.insert();
 				

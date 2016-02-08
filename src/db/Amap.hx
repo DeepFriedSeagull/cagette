@@ -3,9 +3,10 @@ import sys.db.Object;
 import sys.db.Types;
 
 enum AmapFlags {
-	HasMembership; //gestion des adhésions
-	ShopMode; //mode boutique
-	IsAmap; //Amap / groupement d'achat
+	HasMembership; 	//gestion des adhésions
+	ShopMode; 		//mode boutique
+	IsAmap; 		//Amap / groupement d'achat
+	ComputeMargin;	//compute margin instead of percentage
 }
 
 /**
@@ -24,21 +25,60 @@ class Amap extends Object
 	public var txtDistrib:SNull<SText>; //sur liste d'emargement
 	
 	public var membershipRenewalDate : SNull<SDate>;
-	public var membershipPrice : SNull<STinyInt>;
+	@hideInForms  public var membershipPrice : SNull<STinyInt>;
 	
+	@hideInForms 
 	public var vatRates : SData<Map<String,Float>>;
 	
 	public var flags:SFlags<AmapFlags>;
 	
-	@:relation(imageId)
+	@hideInForms @:relation(imageId)
 	public var image : SNull<sugoi.db.File>;
+	
+	@hideInForms public var cdate : SDateTime;
+	@hideInForms @:relation(placeId) public var mainPlace : SNull<db.Place>;
 	
 	public function new() 
 	{
 		super();
 		flags = cast 0;
 		vatRates = ["TVA Alimentaire 5,5%" => 5.5, "TVA 20%" => 20];
+		cdate = Date.now();
 		
+	}
+	
+	/**
+	 * find the most common delivery place
+	 */
+	public function getMainPlace() {
+	
+		if (mainPlace != null && Std.random(100) != 0) {
+			return mainPlace;
+		}else {
+			this.lock();
+			//var cids = Lambda.map(getActiveContracts(), function(x) return x.id);
+			var places = getPlaces();
+			if (places.length == 1) {				
+				this.mainPlace = places.first();
+				this.update();				
+			}
+			
+			var pids = Lambda.map(places, function(x) return x.id);
+			
+			var res = sys.db.Manager.cnx.request("select placeId,count(placeId) as top from Distribution where placeId IN ("+pids.join(",")+") group by placeId order by top desc").results();
+			
+			var pid = Std.parseInt(res.first().placeId);
+			
+			
+			if (pid != 0 && pid != null) {
+				var p = db.Place.manager.get(pid, false);
+				this.mainPlace = p;
+				this.update();
+				return p;
+			}else {
+				return null;	
+			}
+		}
 	}
 	
 	
@@ -68,7 +108,7 @@ class Amap extends Object
 	}
 	
 	public function getContracts() {
-		return Contract.manager.select($amap == this, false);
+		return Contract.manager.search($amap == this, false);
 	}
 	
 	/**

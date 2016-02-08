@@ -6,6 +6,7 @@ import sugoi.form.elements.Input;
 import sugoi.form.elements.Selectbox;
 import sugoi.form.Form;
 import db.Contract;
+import Common;
 using Std;
 
 class Contract extends Controller
@@ -58,17 +59,18 @@ class Contract extends Controller
 		}
 		
 		//struct finale
-		var varOrders2 = new Array<{date:Date,orders:Array<db.UserContract>}>();
+		var varOrders2 = new Array<{date:Date,orders:Array<UserOrder>}>();
 		for ( k in varOrders.keys()) {
-			var d = new Date(k.split("-")[0].parseInt(), k.split("-")[1].parseInt()-1, k.split("-")[2].parseInt(), 0, 0, 0);
-			varOrders2.push({date:d,orders:varOrders[k]});
+			var d = new Date(k.split("-")[0].parseInt(), k.split("-")[1].parseInt() - 1, k.split("-")[2].parseInt(), 0, 0, 0);
+			
+			var orders = db.UserContract.prepare( Lambda.list(varOrders[k]) );
+			
+			varOrders2.push({date:d,orders:orders});
 			
 		}
 		
 		
 		//trier la map par ordre chrono desc
-		
-		
 		varOrders2.sort(function(b, a) {
 			return Math.round(a.date.getTime()/1000)-Math.round(b.date.getTime()/1000);
 		});
@@ -94,7 +96,6 @@ class Contract extends Controller
 		form.getElement("userId").required = true;
 		
 		if (form.checkToken()) {
-			
 			form.toSpod(c);
 			c.amap = app.user.amap;
 			
@@ -217,7 +218,7 @@ class Contract extends Controller
 	}
 	
 	/**
-	 * Faire ou modifier une commande 
+	 * make an order by contract 
 	 */
 	@tpl("contract/order.mtt")
 	function doOrder(c:db.Contract, args: { ?d:db.Distribution } ) {
@@ -232,6 +233,10 @@ class Contract extends Controller
 		view.c = view.contract = c;
 		if (c.type == db.Contract.TYPE_VARORDER) {
 			view.distribution = args.d;
+			
+			
+			if ( !args.d.canOrder() ) throw Error("/contract", "Les commandes sont fermées pour cette livraison, impossible de modifier la commande.");
+			
 		}else {
 			view.distributions = c.getDistribs(false);
 		}
@@ -270,43 +275,32 @@ class Contract extends Controller
 					var pid = Std.parseInt(k.substr("product".length));
 					var uo = Lambda.find(userOrders, function(uo) return uo.product.id == pid);
 					if (uo == null) throw "Impossible de retrouver le produit " + pid;
-					var q = Std.parseInt(param);
 					
-					//var order = new db.UserContract();
+					
+					var q = 0.0;
+					if (uo.product.hasFloatQt ) {
+						param = StringTools.replace(param, ",", ".");
+						q = Std.parseFloat(param);
+					}else {
+						q = Std.parseInt(param);
+					}
+					
+					
 					if (uo.order != null) {
-						//record existant
-						//order = uo.order;
-						//if (q == 0) {
-							//order.lock();
-							//order.delete();
-						//}else {
-							//order.lock();
-							//order.paid = (q==order.quantity && order.paid); //si deja payé et quantité inchangée
-							//order.quantity = q;						
-							//order.update();	
-						//}
+					
 						db.UserContract.edit(uo.order, q);
 						
-						
 					}else {
-						////nouveau record
-						//if (q != 0) {
-							//order.user = app.user;
-							//order.product = uo.product;
-							//order.quantity = q;
-							//order.paid = false;
-							//order.distribution = distrib;
-							//order.insert();	
-						//}
+					
 						db.UserContract.make(app.user, q, uo.product.id, distrib!=null ? distrib.id : null);
 					}
 				}
 			}
-			if (distrib != null) {
-				throw Ok("/contract/order/" + c.id+"?d="+distrib.id, "Votre commande a été mise à jour");	
-			}else {
-				throw Ok("/contract/order/" + c.id, "Votre commande a été mise à jour");	
-			}
+			//if (distrib != null) {
+				//throw Ok("/contract/order/" + c.id+"?d="+distrib.id, "Votre commande a été mise à jour");	
+			//}else {
+				throw Ok("/contract/", "Votre commande a été mise à jour");	
+			//}
 			
 		}
 		
@@ -320,15 +314,20 @@ class Contract extends Controller
 	@tpl("contract/orderByDate.mtt")
 	function doEditOrderByDate(date:Date) {
 		
-		//comment on sait si on peut encore modifier la commande ?
-		// la date de livraison doit etre dans le futur
-		if (Date.now().getTime() > date.getTime()) throw Error("/contract", "Cette livraison a déjà eu lieu, vous ne pouvez plus modifier la commande.");
+		// cannot edit order if date is in the past
+		if (Date.now().getTime() > date.getTime()) {
+			
+			var msg = "Cette livraison a déjà eu lieu, vous ne pouvez plus modifier la commande.";
+			if (app.user.isContractManager()) msg += "<br/>En tant que gestionnaire de contrat vous pouvez modifier une commande depuis la page de gestion des commandes dans <a href='/contractAdmin'>Gestion contrats</a> ";
+			
+			throw Error("/contract", msg);
+		}
 		
 		// Il faut regarder le contrat de chaque produit et verifier si le contrat est toujours ouvert à la commande.		
 		var d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 		var d2 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
-				
-		var cids = Lambda.map(app.user.amap.getActiveContracts(), function(c) return c.id);
+
+		var cids = Lambda.map(app.user.amap.getActiveContracts(true), function(c) return c.id);
 		var distribs = db.Distribution.manager.search(($contractId in cids) && $date >= d1 && $date <=d2 , false);
 		var orders = db.UserContract.manager.search($userId==app.user.id && $distributionId in Lambda.map(distribs,function(d)return d.id)  );
 		view.orders = db.UserContract.prepare(orders);
@@ -345,9 +344,18 @@ class Contract extends Controller
 					var pid = Std.parseInt(k.substr("product".length));
 					var order = Lambda.find(orders, function(uo) return uo.product.id == pid);
 					if (order == null) throw "Erreur, impossible de retrouver la commande";
-					var quantity = Std.int(Math.abs(Std.parseInt(param)));
+					
+					var q = 0.0;
+					if (order.product.hasFloatQt ) {
+						param = StringTools.replace(param, ",", ".");
+						q = Std.parseFloat(param);
+					}else {
+						q = Std.parseInt(param);
+					}
+					
+					var quantity = Math.abs( q==null?0:q );
 
-					if (!order.paid && order.product.contract.isUserOrderAvailable()) {
+					if ( order.distribution.canOrder() ) {
 						//met a jour la commande
 						db.UserContract.edit(order, quantity);
 					}

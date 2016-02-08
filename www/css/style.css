@@ -167,6 +167,10 @@ table.product .desc {
 .overlayContent .article {
 	padding : 24px;
 }
+#cartContainer.scrolled {
+	position : fixed;
+	top : 125px;
+}
 .cartDiv {
 	margin-bottom : 16px;
 	background : #007700;
