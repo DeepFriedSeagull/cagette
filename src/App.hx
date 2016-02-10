@@ -1,4 +1,5 @@
 import db.User;
+import thx.semver.Version;
  
 class App extends sugoi.BaseApp {
 
@@ -13,7 +14,7 @@ class App extends sugoi.BaseApp {
 	 * Version management
 	 * @doc https://github.com/fponticelli/thx.semver
 	 */ 
-	public static var VERSION : thx.semver.Version = [0,9,0];
+	public static var VERSION = ([0,9,1]  : Version).withPre("RC1");
 	
 	public static function main() {
 		

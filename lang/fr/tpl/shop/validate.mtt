@@ -1,41 +1,40 @@
 ::use 'design.mtt'::
 <div class="col-md-9">
 	<div class="article">
-	<h2>Choisissez vos dates de livraison</h2>
-	
-	<p>
-		Les produits que vous avez sélectionnés peuvent potentielement être livrés à des dates differentes,
-		si c'est le cas choisissez à quel dates vous souhaitez récupérer vos produits.
-	</p>
-	
-	::raw form::
-	
-	<!--::foreach o out::
-		products : 
-		<ul>
-			::foreach p o.products::
-			<li>::p.q:: x ::p.p::</li>
-			::end::
-		</ul>
-		distribs : 
-		<ul>
-			::foreach d o.distribs::
-				<li>::d::</li>
-			::end::
-		</ul>
+		
+		<h2>Choisissez vos dates et lieux de livraison</h2>
 		<hr/>
-	::end::-->
-	
-	<!--<a href="/shop/validate?token=::token::" class="btn btn-default btn-lg">Valider la commande</a>-->
+		<p>
+			::raw form::
+		</p>
 	
 	</div>
 </div>
 <div class="col-md-3">
 	
-	
+	<div class="cartDiv">
+		
+		<p>
+			Les produits que vous avez sélectionnés peuvent potentielement être livrés à des dates et lieux differents,
+			si c'est le cas, choisissez attentivement la livraison qui vous convient.
+		</p>
+		<a onClick="formSubmitted=true;$('#validate').submit();" class="btn btn-default"><span class="glyphicon glyphicon-ok"></span> Confirmer ma commande</a>
+	</div>
 		
 </div>
 
+<script>
+
+var formSubmitted = false;
+
+window.addEventListener("beforeunload", function (e) {
+	if(formSubmitted) return undefined;
+    var confirmationMessage = 'Vous avez une commande en cours, si vous quittez cette page sans confirmer votre commande elle sera perdue.';
+
+    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+    return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+});
+</script>
 
 
 ::end::

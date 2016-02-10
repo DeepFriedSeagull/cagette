@@ -6,7 +6,7 @@
 			<img src="/img/order.png" width="64" height="64" style="float:right;" />
 			<h2>Commandes ouvertes</h2>
 			::if amap.hasShopMode()::
-				<a href="/shop" class="btn btn-default">Voir les produits</a>
+				<a href="/shop" class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> Voir la boutique</a>
 			::else::
 			
 			<ul>

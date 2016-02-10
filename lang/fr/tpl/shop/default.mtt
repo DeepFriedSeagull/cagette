@@ -1,6 +1,37 @@
 ::use 'design.mtt'::
 <div class="col-md-9">
 	<div class="article">
+		
+	<table class="table table-bordered">
+		
+		::foreach i infos::
+		<tr>
+			<td ::cond infos.length>1::>
+				
+					::foreach c i.contracts::
+						::c.name:: 
+					::end::
+				
+			</td>
+			<td>
+				<span class="glyphicon glyphicon-calendar"></span>
+				::if i.close!=null::
+					Fermeture des commandes :<br/> ::hDate(i.close)::
+				::else::
+					Ouverture des commandes :<br/> ::hDate(i.open)::
+				::end::
+			</td>
+			<td>
+				<span class="glyphicon glyphicon-map-marker"></span>
+				Livraison :<br/> ::hDate(i.deliv)::
+			</td>
+		</tr>
+		
+		
+		::end::
+	</table>
+		
+		
 	<h2>Produits</h2>
 	
 	<script language="javascript">
@@ -12,8 +43,17 @@
 
 	</script>
 	
+	<style>
+	.product .warning{
+		font-size:11px;
+		color:#900;
+		font-weight:bold;
+	}
+	</style>
 	
 	<div class="row">
+		
+		
 		::foreach p products::
 		<div class="col-xs-12 col-sm-6 col-lg-4" id="product::p.id::">
 			
@@ -39,7 +79,7 @@
 								
 							::else::
 								::if p.stock!=null && p.stock>0 && p.stock<=10::
-								<div style="color:#900;font-weight:bold;">Plus que ::p.stock:: en stock</div>
+								<div class="warning" >Plus que ::p.stock:: en stock</div>
 								::end::
 							
 								<input id="productQt::p.id::" type="text" value="1" style="height: 22px;width:40px;" class="form-control input-sm" maxlength="4"  data-toggle="tooltip" data-placement="top" title="Quantité"/>
