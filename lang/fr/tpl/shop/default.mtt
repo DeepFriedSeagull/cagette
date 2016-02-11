@@ -14,11 +14,11 @@
 				
 			</td>
 			<td>
-				<span class="glyphicon glyphicon-calendar"></span>
+				
 				::if i.close!=null::
-					Fermeture des commandes :<br/> ::hDate(i.close)::
+					<span class="glyphicon glyphicon-calendar"></span> Fermeture des commandes :<br/> ::hDate(i.close)::
 				::else::
-					Ouverture des commandes :<br/> ::hDate(i.open)::
+					<span class="glyphicon glyphicon-remove"></span> Commandes fermées, <br/> prochaine commande à partir du ::hDate(i.open)::
 				::end::
 			</td>
 			<td>
