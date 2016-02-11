@@ -3,9 +3,9 @@ import sys.db.Object;
 import sys.db.Types;
 import db.UserAmap;
 enum UserFlags {
-	HasEmailNotif4h;
-	HasEmailNotif24h;
-	//Lol;
+	HasEmailNotif4h;	//send notifications by mail 4h before
+	HasEmailNotif24h;	//send notifications by mail 24h before
+	Tuto;			//enable tutorials
 }
 
 enum RightSite {
@@ -46,6 +46,10 @@ class User extends Object {
 	
 	public var flags : SFlags<UserFlags>;
 	
+	public var tutoState : SNull<SData<Map<String,Int>>>; //tutorial state
+	
+	
+	
 	public function new() {
 		super();
 		rights = sys.db.Types.SFlags.ofInt(0);
@@ -62,10 +66,15 @@ class User extends Object {
 		return rights.has(Admin) || id==1;
 	}
 	
+	public function hasTuto() {
+		return flags.has(Tuto);
+	}
+
 	/**
 	 * is this user the manager of the current group
 	 */
 	public function isAmapManager() {
+
 		//if (getAmap().contact == null) throw "Cette AMAP n'a pas de responsable général.";
 		var ua = getUserAmap(getAmap());
 		if (ua == null) return false;

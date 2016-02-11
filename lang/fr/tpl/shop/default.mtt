@@ -60,11 +60,11 @@
 			<table class="product">
 				<tr>
 					<td style="vertical-align:top;">
-						<a onclick="_.overlay('/shop/productInfo/::p.id::')" data-toggle="tooltip" data-placement="top" title="En savoir plus"><img src="::p.image::" style="width:64px;height:64px;" />	</a>
+						<a onclick="_.overlay('/shop/productInfo/::p.id::','::escapeJS(p.name)::')" data-toggle="tooltip" data-placement="top" title="En savoir plus"><img src="::p.image::" style="width:64px;height:64px;" />	</a>
 					</td>
 					<td>
 						<h4>
-							<a onclick="_.overlay('/shop/productInfo/::p.id::')">::p.name::</a>
+							<a onclick="_.overlay('/shop/productInfo/::p.id::','::escapeJS(p.name)::')">::p.name::</a>
 						</h4>
 						<span class="price">::formatNum(p.price):: €</span>
 											

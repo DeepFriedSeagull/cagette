@@ -26,17 +26,17 @@ App.prototype = {
 	,getTagger: function(cid) {
 		return new Tagger(cid);
 	}
-	,overlay: function(url) {
-		js.JQuery("body").append("<div class='overlayBackground' onclick='_.closeOverlay()'></div>");
+	,overlay: function(url,title,large) {
+		if(large == null) large = true;
 		var r = new haxe_Http(url);
 		r.onData = function(data) {
-			js.JQuery("body").append("<div class='overlayContent' >" + data + "<a class='btn btn-default' onclick='_.closeOverlay()'><span class='glyphicon glyphicon-remove'></span> Fermer</a></div>");
+			var m = js.JQuery("#myModal");
+			m.find(".modal-body").html(data);
+			if(title != null) m.find(".modal-title").html(title);
+			if(!large) m.find(".modal-dialog").removeClass("modal-lg");
+			js.JQuery("#myModal").modal();
 		};
 		r.request();
-	}
-	,closeOverlay: function() {
-		js.JQuery(".overlayContent").remove();
-		js.JQuery(".overlayBackground").remove();
 	}
 	,__class__: App
 };

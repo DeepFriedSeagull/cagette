@@ -1,0 +1,31 @@
+<p>
+	<img src="/img/tomato.png" style="float:left;" />
+	
+	Tout d'abord, sachez que même si cette fenêtre a disparu, vous pouvez me retrouver à tout moment 
+	sur toutes les pages, juste en dessous de la barre de navigation !
+</p>
+<p>
+	Afin de configurer votre <b>premier contrat</b>, nous devons d'abord entrer la fiche d'un <b>producteur</b>.
+	<br/>
+	<ul>
+		<li>Cliquez sur <b>Gestion contrats</b></li>
+		<li>Dans le bloc <b>::wVendor()::</b>, il y a déjà une fiche de producteur à titre d'exemple.</li>
+		<li>Modifiez la, et <b>saisissez le nom d'un véritable producteur</b> qui approvisionne votre groupe</li>
+	</ul>
+	
+	
+</p>	
+	
+<script>
+
+$('#myModal').on('hidden.bs.modal', function (e) {
+
+	//display a tooltip in the nav
+	$(".nav .contractadmin").attr("title","Cliquez ici !").tooltip('show');		
+
+	//reset event 
+	$('#myModal').off('hidden.bs.modal'); 
+})
+
+
+</script>

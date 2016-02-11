@@ -247,6 +247,12 @@ Called from controller/Main.hx line 117
 	}
 	
 	@logged
+	function doTuto(d:Dispatch) {
+		
+		d.dispatch(new controller.Tuto());
+	}
+	
+	@logged
 	function doStats(d:Dispatch) {
 		view.category = 'stats';
 		d.dispatch(new Stats());

@@ -61,23 +61,71 @@ class Contract extends Controller
 		//struct finale
 		var varOrders2 = new Array<{date:Date,orders:Array<UserOrder>}>();
 		for ( k in varOrders.keys()) {
+
 			var d = new Date(k.split("-")[0].parseInt(), k.split("-")[1].parseInt() - 1, k.split("-")[2].parseInt(), 0, 0, 0);
 			
 			var orders = db.UserContract.prepare( Lambda.list(varOrders[k]) );
 			
 			varOrders2.push({date:d,orders:orders});
 			
+
 		}
-		
 		
 		//trier la map par ordre chrono desc
 		varOrders2.sort(function(b, a) {
 			return Math.round(a.date.getTime()/1000)-Math.round(b.date.getTime()/1000);
 		});
 		
-		
 		view.varOrders = varOrders2;
 		view.constOrders = constOrders;
+		
+		
+		// tutorials
+		if (app.user.isAmapManager()) {
+			
+			
+			if (app.user.tutoState == null) {
+				app.user.tutoState = new Map<String,Int>();
+			}
+			
+			//actions
+			if (app.params.get('tutos') != null) {
+				//enable / disable tutos
+				app.user.lock();
+				if (app.params.get('tutos') == "1") {
+					app.user.flags.set(Tuto);
+				}else {
+					app.user.flags.unset(Tuto);
+				}
+				if (app.user.tutoState == null) {
+					app.user.tutoState = new Map<String,Int>();
+				}
+				app.user.update();	
+			}else if (app.params.get('startTuto') != null) {
+				//start a tuto
+				var t = app.params.get('startTuto'); 
+				app.user.lock();
+				app.user.tutoState.set(t, 0);
+				app.user.update();
+				view.popTutoWindow(t, 0);
+				
+			}
+			
+		
+			//tuto state
+			var tutos = new Array<{name:String,completion:Float,key:String}>();
+			
+			for ( t in Tutorial.all() ) {				
+				var c = app.user.tutoState.get(t);
+				tutos.push( { name:Tutorial.getName(t), completion: c==null?null:(c/Tutorial.getStepNum(t)) , key:t } );
+			}
+			
+			
+			view.tutos = tutos;
+			view.tutoEnabled = app.user.flags.has(Tuto);
+			
+		}
+		
 	}
 	
 
