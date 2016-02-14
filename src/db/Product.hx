@@ -23,8 +23,8 @@ class Product extends Object
 	public var stock : SNull<SFloat>; //if qantity can be float, stock should be float
 	
 	public var type : SInt;	//icones
-	@:relation(imageId)
-	public var image : SNull<sugoi.db.File>;
+	
+	@hideInForms @:relation(imageId) public var image : SNull<sugoi.db.File>;
 	
 	public var hasFloatQt:SBool; //this product can be ordered in "float" quantity
 	public var active : SBool; 	//if false, product disabled, not visible on front office

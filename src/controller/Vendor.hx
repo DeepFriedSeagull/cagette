@@ -13,6 +13,8 @@ class Vendor extends Controller
 	{
 		super();
 		
+		if (!app.user.isContractManager()) throw "accès interdit";
+		
 	}
 	
 	@logged
@@ -83,5 +85,40 @@ class Vendor extends Controller
 		}
 		
 	}
+	
+	@tpl('vendor/addimage.mtt')
+	function doAddImage(v:db.Vendor) {
+		
+		view.vendor = v;
+		view.image = v.image;
+		
+		var request = sugoi.tools.Utils.getMultipart(1024 * 1024 * 12); //12Mb
+		
+		if (request.exists("image")) {
+			
+			//Image
+			var image = request.get("image");
+			if (image != null && image.length > 0) {
+				var img : sugoi.db.File = null;
+				if ( Sys.systemName() == "Windows") {
+					img = sugoi.db.File.create(request.get("image"), request.get("image_filename"));
+				}else {
+					img = sugoi.tools.UploadedImage.resizeAndStore(request.get("image"), request.get("image_filename"), 400, 400);	
+				}
+				
+				v.lock();
+				
+				if (v.image != null) {
+					//efface ancienne
+					v.image.lock();
+					v.image.delete();
+				}
+				
+				v.image = img;
+				v.update();
+				throw Ok('/contractAdmin/','Image mise à jour');
+			}
+		}
+	}	
 	
 }

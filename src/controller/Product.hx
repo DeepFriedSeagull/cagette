@@ -18,8 +18,6 @@ class Product extends Controller
 		
 		var f = sugoi.form.Form.fromSpod(d);
 		
-		f.removeElement( f.getElement('imageId') );		
-		
 		//type (->icon)
 		f.removeElement( f.getElement("type") );
 		var pt = new form.ProductTypeRadioGroup("type", "type",Std.string(d.type));
@@ -56,8 +54,6 @@ class Product extends Controller
 		
 		var d = new db.Product();
 		var f = sugoi.form.Form.fromSpod(d);
-		
-		f.removeElement( f.getElement('imageId') );	
 		
 		f.removeElement( f.getElement("type") );		
 		var pt = new form.ProductTypeRadioGroup("type", "type", "1");

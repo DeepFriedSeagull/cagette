@@ -8,9 +8,9 @@
 		<tr>
 			<td ::cond infos.length>1::>
 				
-					::foreach c i.contracts::
-						::c.name:: 
-					::end::
+				::foreach c i.contracts::
+					::c.name::. 
+				::end::
 				
 			</td>
 			<td>

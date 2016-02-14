@@ -139,7 +139,6 @@ table.product{
 	
 	height:135px;
 	overflow:auto;
-	//border:1px solid #000000 ;
 	
 	.desc{
 		font-size:90%;

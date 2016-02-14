@@ -62,7 +62,7 @@
 	<macro name="delete(text,url)">
 		<a href="::url::" $$confirm(Supprimer ?) class="btn btn-default btn-sm" >
 			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-		::if text!=null::	
+		::if text!=null && text!=""::	
 			&nbsp;::text::
 		::end::
 		</a>

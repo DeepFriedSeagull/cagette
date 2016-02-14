@@ -51,6 +51,7 @@ class Contract extends Object
 	public function new() 
 	{
 		super();
+		flags = cast 0;
 	}
 	
 	/**

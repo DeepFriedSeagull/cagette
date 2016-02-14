@@ -19,6 +19,7 @@ class Contract extends Controller
 	
 	@tpl("contract/view.mtt")
 	public function doView(c:db.Contract) {
+		view.category = 'amap';
 		view.c = c;
 	}
 	
