@@ -53,25 +53,33 @@
 
 
 <div class="col-md-6">
-	<div class="article" ::cond user.isAmapManager()::>
+	<div class="article">
 		<h2>::wVendors()::</h2>
 		<table class="table">
 			::foreach v vendors::		
 				<tr>
+					<td>
+						
+						::if v._image!=null::
+							<img src="::file(v._image)::" class="img-thumbnail" style="height:64px;" />
+						::end::
+					</td>
 					<td><b>::v.name::</b></td>
 					<td>
 						$$edit(Modifier,/vendor/edit/::v.id::)
-						::if user.isAmapManager():: $$delete(Suppr.,/vendor/delete/::v.id::?token=::token::) ::end::
+						<a href="/vendor/addImage/::v.id::" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-picture"></span> Photo</a>
+						::if user.isAmapManager():: $$delete(,/vendor/delete/::v.id::?token=::token::) ::end::
 					</td>
 				</tr>
 			::end::
 		</table>
-		$$insert(Nouveau producteur,/vendor/insert/)
+		$$insert(Nouveau producteur,/vendor/insert/) 
+		
 	</div>	
 </div>
 
 <div class="col-md-6">
-	<div class="article" ::cond user.isAmapManager()::>
+	<div class="article">
 		
 		<h2>Lieux de livraison</h2>
 		<table class="table">

@@ -2,66 +2,94 @@
 <div class="col-md-9">
 	<div class="article">
 		
-	<h2>::c.name::</h2>
-		
-	<div class="row">	
-		<div class="col-md-6">
-			<b>Dates :</b> du ::hDate(c.startDate):: au ::hDate(c.endDate)::<br/>
-			<b>Producteur :</b> ::c._vendor.name::<br/>
+		<h2>::c.name::</h2>
 			
+		<div class="row">	
+			<div class="col-md-6">
+				<b>Dates :</b> du ::hDate(c.startDate):: au ::hDate(c.endDate)::<br/>
+				
+				
+			</div>
+			<div class="col-md-6">
+				::if c.description!=null::
+				<b>Description :</b>	::raw nl2br(c.description)::
+				::end::
+			</div>
+
 		</div>
-		<div class="col-md-6">
-			::if c.description!=null::
-			<b>Description :</b>	::raw nl2br(c.description)::
+		
+		<hr/>	
+			
+		<div class="row">
+			::foreach p c.getProducts(true)::
+			<div class="col-md-4" id="product::p.id::">
+			<table class="product">
+				<tr>
+					<td style="vertical-align:top;">
+						<a onclick="_.overlay('/shop/productInfo/::p.id::')" ><img src="::p.getImage()::" style="width:64px;height:64px;" /></a>	
+					</td>
+					<td>
+						<h4>
+							<a onclick="_.overlay('/shop/productInfo/::p.id::')" href="#">::p.name::</a>
+						</h4>
+						<span class="price">::p.price::&nbsp;€</span>
+						<div>
+							<a class="btn btn-default btn-xs" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	
+						</div>
+						
+					</td>
+				</tr>
+			</table>
+			</div>
 			::end::
 		</div>
-
-	</div>
-	
-	<hr/>	
 		
-	<div class="row">
-		::foreach p c.getProducts(true)::
-		<div class="col-md-4" id="product::p.id::">
-		<table class="product">
-			<tr>
-				<td style="vertical-align:top;">
-					<a onclick="_.overlay('/shop/productInfo/::p.id::')" ><img src="::p.getImage()::" style="width:64px;height:64px;" /></a>	
-				</td>
-				<td>
-					<h4>
-						<a onclick="_.overlay('/shop/productInfo/::p.id::')" href="#">::p.name::</a>
-					</h4>
-					<span class="price">::p.price::&nbsp;€</span>
-					<div>
-						<a class="btn btn-default btn-xs" onclick="_.overlay('/shop/productInfo/::p.id::')">Infos</a>	
-					</div>
-					
-				</td>
-			</tr>
-		</table>
+		<hr/>
+		
+		<div class="row">
+			::set vendor = c._vendor::
+			<div class="col-md-3">
+				::if vendor._image!=null::
+					<img src="::file(vendor._image)::" class="img-thumbnail" />
+				::end::
+			</div>
+			<div class="col-md-5">
+				
+				<h4>::vendor.name::</h4>
+				
+				<b>::vendor.city::</b> (::vendor.zipCode::)
+				
+				<p ::cond vendor.desc!=null:: style="font-size: 13px;">
+					::raw nl2br(vendor.desc)::
+				</p>
+				
+				::if vendor.linkUrl!=null::
+				<p>
+					::if vendor.linkText!=null::
+					<a href="::vendor.linkUrl::" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-right"></span> ::vendor.linkText::</a>
+					::else::
+					<a href="::vendor.linkUrl::" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-right"></span> En savoir plus</a>
+					::end::
+				</p>
+				::end::
+				
+			</div>
+			<div class="col-md-4">		
+				<h4>Coordinateur</h4>
+				::if c._contact!=null::
+
+				<b>::c._contact.firstName:: ::c._contact.lastName::</b><br/>
+				<span ::cond c._contact.email!=null::><span class="glyphicon glyphicon-envelope"></span> <a href="mailto: ::c._contact.email::">::c._contact.email::</a><br/></span>
+				<span ::cond c._contact.phone!=null::><span class="glyphicon glyphicon-phone-alt"></span> ::c._contact.phone::<br/></span>
+							
+				::end::
+			</div>
+			
 		</div>
-		::end::	
-	</div>
-	
-	
-	
 	
 	</div>
 </div>
 <div class="col-md-3">
-	<!--<div class="article">
-	
-			<h2>Producteur</h2>
-			::if c._vendor!=null::
-				
-			<i class="icon-user"></i>
-			<b>::c._vendor.name::</b><br/>
-			<span ::cond c._vendor.email!=null::><i class="icon-envelope"></i> <a href="mailto: ::c._vendor.email::">::c._vendor.email::</a><br/></span>
-			<span ::cond c._vendor.phone!=null::>Téléphone : ::c._vendor.phone::<br/></span>
-						
-			::end::
-	</div>-->
 	
 	
 	<div class="article">
@@ -84,12 +112,20 @@
 			::end::
 
 		::else::
-			Les commandes ne sont pas ouvertes ou le coordinateur préfère saisir lui-même les commandes.
-			<br/>
-			<a href="mailto: ::c._contact.email::">Contactez le pour plus d'informations</a>.
+			<p>
+				Les commandes ne sont pas ouvertes ou le coordinateur préfère saisir lui-même les commandes.
+				<br/>
+				
+				
+				<a href="mailto: ::c._contact.email::" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-envelope"></span> Contactez le pour plus d'informations</a>
+				
+			</p>
 		::end::
 		
-		<a style="font-size:12px;" href='/contract'>Vous pouvez consulter vos commandes en cours sur votre page "mon compte"</a>
+		<p>
+			<a style="font-size:12px;" href='/contract'>Vous pouvez consulter vos commandes en cours sur votre page "mon compte"</a>	
+		</p>
+		
 		
 	</div>
 	
@@ -108,17 +144,10 @@
 	</div>
 	::end::
 	
-	<div class="article">		
-		<h2>Coordinateur</h2>
-		::if c._contact!=null::
-
-		<b>::c._contact.firstName:: ::c._contact.lastName::</b><br/>
-		<span ::cond c._contact.email!=null::><span class="glyphicon glyphicon-envelope"></span> <a href="mailto: ::c._contact.email::">::c._contact.email::</a><br/></span>
-		<span ::cond c._contact.phone!=null::><span class="glyphicon glyphicon-phone-alt"></span> ::c._contact.phone::<br/></span>
-					
-		::end::
-	</div>
+	
 </div>
+
+
 
 
 ::end::

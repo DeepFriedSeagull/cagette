@@ -6,7 +6,6 @@ import sys.db.Types;
  */
 class Vendor extends Object
 {
-
 	public var id : SId;
 	public var name : SString<32>;
 	
@@ -23,8 +22,7 @@ class Vendor extends Object
 	public var linkText:SNull<SString<256>>;
 	public var linkUrl:SNull<SString<256>>;
 	
-	//compte du producteur
-	//@:relation(userId) public var user : SNull<User>;
+	@hideInForms @:relation(imageId) public var image : SNull<sugoi.db.File>;
 	
 	@:relation(amapId) public var amap : SNull<Amap>;
 	

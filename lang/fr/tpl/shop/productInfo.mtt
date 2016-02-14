@@ -31,32 +31,43 @@
 		
 	
 		
-	<div class="col-md-6">
-		<h3>Producteur</h3>
+	
+	<div class="col-md-3">
+		::if vendor._image!=null::
+			<img src="::file(vendor._image)::" class="img-thumbnail" />
+		::end::
+	</div>
+	<div class="col-md-5">
 		
-		<b>::vendor.name::</b>
-		<br/>::vendor.city:: (::vendor.zipCode::)
+		<h4>::vendor.name::</h4>
 		
-		<p ::cond p.desc!=null:: style="font-size: 13px;">
+		<b>::vendor.city::</b> (::vendor.zipCode::)
+		
+		<p ::cond vendor.desc!=null:: style="font-size: 13px;height:150px;overflow-y: scroll;">
 			::raw nl2br(vendor.desc)::
 		</p>
 		
 		::if vendor.linkUrl!=null::
-			<br/>
+		<p>
 			::if vendor.linkText!=null::
-			<a href="::vendor.linkUrl::" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-new-window"></span> ::vendor.linkText::</a>
+			<a href="::vendor.linkUrl::" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-right"></span> ::vendor.linkText::</a>
 			::else::
-			<a href="::vendor.linkUrl::" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-new-window"></span> En savoir plus</a>
+			<a href="::vendor.linkUrl::" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-right"></span> En savoir plus</a>
 			::end::
+		</p>
 		::end::
-	</div>
 		
+	</div>
+	
 	::set cats = product.getCategories()::
-	<div class="col-md-6" ::cond cats.length != 0:: >
+	<div class="col-md-4" ::cond cats.length != 0:: >	
+		
+	
+	
 		<h3>Catégories</h3>
 		<div>
 			::foreach c cats::
-				<span class="tag" style="background-color: ::c.getColor()::;">::c.name::</span>
+				<span class="tag" style="background-color: ::c.getColor()::;">::c.name::</span><br/>
 			::end::
 		</div>
 	</div>

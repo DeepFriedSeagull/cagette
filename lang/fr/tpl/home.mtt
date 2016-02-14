@@ -174,9 +174,10 @@
 	</div>
 	
 	<div class="alert alert-danger" ::cond nopass::>
-		Attention, vous n'avez défini aucun mot de passe.<br/>
-		N'importe qui pourrait se connecter sur votre compte si il connait votre e-mail.<br/>
-		<a href="/user/definePassword" class="btn btn-default btn-sm">Définir un mot de passe</a>
+		<p>
+			Attention, vous n'avez défini aucun mot de passe pour votre compte !
+		</p>
+		<a href="/user/definePassword" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-right"></span> Définir un mot de passe</a>
 		
 	</div>
 </div>
