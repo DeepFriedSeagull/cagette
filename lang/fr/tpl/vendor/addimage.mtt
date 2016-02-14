@@ -1,0 +1,38 @@
+::use 'design.mtt'::
+	
+
+	
+
+
+
+	
+	<div class="col-md-6">
+		<h2>Importer une photo pour ::vendor.name::</h2>
+		
+		
+		<div class="article">
+			<form action="" method="POST" enctype="multipart/form-data">
+				<input name="image" type="file" class="btn btn-default"/>
+				
+				<br/>
+				Taille de photo recommandée : 300 x 300px <br/>
+				Format : JPEG <br/>
+				<br/>
+				
+				<input type="submit" value="Envoyer" class="btn btn-primary" />
+			</form>
+			<br/>
+			<a href="/contractAdmin" class="btn btn-default btn-xs">Retour</a>
+		</div>
+	</div>
+
+	<div class="col-md-6" ::cond image!=null:: >
+		<div class="article">
+
+			<img src="::file(image)::" class="img-thumbnail" />
+		</div>
+	</div>
+	
+
+
+::end::
